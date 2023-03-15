@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const WelcomeApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class WelcomeApp extends StatelessWidget {
+  const WelcomeApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -28,13 +28,13 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(),
+      home: const MyWelcomePage(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
+class MyWelcomePage extends StatelessWidget {
+  const MyWelcomePage({super.key});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -78,12 +78,12 @@ class MyHomePage extends StatelessWidget {
               widthFactor: 1,
               child: TextButton(
                 onPressed: () {},
-                child: const Text('COMENZAR'),
                 style: TextButton.styleFrom(
                   primary: Colors.white,
                   backgroundColor: Colors.blue
                   
                 ),
+                child: const Text('COMENZAR'),
               ),
             )
           ],

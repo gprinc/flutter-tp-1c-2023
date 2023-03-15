@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const InitialApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class InitialApp extends StatelessWidget {
+  const InitialApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -28,13 +28,13 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(),
+      home: const MyInitialPage(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
+class MyInitialPage extends StatelessWidget {
+  const MyInitialPage({super.key});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -55,23 +55,28 @@ class MyHomePage extends StatelessWidget {
             Image.asset('assets/logo.png', height: 150, width: 150,),
             const Padding(
               padding: EdgeInsets.only(
-                top: 70,
-                bottom: 20,
+                bottom: 50,
               ),
               child: Text(
-                '¡Bienvenido!',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
+                '“El esfuerzo desinteresado para llevar alegría a los demás será el comienzo de una vida más feliz para nosotros”',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                 textAlign: TextAlign.center,
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.only(
-                bottom: 80,
+            Padding(
+              padding: const EdgeInsets.only(
+                bottom: 50,
               ),
-              child: Text(
-                'Nunca subestimes tu habilidad para mejorar la vida de alguien',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                textAlign: TextAlign.center,
+              child: FractionallySizedBox(
+                widthFactor: 1,
+                child: TextButton(
+                  onPressed: () {},
+                  style: TextButton.styleFrom(
+                    primary: Colors.white,
+                    backgroundColor: Colors.blue
+                  ),
+                  child: const Text('INICIAR SESIÓN'),
+                ),
               ),
             ),
             FractionallySizedBox(
@@ -83,7 +88,7 @@ class MyHomePage extends StatelessWidget {
                   backgroundColor: Colors.blue
                   
                 ),
-                child: const Text('COMENZAR'),
+                child: const Text('REGISTRARSE'),
               ),
             )
           ],
