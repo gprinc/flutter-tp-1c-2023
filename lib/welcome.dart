@@ -11,9 +11,8 @@ class WelcomeApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.blue
-    ));
+    SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(statusBarColor: Colors.blue));
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -49,47 +48,50 @@ class MyWelcomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Padding( padding: const EdgeInsets.only( left: 20, right: 20), child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.asset('assets/logo.png', height: 150, width: 150,),
-            const Padding(
-              padding: EdgeInsets.only(
-                top: 70,
-                bottom: 20,
-              ),
-              child: Text(
-                '¡Bienvenido!',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(
-                bottom: 80,
-              ),
-              child: Text(
-                'Nunca subestimes tu habilidad para mejorar la vida de alguien',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            FractionallySizedBox(
-              widthFactor: 1,
-              child: TextButton(
-                onPressed: () {},
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  backgroundColor: Colors.blue
-                  
+        child: Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image.asset(
+                  'assets/logo.png',
+                  height: 150,
+                  width: 150,
                 ),
-                child: const Text('COMENZAR'),
-              ),
-            )
-          ],
-        )),
+                const Padding(
+                  padding: EdgeInsets.only(
+                    top: 70,
+                    bottom: 20,
+                  ),
+                  child: Text(
+                    '¡Bienvenido!',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(
+                    bottom: 80,
+                  ),
+                  child: Text(
+                    'Nunca subestimes tu habilidad para mejorar la vida de alguien',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                FractionallySizedBox(
+                  widthFactor: 1,
+                  child: TextButton(
+                    onPressed: () {},
+                    style: TextButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.blue),
+                    child: const Text('COMENZAR'),
+                  ),
+                )
+              ],
+            )),
       ),
     );
   }
 }
-
