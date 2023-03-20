@@ -1,3 +1,4 @@
+import 'package:dam_1c_2023/cells/forms.dart';
 import 'package:dam_1c_2023/molecules/inputs.dart';
 import 'package:flutter/material.dart';
 
@@ -32,7 +33,7 @@ class TestPage extends StatelessWidget {
                 const SizedBox(
                   height: 25,
                 ),
-                VolunteeringCard(),
+                RegisterForm(),
                 const SizedBox(
                   height: 25,
                 ),

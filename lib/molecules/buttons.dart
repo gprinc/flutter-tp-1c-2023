@@ -5,7 +5,7 @@ import 'package:dam_1c_2023/tokens/token_colors.dart';
 class Button extends StatefulWidget {
   final String text;
   final void Function() handlePress;
-  final bool initialEnabledState;
+  final bool enabledState;
   final bool disableAfterPress;
   final ButtonStyle buttonStyle;
   final TextStyle textStyle;
@@ -14,7 +14,7 @@ class Button extends StatefulWidget {
       {super.key,
       required this.text,
       required this.handlePress,
-      required this.initialEnabledState,
+      required this.enabledState,
       required this.buttonStyle,
       required this.textStyle,
       this.disableAfterPress = false});
@@ -30,7 +30,7 @@ class _ButtonState extends State<Button> {
   void initState() {
     super.initState();
     setState(() {
-      _enabled = widget.initialEnabledState;
+      _enabled = widget.enabledState;
     });
   }
 
@@ -45,6 +45,9 @@ class _ButtonState extends State<Button> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      _enabled = widget.enabledState;
+    });
     return ElevatedButton(
       onPressed: _enabled ? onPressed : null,
       style: widget.buttonStyle,
@@ -59,7 +62,7 @@ class _ButtonState extends State<Button> {
 class CtaButton extends StatelessWidget {
   final String text;
   final void Function() handlePress;
-  final bool initialEnabledState;
+  final bool enabledState;
   final bool disableAfterPress;
 
   final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
@@ -74,7 +77,7 @@ class CtaButton extends StatelessWidget {
       {super.key,
       required this.text,
       required this.handlePress,
-      required this.initialEnabledState,
+      required this.enabledState,
       this.disableAfterPress = false});
 
   @override
@@ -85,7 +88,7 @@ class CtaButton extends StatelessWidget {
       child: Button(
         text: text,
         handlePress: handlePress,
-        initialEnabledState: initialEnabledState,
+        enabledState: enabledState,
         buttonStyle: buttonStyle,
         textStyle: textStyle,
         disableAfterPress: disableAfterPress,
@@ -97,7 +100,7 @@ class CtaButton extends StatelessWidget {
 class ShortButton extends StatelessWidget {
   final String text;
   final void Function() handlePress;
-  final bool initialEnabledState;
+  final bool enabledState;
   final bool disableAfterPress;
 
   final TextStyle textStyle = btn;
@@ -112,7 +115,7 @@ class ShortButton extends StatelessWidget {
       {super.key,
       required this.text,
       required this.handlePress,
-      required this.initialEnabledState,
+      required this.enabledState,
       this.disableAfterPress = false});
 
   @override
@@ -123,7 +126,7 @@ class ShortButton extends StatelessWidget {
       child: Button(
           text: text,
           handlePress: handlePress,
-          initialEnabledState: initialEnabledState,
+          enabledState: enabledState,
           buttonStyle: buttonStyle,
           textStyle: textStyle),
     );
