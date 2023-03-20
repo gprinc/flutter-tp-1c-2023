@@ -10,9 +10,8 @@ class InitialApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.blue
-    ));
+    SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(statusBarColor: Colors.blue));
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -31,52 +30,54 @@ class MyInitialPage extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Center(
-        child: Padding( padding: const EdgeInsets.only( left: 20, right: 20), child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.asset('assets/logo.png', height: width * 0.45, width: width * 0.45,),
-            const Padding(
-              padding: EdgeInsets.only(
-                bottom: 50,
-              ),
-              child: Text(
-                '“El esfuerzo desinteresado para llevar alegría a los demás será el comienzo de una vida más feliz para nosotros”',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                bottom: 50,
-              ),
-              child: FractionallySizedBox(
-                widthFactor: 1,
-                child: TextButton(
-                  onPressed: () {},
-                  style: TextButton.styleFrom(
-                    primary: Colors.white,
-                    backgroundColor: Colors.blue
+        child: Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image.asset(
+                  'assets/logo.png',
+                  height: width * 0.45,
+                  width: width * 0.45,
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(
+                    bottom: 50,
                   ),
-                  child: const Text('INICIAR SESIÓN'),
+                  child: Text(
+                    '“El esfuerzo desinteresado para llevar alegría a los demás será el comienzo de una vida más feliz para nosotros”',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-              ),
-            ),
-            FractionallySizedBox(
-              widthFactor: 1,
-              child: TextButton(
-                onPressed: () {},
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  backgroundColor: Colors.blue
-                  
+                Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: 50,
+                  ),
+                  child: FractionallySizedBox(
+                    widthFactor: 1,
+                    child: TextButton(
+                      onPressed: () {},
+                      style: TextButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.blue),
+                      child: const Text('INICIAR SESIÓN'),
+                    ),
+                  ),
                 ),
-                child: const Text('REGISTRARSE'),
-              ),
-            )
-          ],
-        )),
+                FractionallySizedBox(
+                  widthFactor: 1,
+                  child: TextButton(
+                    onPressed: () {},
+                    style: TextButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.blue),
+                    child: const Text('REGISTRARSE'),
+                  ),
+                )
+              ],
+            )),
       ),
     );
   }
 }
-
