@@ -5,11 +5,17 @@ import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import '../tokens/token_colors.dart';
 
 class Input extends StatefulWidget {
-  final TextEditingController textEditingController = TextEditingController();
   final String? Function(String?) validator;
   final String placeHolder;
+  final bool obscureInput;
+  String? value;
 
-  Input({super.key, required this.validator, required this.placeHolder});
+  Input(
+      {super.key,
+      required this.validator,
+      required this.placeHolder,
+      this.obscureInput = false,
+      this.value = ''});
 
   @override
   State<Input> createState() => _InputState();
@@ -19,18 +25,19 @@ class _InputState extends State<Input> {
   bool _hasError = false;
   bool _hasFocus = false;
   final FocusNode _focus = FocusNode();
+  final TextEditingController _controller = TextEditingController();
 
   Widget? _getStateIcon() {
     if (_hasError) return const Icon(Icons.error, color: Colors.red);
 
-    Widget? result = widget.textEditingController.text.isNotEmpty && _hasFocus
+    Widget? result = _controller.text.isNotEmpty && _hasFocus
         ? IconButton(
             icon: const Icon(
               Icons.clear,
               color: btnSecondary,
             ),
             onPressed: () {
-              widget.textEditingController.clear();
+              _controller.clear();
             },
           )
         : null;
@@ -46,6 +53,7 @@ class _InputState extends State<Input> {
   void initState() {
     super.initState();
     _focus.addListener(_onFocusChange);
+    _controller.text = widget.value ?? '';
   }
 
   @override
@@ -53,6 +61,7 @@ class _InputState extends State<Input> {
     super.dispose();
     _focus.removeListener(_onFocusChange);
     _focus.dispose();
+    _controller.dispose();
   }
 
   void _onFocusChange() {
@@ -65,9 +74,11 @@ class _InputState extends State<Input> {
   Widget build(BuildContext context) {
     return TextFormField(
         onChanged: (value) {
-          setState(() {});
+          setState(() {
+            widget.value = value;
+          });
         },
-        controller: widget.textEditingController,
+        controller: _controller,
         decoration: InputDecoration(
             labelText: _getLabelText(),
             labelStyle: subtitle01,
@@ -87,6 +98,7 @@ class _InputState extends State<Input> {
             ),
             suffixIcon: _getStateIcon()),
         style: subtitle01,
+        obscureText: widget.obscureInput,
         validator: (value) {
           String? validation = widget.validator(value);
           setState(() {
@@ -99,16 +111,19 @@ class _InputState extends State<Input> {
 }
 
 class LabelTextInput extends StatefulWidget {
-  final TextEditingController textEditingController = TextEditingController();
   final String? Function(String?) validator;
   final String placeHolder;
   final String label;
+  final bool obscureInput;
+  String? value;
 
   LabelTextInput(
       {super.key,
       required this.validator,
       required this.placeHolder,
-      required this.label});
+      required this.label,
+      this.obscureInput = false,
+      this.value = ''});
 
   @override
   State<LabelTextInput> createState() => _LabelTextInputState();
@@ -118,15 +133,16 @@ class _LabelTextInputState extends State<LabelTextInput> {
   bool _hasError = false;
   bool _hasFocus = false;
   final FocusNode _focus = FocusNode();
+  final TextEditingController _controller = TextEditingController();
 
   Widget? _getStateIcon() {
     if (_hasError) return const Icon(Icons.error, color: Colors.red);
 
-    return widget.textEditingController.text.isNotEmpty && _hasFocus
+    return _controller.text.isNotEmpty && _hasFocus
         ? IconButton(
             icon: const Icon(Icons.clear, color: btnSecondary),
             onPressed: () {
-              widget.textEditingController.clear();
+              _controller.clear();
             },
           )
         : null;
@@ -136,6 +152,7 @@ class _LabelTextInputState extends State<LabelTextInput> {
   void initState() {
     super.initState();
     _focus.addListener(_onFocusChange);
+    _controller.text = widget.value ?? '';
   }
 
   @override
@@ -143,6 +160,7 @@ class _LabelTextInputState extends State<LabelTextInput> {
     super.dispose();
     _focus.removeListener(_onFocusChange);
     _focus.dispose();
+    _controller.dispose();
   }
 
   void _onFocusChange() {
@@ -154,7 +172,12 @@ class _LabelTextInputState extends State<LabelTextInput> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-        controller: widget.textEditingController,
+        onChanged: (value) {
+          setState(() {
+            widget.value = value;
+          });
+        },
+        controller: _controller,
         decoration: InputDecoration(
             floatingLabelBehavior: FloatingLabelBehavior.always,
             labelText: widget.label,
@@ -175,6 +198,7 @@ class _LabelTextInputState extends State<LabelTextInput> {
             ),
             suffixIcon: _getStateIcon()),
         style: subtitle01,
+        obscureText: widget.obscureInput,
         validator: (value) {
           String? validation = widget.validator(value);
           setState(() {
@@ -187,7 +211,6 @@ class _LabelTextInputState extends State<LabelTextInput> {
 }
 
 class SearchInput extends StatefulWidget {
-  final TextEditingController textEditingController = TextEditingController();
   final void Function() search;
   //final String placeHolder;
 
@@ -200,16 +223,17 @@ class SearchInput extends StatefulWidget {
 class _SearchInputState extends State<SearchInput> {
   bool _hasFocus = false;
   final FocusNode _focus = FocusNode();
+  final TextEditingController _controller = TextEditingController();
 
   Widget? _getStateIcon() {
-    return widget.textEditingController.text.isNotEmpty && !_hasFocus
+    return _controller.text.isNotEmpty && !_hasFocus
         ? IconButton(
             icon: const Icon(
               Icons.clear,
               color: btnSecondary,
             ),
             onPressed: () {
-              widget.textEditingController.clear();
+              _controller.clear();
             },
           )
         : IconButton(
@@ -229,6 +253,7 @@ class _SearchInputState extends State<SearchInput> {
     super.dispose();
     _focus.removeListener(_onFocusChange);
     _focus.dispose();
+    _controller.dispose();
   }
 
   void _onFocusChange() {
@@ -242,7 +267,10 @@ class _SearchInputState extends State<SearchInput> {
     return Container(
       decoration: shadow01,
       child: TextFormField(
-          controller: widget.textEditingController,
+          onChanged: (value) {
+            setState(() {});
+          },
+          controller: _controller,
           decoration: InputDecoration(
               hintText: 'Buscar',
               hintStyle: subtitle01,

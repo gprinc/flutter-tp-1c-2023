@@ -1,3 +1,4 @@
+import 'package:dam_1c_2023/pages/home.dart';
 import 'package:dam_1c_2023/test_page.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:flutter/material.dart';
@@ -95,7 +96,7 @@ class MyHomePage extends StatelessWidget {
                   child: CtaButton(
                       text: 'COMENZAR',
                       handlePress: () {},
-                      initialEnabledState: true,
+                      enabledState: true,
                       disableAfterPress:
                           true) /*TextButton(
                     onPressed: () {},
