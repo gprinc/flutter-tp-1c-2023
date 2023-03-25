@@ -71,7 +71,7 @@ class CtaButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(4), // <-- Radius,
       ));
 
-  final TextStyle textStyle = btn;
+  final TextStyle textStyle = btn.copyWith(color: Colors.white);
 
   CtaButton(
       {super.key,
