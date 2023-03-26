@@ -2,6 +2,7 @@ import 'package:dam_1c_2023/cells/forms.dart';
 import 'package:dam_1c_2023/molecules/inputs.dart';
 import 'package:flutter/material.dart';
 import 'package:dam_1c_2023/molecules/buttons.dart';
+import 'package:dam_1c_2023/atoms/icons/arrow_back.dart';
 
 import 'package:flutter/material.dart';
 
@@ -14,14 +15,23 @@ class SelectedCardPage extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          SizedBox(
-            height: 243, // set the height here
-            width: double.infinity,
-            child: Image.asset(
-              'assets/voluntariado.png',
-              fit: BoxFit.cover,
+            Stack(
+              children: <Widget>[
+                SizedBox(
+                  height: 243, // set the height here
+                  width: double.infinity,
+                  child: Image.asset(
+                    'assets/voluntariado.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                const Positioned(
+                  top: 28,
+                  left: 28,
+                  child: ArrowBackIcon(),
+                ),
+              ],
             ),
-          ),
           const SizedBox(
             height: 32,
           ),
