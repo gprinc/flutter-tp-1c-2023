@@ -1,10 +1,9 @@
-import 'package:dam_1c_2023/cells/forms.dart';
-import 'package:dam_1c_2023/molecules/inputs.dart';
+import 'package:dam_1c_2023/cells/modals.dart';
 import 'package:flutter/material.dart';
 import 'package:dam_1c_2023/molecules/buttons.dart';
 import 'package:dam_1c_2023/atoms/icons/arrow_back.dart';
-
-import 'package:flutter/material.dart';
+import 'package:dam_1c_2023/atoms/logos.dart';
+import 'package:dam_1c_2023/cells/modals.dart';
 
 class SelectedCardPage extends StatelessWidget {
   const SelectedCardPage({Key? key});
@@ -15,23 +14,23 @@ class SelectedCardPage extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: <Widget>[
-            Stack(
-              children: <Widget>[
-                SizedBox(
-                  height: 243, // set the height here
-                  width: double.infinity,
-                  child: Image.asset(
-                    'assets/voluntariado.png',
-                    fit: BoxFit.cover,
-                  ),
+          Stack(
+            children: <Widget>[
+              SizedBox(
+                height: 243, // set the height here
+                width: double.infinity,
+                child: Image.asset(
+                  'assets/voluntariado.png',
+                  fit: BoxFit.cover,
                 ),
-                const Positioned(
-                  top: 28,
-                  left: 28,
-                  child: ArrowBackIcon(),
-                ),
-              ],
-            ),
+              ),
+              const Positioned(
+                top: 28,
+                left: 28,
+                child: ArrowBackIcon(),
+              ),
+            ],
+          ),
           const SizedBox(
             height: 32,
           ),
@@ -45,44 +44,53 @@ class SelectedCardPage extends StatelessWidget {
                   Text(
                     'Title',
                     style: TextStyle(
-                      fontSize: 24, 
+                      fontSize: 24,
                       fontWeight: FontWeight.w400,
                       fontFamily: 'Roboto',
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 24)
-                  ),
+                  Padding(padding: EdgeInsets.only(bottom: 24)),
                   Text(
-                    'Some text here',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400
-                      ),
+                    'Description',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
                   ),
                 ],
               ),
             ),
           ),
           Expanded(
-            child:
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                    padding: const EdgeInsets.only(bottom: 56),
-                    child: CtaButton(
-                    text: 'Button Text',
-                    handlePress: () {
-                      // Handle button press here
-                    },
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 56),
+                child: CtaButton(
+                    text: "Postularme",
                     enabledState: true,
-                    disableAfterPress: false,
-                  ),
-                ),
-              )
+                    handlePress: () {
+                      _showCustomDialog(context);
+                    }),
+              ),
+            ),
           )
         ],
       ),
     );
   }
+}
+
+Future<void> _showCustomDialog(BuildContext context) async {
+  await showDialog<void>(
+    context: context,
+    builder: (_) {
+      return ApplyDialog(
+        title: 'Un techo para mi país',
+        description: 'Días sábados de 9.00 a 17.00 horas',
+        location: 'Caballito',
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Confirmar',
+        onCancelPressed: () => Navigator.of(context).pop(),
+        onConfirmPressed: () => Navigator.of(context).pop(),
+      );
+    },
+  );
 }

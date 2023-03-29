@@ -40,7 +40,7 @@ class _ButtonState extends State<Button> {
         _enabled = !_enabled;
       });
     }
-    return widget.handlePress;
+    widget.handlePress.call();
   }
 
   @override
