@@ -6,7 +6,16 @@ import 'package:dam_1c_2023/atoms/logos.dart';
 import 'package:dam_1c_2023/cells/modals.dart';
 
 class SelectedCardPage extends StatelessWidget {
-  const SelectedCardPage({Key? key});
+  final String imageName;
+  final String title;
+  final String description;
+
+  const SelectedCardPage(
+      {Key? key,
+      required this.imageName,
+      required this.title,
+      required this.description})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +29,7 @@ class SelectedCardPage extends StatelessWidget {
                 height: 243, // set the height here
                 width: double.infinity,
                 child: Image.asset(
-                  'assets/voluntariado.png',
+                  imageName,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -40,19 +49,20 @@ class SelectedCardPage extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const <Widget>[
+                children: <Widget>[
                   Text(
-                    'Title',
-                    style: TextStyle(
+                    title,
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w400,
                       fontFamily: 'Roboto',
                     ),
                   ),
-                  Padding(padding: EdgeInsets.only(bottom: 24)),
+                  const Padding(padding: EdgeInsets.only(bottom: 24)),
                   Text(
-                    'Description',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                    description,
+                    style: const TextStyle(
+                        fontSize: 14, fontWeight: FontWeight.w400),
                   ),
                 ],
               ),
