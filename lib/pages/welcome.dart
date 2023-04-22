@@ -1,5 +1,10 @@
+import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+
+import '../atoms/logos.dart';
+import '../molecules/buttons.dart';
 
 void main() {
   runApp(const WelcomeApp());
@@ -16,17 +21,15 @@ class WelcomeApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyWelcomePage(),
+      home: const WelcomePage(),
     );
   }
 }
 
-class MyWelcomePage extends StatelessWidget {
-  const MyWelcomePage({super.key});
-
+class WelcomePage extends StatelessWidget {
+  const WelcomePage({super.key});
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Center(
         child: Padding(
@@ -34,11 +37,7 @@ class MyWelcomePage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Image.asset(
-                  'assets/logo.png',
-                  height: width * 0.45,
-                  width: width * 0.45,
-                ),
+                squareLogo,
                 const Padding(
                   padding: EdgeInsets.only(
                     top: 70,
@@ -46,29 +45,26 @@ class MyWelcomePage extends StatelessWidget {
                   ),
                   child: Text(
                     '¡Bienvenido!',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
                     textAlign: TextAlign.center,
+                    style: headLine01,
                   ),
                 ),
                 const Padding(
-                  padding: EdgeInsets.only(
-                    bottom: 80,
-                  ),
-                  child: Text(
-                    'Nunca subestimes tu habilidad para mejorar la vida de alguien',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+                    padding: EdgeInsets.only(
+                      bottom: 80,
+                    ),
+                    child: Text(
+                      'Nunca subestimes tu habilidad para mejorar la vida de alguien',
+                      style: subtitle01,
+                      textAlign: TextAlign.center,
+                    )),
                 FractionallySizedBox(
                   widthFactor: 1,
-                  child: TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.blue),
-                    child: const Text('COMENZAR'),
-                  ),
+                  child: CtaButton(
+                      text: 'COMENZAR',
+                      handlePress: () => context.go("/home"),
+                      enabledState: true,
+                      disableAfterPress: true),
                 )
               ],
             )),

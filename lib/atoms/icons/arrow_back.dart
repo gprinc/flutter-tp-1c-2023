@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:dam_1c_2023/tokens/token_colors.dart' as colors;
+import 'package:go_router/go_router.dart';
 
 class ArrowBackIcon extends StatefulWidget {
   const ArrowBackIcon({super.key});
@@ -9,14 +9,16 @@ class ArrowBackIcon extends StatefulWidget {
 }
 
 class _ArrowBackIconState extends State<ArrowBackIcon> {
-  IconData _icon = Icons.arrow_back;
-  Color _color = Color.fromRGBO(224, 224, 224, 1.0);
+  final IconData _icon = Icons.arrow_back;
+  final Color _color = const Color.fromRGBO(224, 224, 224, 1.0);
 
   @override
   Widget build(BuildContext context) {
-    return Icon(
-      _icon,
-      color: _color,
-    );
+    return IconButton(
+        icon: Icon(
+          _icon,
+          color: _color,
+        ),
+        onPressed: () => context.go("/"));
   }
 }

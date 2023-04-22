@@ -1,16 +1,19 @@
-import 'package:dam_1c_2023/atoms/logos.dart';
 import 'package:flutter/material.dart';
 
 class VolunteeringCard extends StatelessWidget {
-  const VolunteeringCard({super.key});
+  final String title;
+  final Image image;
+
+  const VolunteeringCard({Key? key, required this.title, required this.image})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: volunteering.width,
+      width: image.width,
       child: Card(
         child: Column(children: [
-          volunteering,
+          image,
           Padding(
             padding:
                 const EdgeInsets.only(top: 8, bottom: 16, left: 16, right: 18),
@@ -20,15 +23,12 @@ class VolunteeringCard extends StatelessWidget {
                 Expanded(
                     child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('ACCIÓN SOCIAL'),
-                    Text('Un Techo para mi País')
-                  ],
+                  children: [const Text('ACCIÓN SOCIAL'), Text(title)],
                 )),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
+                  children: const [
                     Icon(Icons.favorite_border),
                     SizedBox(
                       width: 23,
