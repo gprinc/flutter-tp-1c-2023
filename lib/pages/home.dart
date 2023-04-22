@@ -1,5 +1,6 @@
 import 'package:dam_1c_2023/cells/cards.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../atoms/logos.dart';
 import '../tokens/token_colors.dart';
 
@@ -28,20 +29,38 @@ class Home extends StatelessWidget {
           body: Column(
             children: [
               Expanded(
-                child: TabBarView(children: [
-                  ListView(
-                    children: [
-                      VolunteeringCard(
-                          title: 'Un techo para mi país', image: volunteering),
-                      VolunteeringCard(
-                          title: 'Manos caritativas', image: manos),
-                      VolunteeringCard(title: 'Iglesia', image: iglesia),
-                    ],
-                  ),
-                  const SizedBox(),
-                  const SizedBox()
-                ]),
-              )
+                  child: Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16),
+                child: TabBarView(
+                  children: [
+                    ListView(
+                      children: [
+                        GestureDetector(
+                          onTap: () => context.go('/selected-card'),
+                          child: const VolunteeringCard(
+                              title: 'Un techo para mi país',
+                              imageName: 'assets/voluntariado.png'),
+                        ),
+                        GestureDetector(
+                          onTap: () => context.go('/selected-card'),
+                          child: const VolunteeringCard(
+                              title: 'Manos caritativas',
+                              imageName: 'assets/manos.png'),
+                        ),
+                        GestureDetector(
+                          onTap: () => context.go('/selected-card'),
+                          child: const VolunteeringCard(
+                              title: 'Iglesia',
+                              imageName: 'assets/iglesia.png'),
+                        ),
+                      ],
+                    ),
+                    // The other tabs...
+                    Container(color: Colors.blue),
+                    Container(color: Colors.green),
+                  ],
+                ),
+              ))
             ],
           )),
     );

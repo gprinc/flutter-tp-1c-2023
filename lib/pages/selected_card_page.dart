@@ -2,8 +2,6 @@ import 'package:dam_1c_2023/cells/modals.dart';
 import 'package:flutter/material.dart';
 import 'package:dam_1c_2023/molecules/buttons.dart';
 import 'package:dam_1c_2023/atoms/icons/arrow_back.dart';
-import 'package:dam_1c_2023/atoms/logos.dart';
-import 'package:dam_1c_2023/cells/modals.dart';
 
 class SelectedCardPage extends StatelessWidget {
   final String imageName;
@@ -29,7 +27,7 @@ class SelectedCardPage extends StatelessWidget {
                 height: 243, // set the height here
                 width: double.infinity,
                 child: Image.asset(
-                  'assets/' + imageName,
+                  'assets/$imageName',
                   fit: BoxFit.cover,
                 ),
               ),

@@ -19,6 +19,6 @@ class _ArrowBackIconState extends State<ArrowBackIcon> {
           _icon,
           color: _color,
         ),
-        onPressed: () => context.go("/"));
+        onPressed: () => context.go("/home"));
   }
 }

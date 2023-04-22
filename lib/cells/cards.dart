@@ -2,18 +2,22 @@ import 'package:flutter/material.dart';
 
 class VolunteeringCard extends StatelessWidget {
   final String title;
-  final Image image;
+  final String imageName;
 
-  const VolunteeringCard({Key? key, required this.title, required this.image})
+  const VolunteeringCard(
+      {Key? key, required this.title, required this.imageName})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: image.width,
       child: Card(
         child: Column(children: [
-          image,
+          Image.asset(
+            imageName,
+            height: 138,
+            width: 328,
+          ),
           Padding(
             padding:
                 const EdgeInsets.only(top: 8, bottom: 16, left: 16, right: 18),
