@@ -68,9 +68,7 @@ class Home extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8),
                             child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                              ),
+                              decoration: BoxDecoration(),
                               child: Center(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -100,13 +98,11 @@ class Home extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        Container(
-                          width: double.infinity,
-                          height: 50,
-                          margin: const EdgeInsets.symmetric(horizontal: 16),
-                          child: SizedBox(
+                        Center(
+                          child: Container(
                             width: 123,
                             height: 48,
+                            margin: const EdgeInsets.only(bottom: 80),
                             child: ShortButton(
                               handlePress: () {
                                 // Do something when the button is pressed
