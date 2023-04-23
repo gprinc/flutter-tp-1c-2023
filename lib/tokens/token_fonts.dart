@@ -43,7 +43,7 @@ const TextStyle body01 = TextStyle(
   fontSize: 14,
   //height: 20,
   letterSpacing: 0.25,
-  color: lbl,
+  color: btnSecondary,
 );
 
 const TextStyle body02 = TextStyle(
@@ -61,9 +61,8 @@ const TextStyle btn = TextStyle(
   fontStyle: FontStyle.normal,
   fontWeight: FontWeight.w500,
   fontSize: 14,
-  //height: 20,
   letterSpacing: 0.1,
-  color: lbl,
+  color: neutralBg,
 );
 
 const TextStyle caption = TextStyle(

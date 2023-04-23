@@ -1,6 +1,10 @@
 import 'package:dam_1c_2023/cells/cards.dart';
+import 'package:dam_1c_2023/models/card_list.dart';
+import 'package:dam_1c_2023/molecules/buttons.dart';
+import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import '../atoms/logos.dart';
 import '../tokens/token_colors.dart';
 
@@ -9,8 +13,9 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cardsProvider = Provider.of<CardList>(context);
     return DefaultTabController(
-      // --> Puedo manegar el estado del TabBar de forma automatica.
+      // --> Puedo manejar el estado del TabBar de forma automatica.
       // Es una clase "Inherited" que no convenia a veces.
       length: 3,
       child: Scaffold(
@@ -56,8 +61,65 @@ class Home extends StatelessWidget {
                       ],
                     ),
                     // The other tabs...
-                    Container(color: Colors.blue),
-                    Container(color: Colors.green),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                              ),
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      width: 120,
+                                      height: 120,
+                                      child: Image.asset('assets/profile.png'),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    const Text('Voluntario', style: overline),
+                                    const SizedBox(height: 8),
+                                    const Text('Juan Cruz', style: subtitle01),
+                                    const SizedBox(height: 8),
+                                    const Center(
+                                      child: Text(
+                                        "¡Completá tu perfil para tener acceso a mejores oportunidades!",
+                                        style: body01,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Container(
+                          width: double.infinity,
+                          height: 50,
+                          margin: const EdgeInsets.symmetric(horizontal: 16),
+                          child: SizedBox(
+                            width: 123,
+                            height: 48,
+                            child: ShortButton(
+                              handlePress: () {
+                                // Do something when the button is pressed
+                              },
+                              text: 'Completar',
+                              enabledState: true,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+                    ),
+                    Column(),
                   ],
                 ),
               ))

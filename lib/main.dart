@@ -4,6 +4,9 @@ import 'package:dam_1c_2023/pages/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
+import 'models/card_list.dart';
 
 final GoRouter _router = GoRouter(
   routes: [
@@ -43,12 +46,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.blue));
-    return MaterialApp.router(
-      routerConfig: _router,
-      title: 'Flutter App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-    );
+    return ChangeNotifierProvider(
+        create: (_) => CardList(),
+        child: MaterialApp.router(
+          routerConfig: _router,
+          title: 'Flutter App',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+        ));
   }
 }

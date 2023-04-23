@@ -27,7 +27,7 @@ class SelectedCardPage extends StatelessWidget {
                 height: 243, // set the height here
                 width: double.infinity,
                 child: Image.asset(
-                  'assets/$imageName',
+                  'assets/' + imageName,
                   fit: BoxFit.cover,
                 ),
               ),
