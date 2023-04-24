@@ -20,11 +20,20 @@ class Home extends StatelessWidget {
       length: 3,
       child: Scaffold(
           appBar: AppBar(
-            toolbarHeight: 100,
+            toolbarHeight: 41,
+            leadingWidth: 197,
             elevation: 0,
-            leading: Padding(
-              padding: const EdgeInsets.only(left: 14),
-              child: rectangularLogo,
+            leading: SizedBox(
+              width: 50, // Adjust this value as needed
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 14),
+                    child: rectangularLogo,
+                  ),
+                ],
+              ),
             ),
             bottom: PreferredSize(
               preferredSize: _tabBar.preferredSize,
