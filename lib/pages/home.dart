@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:dam_1c_2023/cells/cards.dart';
 import 'package:dam_1c_2023/models/card_list.dart';
 import 'package:dam_1c_2023/molecules/buttons.dart';
+import 'package:dam_1c_2023/molecules/inputs.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -49,23 +52,35 @@ class Home extends StatelessWidget {
                   children: [
                     ListView(
                       children: [
+                        const SizedBox(height: 24),
+                        SearchInput(search: () => print("hi")),
+                        const SizedBox(height: 32),
                         GestureDetector(
                           onTap: () => context.go('/selected-card'),
                           child: const VolunteeringCard(
                               title: 'Un techo para mi país',
                               imageName: 'assets/voluntariado.png'),
                         ),
+                        const SizedBox(height: 24),
                         GestureDetector(
                           onTap: () => context.go('/selected-card'),
                           child: const VolunteeringCard(
                               title: 'Manos caritativas',
                               imageName: 'assets/manos.png'),
                         ),
+                        const SizedBox(height: 24),
                         GestureDetector(
                           onTap: () => context.go('/selected-card'),
                           child: const VolunteeringCard(
                               title: 'Iglesia',
                               imageName: 'assets/iglesia.png'),
+                        ),
+                        const SizedBox(height: 24),
+                        GestureDetector(
+                          onTap: () => context.go('/selected-card'),
+                          child: const VolunteeringCard(
+                              title: 'Un techo para mi país',
+                              imageName: 'assets/voluntariado.png'),
                         ),
                       ],
                     ),

@@ -214,7 +214,7 @@ class SearchInput extends StatefulWidget {
   final void Function() search;
   //final String placeHolder;
 
-  SearchInput({super.key, required this.search});
+  const SearchInput({super.key, required this.search});
 
   @override
   State<SearchInput> createState() => _SearchInputState();
