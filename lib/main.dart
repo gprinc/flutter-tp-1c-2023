@@ -19,14 +19,22 @@ final GoRouter _router = GoRouter(
       builder: (context, state) => const Home(),
     ),
     GoRoute(
-      path: "/selected-card",
-      builder: (context, state) => const SelectedCardPage(
-        imageName: 'voluntariado.png',
-        title: 'Un techo para mi país',
-        description:
-            'A dos horas al sur de Vicente López en la ciudad de Buenos Aires.',
-      ),
-    ),
+        name: 'selected-card',
+        path: "/selected-card/:id",
+        builder: (context, state) {
+          final volunteeringProvider = Provider.of<VolunteeringList>(context);
+          final int? index = int.tryParse(state.params['id'] ?? '');
+          if (index == null) {
+            // handle the case where index is null (e.g. invalid input)
+            return Container();
+          }
+          final volunteering = volunteeringProvider.volunteering[index - 1];
+          return SelectedCardPage(
+            imageName: volunteering.imageName,
+            title: volunteering.title,
+            description: volunteering.description,
+          );
+        }),
     GoRoute(
       path: "/welcome",
       builder: (context, state) => const WelcomePage(),

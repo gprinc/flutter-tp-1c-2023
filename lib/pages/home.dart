@@ -69,7 +69,8 @@ class Home extends StatelessWidget {
                                 child: VolunteeringCard(
                                     title: volunteering.title,
                                     imageName: volunteering.imageName),
-                                onTap: () => context.go("/selected-card"),
+                                onTap: () => context.goNamed('selected-card',
+                                    params: {'id': index.toString()}),
                               ),
                               const SizedBox(height: 24),
                             ],
