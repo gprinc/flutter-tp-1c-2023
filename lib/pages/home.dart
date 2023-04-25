@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:dam_1c_2023/cells/cards.dart';
-import 'package:dam_1c_2023/models/card_list.dart';
+import 'package:dam_1c_2023/models/volunteering_list.dart';
 import 'package:dam_1c_2023/molecules/buttons.dart';
 import 'package:dam_1c_2023/molecules/inputs.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
@@ -16,7 +16,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cardsProvider = Provider.of<CardList>(context);
+    final volunteeringProvider = Provider.of<VolunteeringList>(context);
     return DefaultTabController(
       // --> Puedo manejar el estado del TabBar de forma automatica.
       // Es una clase "Inherited" que no convenia a veces.
@@ -50,40 +50,31 @@ class Home extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16, right: 16),
                 child: TabBarView(
                   children: [
-                    ListView(
-                      children: [
-                        const SizedBox(height: 24),
-                        SearchInput(search: () => print("hi")),
-                        const SizedBox(height: 32),
-                        GestureDetector(
-                          onTap: () => context.go('/selected-card'),
-                          child: const VolunteeringCard(
-                              title: 'Un techo para mi país',
-                              imageName: 'assets/voluntariado.png'),
-                        ),
-                        const SizedBox(height: 24),
-                        GestureDetector(
-                          onTap: () => context.go('/selected-card'),
-                          child: const VolunteeringCard(
-                              title: 'Manos caritativas',
-                              imageName: 'assets/manos.png'),
-                        ),
-                        const SizedBox(height: 24),
-                        GestureDetector(
-                          onTap: () => context.go('/selected-card'),
-                          child: const VolunteeringCard(
-                              title: 'Iglesia',
-                              imageName: 'assets/iglesia.png'),
-                        ),
-                        const SizedBox(height: 24),
-                        GestureDetector(
-                          onTap: () => context.go('/selected-card'),
-                          child: const VolunteeringCard(
-                              title: 'Un techo para mi país',
-                              imageName: 'assets/voluntariado.png'),
-                        ),
-                      ],
-                    ),
+                    ListView.builder(
+                        itemCount: volunteeringProvider.volunteering.length + 1,
+                        itemBuilder: (BuildContext context, int index) {
+                          if (index == 0) {
+                            return Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: SearchInput(search: () {
+                                // Handle search input here
+                              }),
+                            );
+                          }
+                          final volunteering =
+                              volunteeringProvider.volunteering[index - 1];
+                          return Column(
+                            children: [
+                              GestureDetector(
+                                child: VolunteeringCard(
+                                    title: volunteering.title,
+                                    imageName: volunteering.imageName),
+                                onTap: () => context.go("/selected-card"),
+                              ),
+                              const SizedBox(height: 24),
+                            ],
+                          );
+                        }),
                     // The other tabs...
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

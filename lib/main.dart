@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import 'models/card_list.dart';
+import 'models/volunteering_list.dart';
 
 final GoRouter _router = GoRouter(
   routes: [
@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.blue));
     return ChangeNotifierProvider(
-        create: (_) => CardList(),
+        create: (_) => VolunteeringList(),
         child: MaterialApp.router(
           routerConfig: _router,
           title: 'Flutter App',

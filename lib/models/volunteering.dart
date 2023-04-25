@@ -1,9 +1,9 @@
-class CardData {
+class Volunteering {
   final String title;
   final String description;
   final String imageName;
 
-  CardData(
+  Volunteering(
       {required this.title,
       required this.description,
       required this.imageName});
