@@ -1,4 +1,6 @@
+import 'package:dam_1c_2023/atoms/logos.dart';
 import 'package:dam_1c_2023/cells/modals.dart';
+import 'package:dam_1c_2023/models/volunteering.dart';
 import 'package:flutter/material.dart';
 import 'package:dam_1c_2023/molecules/buttons.dart';
 import 'package:dam_1c_2023/atoms/icons/arrow_back.dart';
@@ -75,7 +77,7 @@ class SelectedCardPage extends StatelessWidget {
                     text: "Postularme",
                     enabledState: true,
                     handlePress: () {
-                      _showCustomDialog(context);
+                      _showCustomDialog(context, title, description);
                     }),
               ),
             ),
@@ -86,12 +88,13 @@ class SelectedCardPage extends StatelessWidget {
   }
 }
 
-Future<void> _showCustomDialog(BuildContext context) async {
+Future<void> _showCustomDialog(
+    BuildContext context, String title, String description) async {
   await showDialog<void>(
     context: context,
     builder: (_) {
       return ApplyDialog(
-        title: 'Un techo para mi país',
+        title: title,
         description: 'Días sábados de 9.00 a 17.00 horas',
         location: 'Caballito',
         cancelButtonText: 'Cancelar',
