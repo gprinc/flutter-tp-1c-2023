@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:dam_1c_2023/cells/cards.dart';
+import 'package:dam_1c_2023/models/newsList.dart';
 import 'package:dam_1c_2023/models/volunteering_list.dart';
 import 'package:dam_1c_2023/molecules/buttons.dart';
 import 'package:dam_1c_2023/molecules/inputs.dart';
@@ -17,6 +18,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final volunteeringProvider = Provider.of<VolunteeringList>(context);
+    final newsProvider = Provider.of<NewsList>(context);
     return DefaultTabController(
       // --> Puedo manejar el estado del TabBar de forma automatica.
       // Es una clase "Inherited" que no convenia a veces.
@@ -131,7 +133,23 @@ class Home extends StatelessWidget {
                         const SizedBox(height: 16),
                       ],
                     ),
-                    Column(),
+
+                    // NOVEDADES
+                    ListView.builder(
+                        itemCount: newsProvider.news.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final news = newsProvider.news[index];
+                          return Column(
+                            children: [
+                              NewsCard(
+                                  title: news.title,
+                                  header: news.header,
+                                  description: news.description,
+                                  imageName: news.imageName),
+                              const SizedBox(height: 24),
+                            ],
+                          );
+                        }),
                   ],
                 ),
               ))
@@ -149,31 +167,3 @@ class Home extends StatelessWidget {
             Tab(text: 'Novedades'),
           ]);
 }
-
-
-        /*body: Column(
-          children: [
-            Container(color: unselectedColor, child: _tabBar),
-
-            Si no le pongo el expanded me tira este error:
-            The following assertion was thrown during performResize():
-            Horizontal viewport was given unbounded height.
-            Expanded(
-              child: TabBarView(children: [
-                1st Tab
-                const PostulacionesBody(),
-                PostulacionesBody(),
-                Center(
-                  child: Container(
-                    height: 100,
-                    width: 100,
-                    color: Colors.orange,
-                  ),
-                ),
-                Container(
-                  color: Colors.blueAccent,
-                ),
-              ]),
-            ),
-          ],
-        )*/

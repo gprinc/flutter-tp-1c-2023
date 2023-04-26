@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import 'models/newsList.dart';
 import 'models/volunteering_list.dart';
 
 final GoRouter _router = GoRouter(
@@ -49,19 +50,26 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.blue));
-    return ChangeNotifierProvider(
-        create: (_) => VolunteeringList(),
-        child: MaterialApp.router(
-          routerConfig: _router,
-          title: 'Flutter App',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
-        ));
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<VolunteeringList>(
+          create: (_) => VolunteeringList(),
+        ),
+        ChangeNotifierProvider<NewsList>(
+          create: (_) => NewsList(),
+        ),
+      ],
+      child: MaterialApp.router(
+        routerConfig: _router,
+        title: 'Flutter App',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+      ),
+    );
   }
 }

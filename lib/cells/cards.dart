@@ -1,3 +1,4 @@
+import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:flutter/material.dart';
 
 class VolunteeringCard extends StatelessWidget {
@@ -44,6 +45,59 @@ class VolunteeringCard extends StatelessWidget {
             ),
           )
         ]),
+      ),
+    );
+  }
+}
+
+class NewsCard extends StatelessWidget {
+  final String title;
+  final String header;
+  final String description;
+  final String imageName;
+
+  const NewsCard({
+    Key? key,
+    required this.title,
+    required this.header,
+    required this.description,
+    required this.imageName,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 156,
+      child: Card(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Image.asset(
+              imageName,
+              width: 118,
+              fit: BoxFit.cover,
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(header, style: overline),
+                    const SizedBox(height: 8),
+                    Text(title, style: subtitle01),
+                    const SizedBox(height: 8),
+                    Text(description,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: body02),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
