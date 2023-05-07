@@ -53,7 +53,7 @@ const TextStyle body02 = TextStyle(
   fontSize: 12,
   //height: 16,
   letterSpacing: 0.4,
-  color: lbl,
+  color: btnSecondary,
 );
 
 const TextStyle btn = TextStyle(
@@ -91,5 +91,5 @@ const TextStyle overline = TextStyle(
   fontSize: 10,
   //height: 16,
   letterSpacing: 1.5,
-  color: lbl,
+  color: btnSecondary,
 );
