@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:dam_1c_2023/tokens/token_colors.dart';
 
+import '../atoms/icons/plus.dart';
+
 class Button extends StatefulWidget {
   final String text;
   final void Function() handlePress;
@@ -111,24 +113,32 @@ class ShortButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(4), // <-- Radius,
       ));
 
-  ShortButton(
-      {super.key,
-      required this.text,
-      required this.handlePress,
-      required this.enabledState,
-      this.disableAfterPress = false});
+  ShortButton({
+    Key? key,
+    required this.text,
+    required this.handlePress,
+    required this.enabledState,
+    this.disableAfterPress = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 123,
       height: 48,
-      child: Button(
-          text: text,
-          handlePress: handlePress,
-          enabledState: enabledState,
-          buttonStyle: buttonStyle,
-          textStyle: textStyle),
+      child: ElevatedButton(
+        onPressed: enabledState ? handlePress : null,
+        style: buttonStyle,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const PlusIcon(),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(text, style: textStyle),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

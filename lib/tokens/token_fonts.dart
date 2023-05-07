@@ -65,6 +65,15 @@ const TextStyle btn = TextStyle(
   color: neutralBg,
 );
 
+const TextStyle btnGreen = TextStyle(
+  fontFamily: 'Roboto',
+  fontStyle: FontStyle.normal,
+  fontWeight: FontWeight.w500,
+  fontSize: 14,
+  letterSpacing: 0.1,
+  color: primary,
+);
+
 const TextStyle caption = TextStyle(
   fontFamily: 'Roboto',
   fontStyle: FontStyle.normal,

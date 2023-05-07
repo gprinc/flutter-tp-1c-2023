@@ -69,32 +69,55 @@ class NewsCard extends StatelessWidget {
     return SizedBox(
       height: 156,
       child: Card(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: Stack(
           children: [
-            Image.asset(
-              imageName,
-              width: 118,
-              fit: BoxFit.cover,
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(header, style: overline),
-                    const SizedBox(height: 8),
-                    Text(title, style: subtitle01),
-                    const SizedBox(height: 8),
-                    Text(description,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: body02),
-                  ],
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Image.asset(
+                  imageName,
+                  width: 118,
+                  fit: BoxFit.cover,
                 ),
-              ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(header, style: overline),
+                            const SizedBox(height: 8),
+                            Text(title, style: subtitle01),
+                            const SizedBox(height: 8),
+                            Text(
+                              description,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: body02,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 40,
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: TextButton(
+                              onPressed: () {
+                                // TODO: Handle "Leer mas" button press
+                              },
+                              child: const Text("Leer mas", style: btnGreen),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
