@@ -17,6 +17,7 @@ class _PlusIcon extends State<PlusIcon> {
     return Icon(
       _icon,
       color: _color,
+      size: 14,
     );
   }
 }

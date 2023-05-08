@@ -108,10 +108,11 @@ class ShortButton extends StatelessWidget {
   final TextStyle textStyle = btn;
 
   final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
-      backgroundColor: primary,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4), // <-- Radius,
-      ));
+    backgroundColor: primary,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(4), // <-- Radius,
+    ),
+  );
 
   ShortButton({
     Key? key,
@@ -125,16 +126,19 @@ class ShortButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 48,
+      width: 123,
       child: ElevatedButton(
         onPressed: enabledState ? handlePress : null,
         style: buttonStyle,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const PlusIcon(),
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Text(text, style: textStyle),
+            const SizedBox(width: 5),
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(text, style: textStyle),
+              ),
             ),
           ],
         ),
