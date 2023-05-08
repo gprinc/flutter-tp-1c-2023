@@ -1,4 +1,6 @@
+import 'package:dam_1c_2023/initial.dart';
 import 'package:dam_1c_2023/pages/home.dart';
+import 'package:dam_1c_2023/pages/login.dart';
 import 'package:dam_1c_2023/pages/selected_card_page.dart';
 import 'package:dam_1c_2023/pages/welcome.dart';
 import 'package:flutter/material.dart';
@@ -8,14 +10,32 @@ import 'package:provider/provider.dart';
 
 import 'models/newsList.dart';
 import 'models/volunteering_list.dart';
+import 'pages/signup.dart';
 
 final GoRouter _router = GoRouter(
   routes: [
     GoRoute(
-      path: "/",
+        path: "/",
+        builder: (context, state) => const MyInitialPage(),
+        routes: [
+          GoRoute(
+            name: 'login',
+            path: "login",
+            builder: (context, state) => const LoginPage(),
+          ),
+          GoRoute(
+            name: 'signup',
+            path: "signup",
+            builder: (context, state) => const SignupPage(),
+          ),
+        ]),
+    GoRoute(
+      name: 'welcome',
+      path: "/welcome",
       builder: (context, state) => const WelcomePage(),
     ),
     GoRoute(
+      name: 'home',
       path: "/home",
       builder: (context, state) => const Home(),
     ),
@@ -36,10 +56,6 @@ final GoRouter _router = GoRouter(
             description: volunteering.description,
           );
         }),
-    GoRoute(
-      path: "/welcome",
-      builder: (context, state) => const WelcomePage(),
-    ),
   ],
 );
 

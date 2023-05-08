@@ -2,8 +2,10 @@ import 'package:dam_1c_2023/atoms/logos.dart';
 import 'package:dam_1c_2023/molecules/buttons.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../molecules/inputs.dart';
+import '../tokens/token_colors.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -16,13 +18,21 @@ class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   bool _enabled = true;
   late bool _isFresh;
+  late TextEditingController _emailController;
+  late TextEditingController _passController;
 
   @override
   void initState() {
     super.initState();
+    _emailController = TextEditingController();
+    _passController = TextEditingController();
     setState(() {
       _isFresh = true;
     });
+  }
+
+  bool _isComplete() {
+    return _emailController.text.isNotEmpty && _passController.text.isNotEmpty;
   }
 
   String? emailValidator(String? email) {
@@ -41,11 +51,11 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   String? passwordValidator(String? pass) {
-    RegExp regex =
-        RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+    //RegExp regex =
+    //    RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
     if (pass == null || pass.isEmpty) return 'Ingrese una contraseña';
-
-    return !regex.hasMatch(pass) ? 'Ingrese contraseña valida' : null;
+    return null;
+    //return !regex.hasMatch(pass) ? 'Ingrese contraseña valida' : null;
   }
 
   _validate() {
@@ -56,43 +66,48 @@ class _LoginFormState extends State<LoginForm> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Validando')),
       );
+      context.goNamed('home');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Form(
-      autovalidateMode: AutovalidateMode.onUserInteraction,
+      autovalidateMode: AutovalidateMode.disabled,
       key: _formKey,
       onChanged: () {
         setState(() {
-          _enabled = _formKey.currentState!.validate();
+          _enabled = _isComplete();
           _isFresh = false;
         });
       },
       child: Column(
         children: <Widget>[
           const SizedBox(
-            height: 10,
+            height: 149,
           ),
           squareLogo,
           const SizedBox(
-            height: 38,
+            height: 43.5,
           ),
-          Input(
+          LabelTextInput(
             placeHolder: 'Email',
+            controller: _emailController,
             validator: emailValidator,
+            label: 'Email',
           ),
           const SizedBox(
-            height: 46,
+            height: 64,
           ),
-          Input(
+          LabelTextInput(
             placeHolder: 'Contraseña',
+            controller: _passController,
             validator: passwordValidator,
             obscureInput: true,
+            label: 'Contraseña',
           ),
           const SizedBox(
-            height: 141,
+            height: 63,
           ),
           CtaButton(
             text: 'Ingresar',
@@ -104,8 +119,8 @@ class _LoginFormState extends State<LoginForm> {
             height: 28,
           ),
           TextButton(
-            onPressed: () {},
-            child: const Text('No tengo cuenta', style: btn),
+            onPressed: () => context.goNamed('signup'),
+            child: Text('No tengo cuenta', style: btnModif(textBtn)),
           )
         ],
       ),
@@ -124,10 +139,18 @@ class _RegisterFormState extends State<RegisterForm> {
   final _formKey = GlobalKey<FormState>();
   bool _enabled = true;
   late bool _isFresh;
+  late TextEditingController _emailController;
+  late TextEditingController _passController;
+  late TextEditingController _firstNameController;
+  late TextEditingController _lastNameController;
 
   @override
   void initState() {
     super.initState();
+    _emailController = TextEditingController();
+    _passController = TextEditingController();
+    _firstNameController = TextEditingController();
+    _lastNameController = TextEditingController();
     setState(() {
       _isFresh = true;
     });
@@ -149,16 +172,17 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   String? passwordValidator(String? pass) {
-    RegExp regex =
-        RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+    //RegExp regex =
+    //    RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
     if (pass == null || pass.isEmpty) return 'Ingrese una contraseña';
-
-    return !regex.hasMatch(pass) ? 'Ingrese contraseña valida' : null;
+    return null;
+    //return !regex.hasMatch(pass) ? 'Ingrese contraseña valida' : null;
   }
 
   String? nameValidator(String? name) {
     if (name == null || name.isEmpty) return 'Campo requerido';
-    return null;
+    RegExp regex = RegExp(r'^[a-zA-Z ]+$');
+    return !regex.hasMatch(name) ? 'Ingrese solo letras y espacios' : null;
   }
 
   _validate() {
@@ -169,74 +193,82 @@ class _RegisterFormState extends State<RegisterForm> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Validando')),
       );
+      context.goNamed('welcome');
     }
+  }
+
+  bool _isComplete() {
+    return _emailController.text.isNotEmpty &&
+        _passController.text.isNotEmpty &&
+        _firstNameController.text.isNotEmpty &&
+        _lastNameController.text.isNotEmpty;
   }
 
   @override
   Widget build(BuildContext context) {
     return Form(
-      autovalidateMode: AutovalidateMode.onUserInteraction,
       key: _formKey,
+      autovalidateMode: AutovalidateMode.disabled,
       onChanged: () {
         setState(() {
-          _enabled = _formKey.currentState!.validate();
+          _enabled = _isComplete();
           _isFresh = false;
         });
       },
       child: Column(
         children: <Widget>[
           const SizedBox(
-            height: 5,
-          ),
-          squareLogo,
-          const SizedBox(
-            height: 25,
+            height: 176,
           ),
           LabelTextInput(
-            placeHolder: 'Ej: Juan',
+            placeHolder: 'Nombre',
+            controller: _firstNameController,
             validator: nameValidator,
             label: 'Nombre',
           ),
           const SizedBox(
-            height: 25,
+            height: 63,
           ),
           LabelTextInput(
-            placeHolder: 'Ej: Barcena',
+            placeHolder: 'Apellido',
+            controller: _lastNameController,
             validator: nameValidator,
             label: 'Apellido',
           ),
           const SizedBox(
-            height: 25,
+            height: 63,
           ),
           LabelTextInput(
             placeHolder: 'Contraseña',
+            controller: _passController,
             validator: passwordValidator,
             obscureInput: true,
-            label: 'Ej: ABCD1234',
+            label: 'Contraseña',
           ),
           const SizedBox(
-            height: 25,
+            height: 63,
           ),
           LabelTextInput(
             placeHolder: 'Email',
+            controller: _emailController,
             validator: emailValidator,
-            label: 'Ej: juanbarcena@mail.com',
+            label: 'Email',
           ),
           const SizedBox(
-            height: 80,
+            height: 49,
           ),
           CtaButton(
-            text: 'Ingresar',
+            text: 'Registrarme',
             handlePress: _validate,
             enabledState: _isFresh ? false : _enabled,
             disableAfterPress: true,
           ),
           const SizedBox(
-            height: 5,
+            height: 29,
           ),
           TextButton(
-            onPressed: () {},
-            child: const Text('Ya tengo cuenta', style: btn),
+            onPressed: () => context.goNamed('login'),
+            child: Text('Ya tengo cuenta', style: btnModif(textBtn)),
           )
         ],
       ),

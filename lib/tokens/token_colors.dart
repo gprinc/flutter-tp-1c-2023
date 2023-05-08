@@ -6,6 +6,7 @@ const Color cardBg = Color(0xFFFAFAFA);
 const Color inputOutline = Color(0xffE0E0E0);
 const Color searchLbl = Color(0xff9E9E9E);
 const Color btnSecondary = Color(0xff666666);
+const Color textBtn = Color(0xff737373);
 
 const Color primary = Color(0xff14903F);
 

@@ -56,6 +56,17 @@ const TextStyle body02 = TextStyle(
   color: lbl,
 );
 
+TextStyle btnModif(Color givenColor) {
+  return TextStyle(
+    fontFamily: 'Roboto',
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.w500,
+    fontSize: 14,
+    letterSpacing: 0.1,
+    color: givenColor,
+  );
+}
+
 const TextStyle btn = TextStyle(
   fontFamily: 'Roboto',
   fontStyle: FontStyle.normal,

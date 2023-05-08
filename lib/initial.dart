@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 
 void main() {
   runApp(const InitialApp());
@@ -57,7 +58,7 @@ class MyInitialPage extends StatelessWidget {
                   child: FractionallySizedBox(
                     widthFactor: 1,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () => context.goNamed('login'),
                       style: TextButton.styleFrom(
                           foregroundColor: Colors.white,
                           backgroundColor: Colors.blue),
@@ -68,7 +69,7 @@ class MyInitialPage extends StatelessWidget {
                 FractionallySizedBox(
                   widthFactor: 1,
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () => context.goNamed('signup'),
                     style: TextButton.styleFrom(
                         foregroundColor: Colors.white,
                         backgroundColor: Colors.blue),

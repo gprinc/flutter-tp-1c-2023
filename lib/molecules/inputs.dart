@@ -24,11 +24,26 @@ class Input extends StatefulWidget {
 class _InputState extends State<Input> {
   bool _hasError = false;
   bool _hasFocus = false;
+  bool _isObscured = true;
   final FocusNode _focus = FocusNode();
   final TextEditingController _controller = TextEditingController();
 
   Widget? _getStateIcon() {
     if (_hasError) return const Icon(Icons.error, color: Colors.red);
+
+    if (widget.obscureInput) {
+      return IconButton(
+        icon: Icon(
+          _isObscured ? Icons.visibility : Icons.visibility_off,
+          color: Colors.grey,
+        ),
+        onPressed: () {
+          setState(() {
+            _isObscured = !_isObscured;
+          });
+        },
+      );
+    }
 
     Widget? result = _controller.text.isNotEmpty && _hasFocus
         ? IconButton(
@@ -72,10 +87,14 @@ class _InputState extends State<Input> {
 
   @override
   Widget build(BuildContext context) {
+    final formKey = GlobalKey<FormState>();
     return TextFormField(
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        key: formKey,
         onChanged: (value) {
           setState(() {
             widget.value = value;
+            formKey.currentState!.validate();
           });
         },
         controller: _controller,
@@ -115,11 +134,13 @@ class LabelTextInput extends StatefulWidget {
   final String placeHolder;
   final String label;
   final bool obscureInput;
+  final TextEditingController controller;
   String? value;
 
   LabelTextInput(
       {super.key,
       required this.validator,
+      required this.controller,
       required this.placeHolder,
       required this.label,
       this.obscureInput = false,
@@ -132,11 +153,26 @@ class LabelTextInput extends StatefulWidget {
 class _LabelTextInputState extends State<LabelTextInput> {
   bool _hasError = false;
   bool _hasFocus = false;
+  bool _isObscured = true;
   final FocusNode _focus = FocusNode();
-  final TextEditingController _controller = TextEditingController();
+  late TextEditingController _controller;
 
   Widget? _getStateIcon() {
     if (_hasError) return const Icon(Icons.error, color: Colors.red);
+
+    if (widget.obscureInput) {
+      return IconButton(
+        icon: Icon(
+          _isObscured ? Icons.visibility : Icons.visibility_off,
+          color: Colors.grey,
+        ),
+        onPressed: () {
+          setState(() {
+            _isObscured = !_isObscured;
+          });
+        },
+      );
+    }
 
     return _controller.text.isNotEmpty && _hasFocus
         ? IconButton(
@@ -152,6 +188,7 @@ class _LabelTextInputState extends State<LabelTextInput> {
   void initState() {
     super.initState();
     _focus.addListener(_onFocusChange);
+    _controller = widget.controller;
     _controller.text = widget.value ?? '';
   }
 
@@ -202,7 +239,7 @@ class _LabelTextInputState extends State<LabelTextInput> {
         validator: (value) {
           String? validation = widget.validator(value);
           setState(() {
-            _hasError = validation == null;
+            _hasError = validation != null;
           });
           return validation;
         },
