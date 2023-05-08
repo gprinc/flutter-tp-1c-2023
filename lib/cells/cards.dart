@@ -91,7 +91,12 @@ class NewsCard extends StatelessWidget {
                           children: [
                             Text(header, style: overline),
                             const SizedBox(height: 8),
-                            Text(title, style: subtitle01),
+                            Text(
+                              title,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: subtitle01,
+                            ),
                             const SizedBox(height: 8),
                             Text(
                               description,
