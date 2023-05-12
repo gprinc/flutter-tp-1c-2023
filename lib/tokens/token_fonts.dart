@@ -53,7 +53,7 @@ const TextStyle body02 = TextStyle(
   fontSize: 12,
   //height: 16,
   letterSpacing: 0.4,
-  color: lbl,
+  color: btnSecondary,
 );
 
 const TextStyle btn = TextStyle(
@@ -63,6 +63,15 @@ const TextStyle btn = TextStyle(
   fontSize: 14,
   letterSpacing: 0.1,
   color: neutralBg,
+);
+
+const TextStyle btnGreen = TextStyle(
+  fontFamily: 'Roboto',
+  fontStyle: FontStyle.normal,
+  fontWeight: FontWeight.w500,
+  fontSize: 14,
+  letterSpacing: 0.1,
+  color: primary,
 );
 
 const TextStyle caption = TextStyle(
@@ -82,5 +91,5 @@ const TextStyle overline = TextStyle(
   fontSize: 10,
   //height: 16,
   letterSpacing: 1.5,
-  color: lbl,
+  color: btnSecondary,
 );
