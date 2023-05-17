@@ -78,7 +78,8 @@ class Home extends StatelessWidget {
                             ],
                           );
                         }),
-                    // The other tabs...
+
+                    // MI PERFIL
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -86,7 +87,7 @@ class Home extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8),
                             child: Container(
-                              decoration: BoxDecoration(),
+                              decoration: const BoxDecoration(),
                               child: Center(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -135,21 +136,26 @@ class Home extends StatelessWidget {
                     ),
 
                     // NOVEDADES
-                    ListView.builder(
+                    Padding(
+                      padding: EdgeInsets.only(top: 32.0),
+                      child: ListView.builder(
                         itemCount: newsProvider.news.length,
                         itemBuilder: (BuildContext context, int index) {
                           final news = newsProvider.news[index];
                           return Column(
                             children: [
                               NewsCard(
-                                  title: news.title,
-                                  header: news.header,
-                                  description: news.description,
-                                  imageName: news.imageName),
+                                title: news.title,
+                                header: news.header,
+                                description: news.description,
+                                imageName: news.imageName,
+                              ),
                               const SizedBox(height: 24),
                             ],
                           );
-                        }),
+                        },
+                      ),
+                    )
                   ],
                 ),
               ))

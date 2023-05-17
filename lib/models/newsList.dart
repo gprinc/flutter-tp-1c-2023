@@ -12,7 +12,7 @@ class NewsList extends ChangeNotifier {
       imageName: 'assets/news_donar.png',
     ),
     News(
-      header: 'Noticias de Cuyo',
+      header: 'NOTICIAS DE CUYO',
       title: 'Juntamos residuos',
       description:
           'Voluntarios de Godoy Cruz, se sumaron a la limpieza de un cauce en las inmediaciones.',
@@ -26,7 +26,7 @@ class NewsList extends ChangeNotifier {
       imageName: 'assets/news_adoptar.png',
     ),
     News(
-      header: 'La voz del interior',
+      header: 'LA VOZ DEL INTERIOR',
       title: 'Preservamos la fauna',
       description:
           'Córdoba se une a la campaña del gobierno cuidar la fauna en época de sequía',
