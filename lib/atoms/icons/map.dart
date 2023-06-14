@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:dam_1c_2023/tokens/token_colors.dart';
 
 class MapIcon extends StatefulWidget {
-  const MapIcon({super.key});
+  final void Function(bool value) onPressed;
+
+  const MapIcon({super.key, required this.onPressed});
 
   @override
   State<MapIcon> createState() => _MapIconState();
@@ -20,6 +21,6 @@ class _MapIconState extends State<MapIcon> {
           _icon,
           color: _color,
         ),
-        onPressed: () => context.go("/home"));
+        onPressed: () => widget.onPressed(true));
   }
 }

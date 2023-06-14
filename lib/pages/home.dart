@@ -12,8 +12,14 @@ import 'package:provider/provider.dart';
 import '../atoms/logos.dart';
 import '../tokens/token_colors.dart';
 
-class Home extends StatelessWidget {
-  Home({super.key});
+class Home extends StatefulWidget {
+  const Home({required Key key}) : super(key: key);
+
+  @override
+  HomeState createState() => HomeState();
+}
+
+class HomeState extends State<Home> {
   var isMapVisible = false;
 
   @override
@@ -57,6 +63,22 @@ class Home extends StatelessWidget {
                       Stack(
                         children: [
                           Align(
+                              alignment: Alignment.topCenter,
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: SearchInput(
+                                  search: () {
+                                    // Handle search input here
+                                  },
+                                  toggleMapVisibility: (bool value) {
+                                    setState(() {
+                                      isMapVisible = value;
+                                    });
+                                  },
+                                  isMapVisible: isMapVisible,
+                                ),
+                              )),
+                          Align(
                               alignment: Alignment.bottomCenter,
                               child: Container(
                                 margin: const EdgeInsets.only(bottom: 16),
@@ -81,9 +103,17 @@ class Home extends StatelessWidget {
                             if (index == 0) {
                               return Padding(
                                 padding: const EdgeInsets.all(16),
-                                child: SearchInput(search: () {
-                                  // Handle search input here
-                                }),
+                                child: SearchInput(
+                                  search: () {
+                                    // Handle search input here
+                                  },
+                                  toggleMapVisibility: (bool value) {
+                                    setState(() {
+                                      isMapVisible = value;
+                                    });
+                                  },
+                                  isMapVisible: isMapVisible,
+                                ),
                               );
                             }
                             final volunteering =
