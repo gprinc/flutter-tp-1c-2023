@@ -13,7 +13,8 @@ import '../atoms/logos.dart';
 import '../tokens/token_colors.dart';
 
 class Home extends StatelessWidget {
-  const Home({super.key});
+  Home({super.key});
+  var isMapVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -52,32 +53,54 @@ class Home extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16, right: 16),
                 child: TabBarView(
                   children: [
-                    ListView.builder(
-                        itemCount: volunteeringProvider.volunteering.length + 1,
-                        itemBuilder: (BuildContext context, int index) {
-                          if (index == 0) {
-                            return Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: SearchInput(search: () {
-                                // Handle search input here
-                              }),
+                    if (isMapVisible)
+                      Stack(
+                        children: [
+                          Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Container(
+                                margin: const EdgeInsets.only(bottom: 16),
+                                height: 270,
+                                child: ListView.builder(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  itemCount: 1,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return _buildCarousel(context, index ~/ 2);
+                                  },
+                                ),
+                              ))
+                        ],
+                      )
+                    else
+                      ListView.builder(
+                          itemCount:
+                              volunteeringProvider.volunteering.length + 1,
+                          itemBuilder: (BuildContext context, int index) {
+                            if (index == 0) {
+                              return Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: SearchInput(search: () {
+                                  // Handle search input here
+                                }),
+                              );
+                            }
+                            final volunteering =
+                                volunteeringProvider.volunteering[index - 1];
+                            return Column(
+                              children: [
+                                GestureDetector(
+                                  child: VolunteeringCard(
+                                      title: volunteering.title,
+                                      imageName: volunteering.imageName),
+                                  onTap: () => context.goNamed('selected-card',
+                                      params: {'id': index.toString()}),
+                                ),
+                                const SizedBox(height: 24),
+                              ],
                             );
-                          }
-                          final volunteering =
-                              volunteeringProvider.volunteering[index - 1];
-                          return Column(
-                            children: [
-                              GestureDetector(
-                                child: VolunteeringCard(
-                                    title: volunteering.title,
-                                    imageName: volunteering.imageName),
-                                onTap: () => context.goNamed('selected-card',
-                                    params: {'id': index.toString()}),
-                              ),
-                              const SizedBox(height: 24),
-                            ],
-                          );
-                        }),
+                          }),
 
                     // MI PERFIL
                     Column(
@@ -137,7 +160,7 @@ class Home extends StatelessWidget {
 
                     // NOVEDADES
                     Padding(
-                      padding: EdgeInsets.only(top: 32.0),
+                      padding: const EdgeInsets.only(top: 32.0),
                       child: ListView.builder(
                         itemCount: newsProvider.news.length,
                         itemBuilder: (BuildContext context, int index) {
@@ -172,4 +195,41 @@ class Home extends StatelessWidget {
             Tab(text: 'Mi Perfil'),
             Tab(text: 'Novedades'),
           ]);
+}
+
+Widget _buildCarousel(BuildContext context, int carouselIndex) {
+  final volunteeringProvider = Provider.of<VolunteeringList>(context);
+  return Column(
+    mainAxisSize: MainAxisSize.min,
+    children: <Widget>[
+      Text('Carouseeel $carouselIndex'),
+      SizedBox(
+        // you may want to use an aspect ratio here for tablet support
+        height: 234.0,
+        child: PageView.builder(
+          itemCount: volunteeringProvider.volunteering.length,
+          // store this controller in a State to save the carousel scroll position
+          controller: PageController(viewportFraction: 0.8),
+          itemBuilder: (BuildContext context, int itemIndex) {
+            return _buildCarouselItem(
+                context, carouselIndex, itemIndex, volunteeringProvider);
+          },
+        ),
+      )
+    ],
+  );
+}
+
+Widget _buildCarouselItem(
+    BuildContext context, int carouselIndex, int itemIndex, provider) {
+  final volunteering = provider.volunteering[itemIndex];
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 0.0),
+    child: GestureDetector(
+      child: VolunteeringCard(
+          title: volunteering.title, imageName: volunteering.imageName),
+      onTap: () => context
+          .goNamed('selected-card', params: {'id': itemIndex.toString()}),
+    ),
+  );
 }

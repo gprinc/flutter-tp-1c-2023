@@ -11,7 +11,7 @@ const Color textBtn = Color(0xff737373);
 const Color primary = Color(0xff14903F);
 
 const Color topBarBg = Color(0xff90CAF9);
-const Color secondaryBlue = Color(0xff6CB6F3);
+const Color secondaryBlue = Color(0xffEAF5FD);
 const Color statusBarBg = Color(0xff4AA9F5);
 const Color inactiveTab = Color(0xff2C98F0);
 const Color selectedTab = Color(0xff0D47A1);

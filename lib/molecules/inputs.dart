@@ -2,6 +2,7 @@ import 'package:dam_1c_2023/tokens/token_shadows.dart';
 import 'package:flutter/material.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
 
+import '../atoms/icons/map.dart';
 import '../tokens/token_colors.dart';
 
 class Input extends StatefulWidget {
@@ -262,21 +263,31 @@ class _SearchInputState extends State<SearchInput> {
   final FocusNode _focus = FocusNode();
   final TextEditingController _controller = TextEditingController();
 
-  Widget? _getStateIcon() {
-    return _controller.text.isNotEmpty && !_hasFocus
-        ? IconButton(
-            icon: const Icon(
-              Icons.clear,
-              color: btnSecondary,
-            ),
-            onPressed: () {
-              _controller.clear();
-            },
-          )
-        : IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: widget.search,
+  Widget? _getPrefixStateIcon() {
+    return _controller.text.isNotEmpty
+        ? null
+        : const Icon(
+            Icons.search,
+            color: btnSecondary,
           );
+  }
+
+  Widget? _getSuffixStateIcon() {
+    // If no focus, and no text => Map Icon
+    return _controller.text.isEmpty && !_hasFocus
+        ? const MapIcon()
+        : _hasFocus && _controller.text.isNotEmpty
+            // If focus and text => return Clear Icon
+            ? IconButton(
+                icon: const Icon(
+                  Icons.clear,
+                  color: btnSecondary,
+                ),
+                onPressed: () {
+                  _controller.clear();
+                },
+              )
+            : null;
   }
 
   @override
@@ -302,7 +313,12 @@ class _SearchInputState extends State<SearchInput> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: shadow01,
+      decoration: const BoxDecoration(
+        color: cardBg,
+        boxShadow: [
+          searchBarShadow,
+        ],
+      ),
       child: TextFormField(
           onChanged: (value) {
             setState(() {});
@@ -317,7 +333,8 @@ class _SearchInputState extends State<SearchInput> {
               focusedBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey),
               ),
-              suffixIcon: _getStateIcon()),
+              prefixIcon: _getPrefixStateIcon(),
+              suffixIcon: _getSuffixStateIcon()),
           style: subtitle01,
           focusNode: _focus),
     );

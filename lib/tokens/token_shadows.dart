@@ -6,6 +6,13 @@ const shadow01 = BoxDecoration(
   color: cardBg,
 );
 
+const searchBarShadow = BoxShadow(
+  color: Color(0x4D000000),
+  offset: Offset(0, 1),
+  blurRadius: 2,
+  spreadRadius: 0,
+);
+
 
 //TODO: shadows, iconos y grid
 //En los input dice usar subtitle01 pero el color es distinto
