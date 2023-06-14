@@ -55,10 +55,9 @@ class HomeState extends State<Home> {
           body: Column(
             children: [
               Expanded(
-                  child: Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
                 child: TabBarView(
                   children: [
+                    // Postulaciones
                     if (isMapVisible)
                       Stack(
                         children: [
@@ -120,12 +119,17 @@ class HomeState extends State<Home> {
                                 volunteeringProvider.volunteering[index - 1];
                             return Column(
                               children: [
-                                GestureDetector(
-                                  child: VolunteeringCard(
-                                      title: volunteering.title,
-                                      imageName: volunteering.imageName),
-                                  onTap: () => context.goNamed('selected-card',
-                                      params: {'id': index.toString()}),
+                                SizedBox(
+                                  height: 238,
+                                  width: 328,
+                                  child: GestureDetector(
+                                    child: VolunteeringCard(
+                                        title: volunteering.title,
+                                        imageName: volunteering.imageName),
+                                    onTap: () => context.goNamed(
+                                        'selected-card',
+                                        params: {'id': index.toString()}),
+                                  ),
                                 ),
                                 const SizedBox(height: 24),
                               ],
@@ -211,7 +215,7 @@ class HomeState extends State<Home> {
                     )
                   ],
                 ),
-              ))
+              )
             ],
           )),
     );
