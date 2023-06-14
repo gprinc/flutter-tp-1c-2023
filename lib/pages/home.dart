@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:dam_1c_2023/atoms/icons/location.dart';
 import 'package:dam_1c_2023/cells/cards.dart';
 import 'package:dam_1c_2023/models/newsList.dart';
 import 'package:dam_1c_2023/models/volunteering_list.dart';
@@ -20,7 +21,7 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-  var isMapVisible = false;
+  var isMapVisible = true;
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +78,8 @@ class HomeState extends State<Home> {
                                   isMapVisible: isMapVisible,
                                 ),
                               )),
+                          const Positioned(
+                              bottom: 286, right: 16, child: LocationIcon()),
                           Align(
                               alignment: Alignment.bottomCenter,
                               child: Container(
@@ -236,7 +239,6 @@ Widget _buildCarousel(BuildContext context, int carouselIndex) {
   return Column(
     mainAxisSize: MainAxisSize.min,
     children: <Widget>[
-      Text('Carouseeel $carouselIndex'),
       SizedBox(
         // you may want to use an aspect ratio here for tablet support
         height: 234.0,
