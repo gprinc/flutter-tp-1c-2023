@@ -1,3 +1,4 @@
+import 'package:dam_1c_2023/atoms/icons/list.dart';
 import 'package:dam_1c_2023/tokens/token_shadows.dart';
 import 'package:flutter/material.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
@@ -282,11 +283,17 @@ class _SearchInputState extends State<SearchInput> {
   Widget? _getSuffixStateIcon(bool isMapVisible) {
     // If no focus, and no text => Map Icon
     return _controller.text.isEmpty && !_hasFocus
-        ? MapIcon(
-            onPressed: (value) {
-              widget.toggleMapVisibility(!isMapVisible);
-            },
-          )
+        ? isMapVisible
+            ? ListIcon(
+                onPressed: (value) {
+                  widget.toggleMapVisibility(!isMapVisible);
+                },
+              )
+            : MapIcon(
+                onPressed: (value) {
+                  widget.toggleMapVisibility(!isMapVisible);
+                },
+              )
         : _hasFocus && _controller.text.isNotEmpty
             // If focus and text => return Clear Icon
             ? IconButton(
