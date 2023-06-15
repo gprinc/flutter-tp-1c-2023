@@ -12,7 +12,9 @@ import 'package:provider/provider.dart';
 import 'models/newsList.dart';
 import 'models/volunteering_list.dart';
 
-final GoRouter _router = GoRouter(
+GoRouter _router(FirebaseAnalyticsObserver obs) { 
+  return GoRouter(
+    observers: [obs],
   routes: [
     GoRoute(
       path: "/",
@@ -45,6 +47,7 @@ final GoRouter _router = GoRouter(
     ),
   ],
 );
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -75,7 +78,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp.router(
-        routerConfig: _router,
+        routerConfig: _router(observer),
         title: 'Flutter App',
         theme: ThemeData(
           primarySwatch: Colors.blue,
