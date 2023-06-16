@@ -8,17 +8,17 @@ class Vacancies extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          width: 117,
-          height: 28,
-          decoration: BoxDecoration(
-            color: const Color(0xFFCAE5FB),
-            borderRadius: BorderRadius.circular(4),
-          ),
+    return Container(
+        width: 117,
+        height: 28,
+        decoration: BoxDecoration(
+          color: const Color(0xFFCAE5FB),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Align(
+          alignment: Alignment.center,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Padding(
@@ -29,7 +29,7 @@ class Vacancies extends StatelessWidget {
                 ),
               ),
               const Padding(
-                padding: EdgeInsets.only(left: 11.33, right: 2),
+                padding: EdgeInsets.only(left: 10, right: 2),
                 child: Icon(
                   Icons.person,
                   size: 15,
@@ -43,8 +43,6 @@ class Vacancies extends StatelessWidget {
                   )),
             ],
           ),
-        ),
-      ],
-    );
+        ));
   }
 }

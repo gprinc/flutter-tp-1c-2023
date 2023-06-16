@@ -337,7 +337,7 @@ class _SearchInputState extends State<SearchInput> {
           searchBarShadow,
         ],
       ),
-      child: TextFormField(
+      child: TextField(
           onChanged: (value) {
             widget.search(value);
           },

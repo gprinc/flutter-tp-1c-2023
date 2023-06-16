@@ -3,7 +3,10 @@ import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:dam_1c_2023/tokens/token_shadows.dart';
 import 'package:flutter/material.dart';
 
+import '../atoms/icons/vol_location.dart';
 import '../molecules/components.dart';
+import 'package:maps_launcher/maps_launcher.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class VolunteeringCard extends StatelessWidget {
   final String title;
@@ -22,20 +25,19 @@ class VolunteeringCard extends StatelessWidget {
       width: 328,
       decoration: cardShadow,
       child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(2),
+        ),
         child: Column(
           children: [
-            Image.asset(
-              imageName,
-              height: 138,
-              width: 328,
+            SizedBox(
+              height: 135,
+              child: Image.asset(
+                imageName,
+              ),
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                top: 8,
-                bottom: 16,
-                left: 16,
-                right: 18,
-              ),
+              padding: const EdgeInsets.only(top: 8, left: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -47,27 +49,58 @@ class VolunteeringCard extends StatelessWidget {
                     title,
                     style: subtitle01,
                   ),
-                  const SizedBox(height: 4),
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Vacancies(counter: 5),
-                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 110),
+                        child: Vacancies(counter: 10),
+                      ),
                       const Icon(
                         Icons.favorite_border,
                         color: primary,
                       ),
-                      const SizedBox(width: 8),
-                      const Icon(
-                        Icons.location_on,
-                        color: primary,
-                      ),
+                      VolLocation(() {
+                        MapsLauncher.launchQuery('Palmar 6841');
+                        //openMap('Palmar 6841');
+                      })
                     ],
                   ),
                 ],
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+// Future<void> openMap(String location) async {
+//   String googleUrl =
+//       'https://www.google.com/maps/search/?api=1&query=$location';
+//   final Uri _url = Uri.parse(googleUrl);
+//   if (await canLaunchUrl(_url) != null) {
+//     await canLaunchUrl(_url);
+//   } else {
+//     throw 'Could not open the map.';
+//   }
+// }
+
+class EmptyVolunteeringCard extends StatelessWidget {
+  const EmptyVolunteeringCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: neutralBg,
+      height: 108,
+      child: const Align(
+        alignment: Alignment.center,
+        child: Text(
+          'No hay voluntariados vigentes para tu búsqueda.',
+          style: subtitle01,
+          textAlign: TextAlign.center,
         ),
       ),
     );

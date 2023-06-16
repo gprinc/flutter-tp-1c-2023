@@ -15,24 +15,17 @@ Image rectangularLogo = Image.asset(
 
 Image volunteering = Image.asset(
   'assets/voluntariado.png',
-  height: 138,
-  width: 328,
 );
 
 Image manos = Image.asset(
   'assets/manos.png',
-  height: 138,
-  width: 328,
 );
 
 Image iglesia = Image.asset(
   'assets/iglesia.png',
-  height: 138,
-  width: 328,
 );
 
 Image news = Image.asset(
   'assets/novedades.png',
   height: 156,
-  width: 118,
 );

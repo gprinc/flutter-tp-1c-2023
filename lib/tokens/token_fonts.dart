@@ -53,7 +53,7 @@ const TextStyle body02 = TextStyle(
   fontSize: 12,
   //height: 16,
   letterSpacing: 0.4,
-  color: btnSecondary,
+  color: lbl,
 );
 
 TextStyle btnModif(Color givenColor) {

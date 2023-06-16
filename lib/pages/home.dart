@@ -171,7 +171,9 @@ class HomeState extends State<Home> {
                                                           'Voluntariados',
                                                           style: headLine01,
                                                         ),
-                                                      ))
+                                                      )),
+                                                  if (_foundCards.isEmpty)
+                                                    const EmptyVolunteeringCard()
                                                 ],
                                               );
                                             }
