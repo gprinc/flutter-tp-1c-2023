@@ -1,5 +1,6 @@
 import 'package:dam_1c_2023/tokens/token_colors.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
+import 'package:dam_1c_2023/tokens/token_shadows.dart';
 import 'package:flutter/material.dart';
 
 import '../molecules/components.dart';
@@ -16,9 +17,10 @@ class VolunteeringCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       height: 234,
       width: 328,
+      decoration: cardShadow,
       child: Card(
         child: Column(
           children: [

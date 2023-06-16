@@ -84,82 +84,91 @@ class HomeState extends State<Home> {
                   children: [
                     // Postulaciones
                     if (isMapVisible)
-                      Stack(
-                        children: [
-                          Align(
-                              alignment: Alignment.topCenter,
-                              child: Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: SearchInput(
-                                  search: (value) {
-                                    _runFilter(value);
-                                  },
-                                  toggleMapVisibility: (bool value) {
-                                    setState(() {
-                                      isMapVisible = value;
-                                    });
-                                  },
-                                  isMapVisible: isMapVisible,
-                                ),
-                              )),
-                          const Positioned(
-                              bottom: 286, right: 16, child: LocationIcon()),
-                          Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Container(
-                                margin: const EdgeInsets.only(bottom: 16),
-                                height: 270,
-                                child: ListView.builder(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8.0),
-                                  itemCount: 1,
+                      Container(
+                          color: secondaryBlue,
+                          child: Stack(
+                            children: [
+                              Align(
+                                  alignment: Alignment.topCenter,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16),
+                                    child: SearchInput(
+                                      search: (value) {
+                                        _runFilter(value);
+                                      },
+                                      toggleMapVisibility: (bool value) {
+                                        setState(() {
+                                          isMapVisible = value;
+                                        });
+                                      },
+                                      isMapVisible: isMapVisible,
+                                    ),
+                                  )),
+                              const Positioned(
+                                  bottom: 286,
+                                  right: 16,
+                                  child: LocationIcon()),
+                              Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Container(
+                                    margin: const EdgeInsets.only(bottom: 16),
+                                    height: 270,
+                                    child: ListView.builder(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0),
+                                      itemCount: 1,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return _buildCarousel(
+                                            context, index ~/ 2);
+                                      },
+                                    ),
+                                  ))
+                            ],
+                          ))
+                    else
+                      Container(
+                          color: secondaryBlue,
+                          child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: ListView.builder(
+                                  itemCount: _foundCards.length + 1,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    return _buildCarousel(context, index ~/ 2);
-                                  },
-                                ),
-                              ))
-                        ],
-                      )
-                    else
-                      ListView.builder(
-                          itemCount: _foundCards.length + 1,
-                          itemBuilder: (BuildContext context, int index) {
-                            if (index == 0) {
-                              return Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: SearchInput(
-                                  search: (value) {
-                                    _runFilter(value);
-                                  },
-                                  toggleMapVisibility: (bool value) {
-                                    setState(() {
-                                      isMapVisible = value;
-                                    });
-                                  },
-                                  isMapVisible: isMapVisible,
-                                ),
-                              );
-                            }
-                            final volunteering = _foundCards[index - 1];
-                            return Column(
-                              children: [
-                                SizedBox(
-                                  height: 238,
-                                  width: 328,
-                                  child: GestureDetector(
-                                    child: VolunteeringCard(
-                                        title: volunteering.title,
-                                        imageName: volunteering.imageName),
-                                    onTap: () => context.goNamed(
-                                        'selected-card',
-                                        params: {'id': index.toString()}),
-                                  ),
-                                ),
-                                const SizedBox(height: 24),
-                              ],
-                            );
-                          }),
+                                    if (index == 0) {
+                                      return Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 24, bottom: 32),
+                                        child: SearchInput(
+                                          search: (value) {
+                                            _runFilter(value);
+                                          },
+                                          toggleMapVisibility: (bool value) {
+                                            setState(() {
+                                              isMapVisible = value;
+                                            });
+                                          },
+                                          isMapVisible: isMapVisible,
+                                        ),
+                                      );
+                                    }
+                                    final volunteering = _foundCards[index - 1];
+                                    return Column(
+                                      children: [
+                                        GestureDetector(
+                                          child: VolunteeringCard(
+                                              title: volunteering.title,
+                                              imageName:
+                                                  volunteering.imageName),
+                                          onTap: () => context.goNamed(
+                                              'selected-card',
+                                              params: {'id': index.toString()}),
+                                        ),
+                                        const SizedBox(height: 24),
+                                      ],
+                                    );
+                                  }))),
 
                     // MI PERFIL
                     Column(
