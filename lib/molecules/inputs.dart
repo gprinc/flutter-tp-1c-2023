@@ -302,7 +302,10 @@ class _SearchInputState extends State<SearchInput> {
                   color: btnSecondary,
                 ),
                 onPressed: () {
-                  _controller.clear();
+                  setState(() {
+                    _controller.clear();
+                  });
+                  widget.search(''); // Call _runFilter with an empty string
                 },
               )
             : null;
