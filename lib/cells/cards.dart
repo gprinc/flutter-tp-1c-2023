@@ -29,7 +29,11 @@ class VolunteeringCard extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(
-                  top: 8, bottom: 16, left: 16, right: 18),
+                top: 8,
+                bottom: 16,
+                left: 16,
+                right: 18,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -45,9 +49,7 @@ class VolunteeringCard extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Expanded(
-                        child: Vacancies(counter: 5),
-                      ),
+                      Vacancies(counter: 5),
                       const Spacer(),
                       const Icon(
                         Icons.favorite_border,

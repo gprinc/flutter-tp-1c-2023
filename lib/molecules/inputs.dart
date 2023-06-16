@@ -250,7 +250,7 @@ class _LabelTextInputState extends State<LabelTextInput> {
 }
 
 class SearchInput extends StatefulWidget {
-  final void Function() search;
+  final void Function(String value) search;
   final void Function(bool value) toggleMapVisibility;
   final bool isMapVisible;
   //final String placeHolder;
@@ -339,7 +339,7 @@ class _SearchInputState extends State<SearchInput> {
       ),
       child: TextFormField(
           onChanged: (value) {
-            setState(() {});
+            widget.search(value);
           },
           controller: _controller,
           decoration: InputDecoration(

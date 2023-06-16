@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:dam_1c_2023/atoms/icons/location.dart';
 import 'package:dam_1c_2023/cells/cards.dart';
 import 'package:dam_1c_2023/models/newsList.dart';
+import 'package:dam_1c_2023/models/volunteering.dart';
 import 'package:dam_1c_2023/models/volunteering_list.dart';
 import 'package:dam_1c_2023/molecules/buttons.dart';
 import 'package:dam_1c_2023/molecules/inputs.dart';
@@ -21,12 +20,37 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-  var isMapVisible = true;
+  var isMapVisible = false;
+
+  List<Volunteering> _foundCards = [];
+  List<Volunteering> _allCards = [];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _allCards =
+        Provider.of<VolunteeringList>(context, listen: false).volunteering;
+    _foundCards = _allCards;
+  }
+
+  void _runFilter(String enteredKeyword) {
+    List<Volunteering> results = [];
+    if (enteredKeyword.isEmpty) {
+      results = _allCards;
+    } else {
+      results = Provider.of<VolunteeringList>(context, listen: false)
+          .searchVolunteerings(enteredKeyword);
+    }
+
+    setState(() {
+      _foundCards = results;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final volunteeringProvider = Provider.of<VolunteeringList>(context);
     final newsProvider = Provider.of<NewsList>(context);
+
     return DefaultTabController(
       // --> Puedo manejar el estado del TabBar de forma automatica.
       // Es una clase "Inherited" que no convenia a veces.
@@ -67,8 +91,8 @@ class HomeState extends State<Home> {
                               child: Padding(
                                 padding: const EdgeInsets.all(16),
                                 child: SearchInput(
-                                  search: () {
-                                    // Handle search input here
+                                  search: (value) {
+                                    _runFilter(value);
                                   },
                                   toggleMapVisibility: (bool value) {
                                     setState(() {
@@ -99,15 +123,14 @@ class HomeState extends State<Home> {
                       )
                     else
                       ListView.builder(
-                          itemCount:
-                              volunteeringProvider.volunteering.length + 1,
+                          itemCount: _foundCards.length + 1,
                           itemBuilder: (BuildContext context, int index) {
                             if (index == 0) {
                               return Padding(
                                 padding: const EdgeInsets.all(16),
                                 child: SearchInput(
-                                  search: () {
-                                    // Handle search input here
+                                  search: (value) {
+                                    _runFilter(value);
                                   },
                                   toggleMapVisibility: (bool value) {
                                     setState(() {
@@ -118,8 +141,7 @@ class HomeState extends State<Home> {
                                 ),
                               );
                             }
-                            final volunteering =
-                                volunteeringProvider.volunteering[index - 1];
+                            final volunteering = _foundCards[index - 1];
                             return Column(
                               children: [
                                 SizedBox(
@@ -235,7 +257,8 @@ class HomeState extends State<Home> {
 }
 
 Widget _buildCarousel(BuildContext context, int carouselIndex) {
-  final volunteeringProvider = Provider.of<VolunteeringList>(context);
+  final volunteeringProvider =
+      Provider.of<VolunteeringList>(context, listen: false);
   return Column(
     mainAxisSize: MainAxisSize.min,
     children: <Widget>[
