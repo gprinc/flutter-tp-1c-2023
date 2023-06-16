@@ -132,44 +132,70 @@ class HomeState extends State<Home> {
                           child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16),
-                              child: ListView.builder(
-                                  itemCount: _foundCards.length + 1,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    if (index == 0) {
-                                      return Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 24, bottom: 32),
-                                        child: SearchInput(
-                                          search: (value) {
-                                            _runFilter(value);
-                                          },
-                                          toggleMapVisibility: (bool value) {
-                                            setState(() {
-                                              isMapVisible = value;
-                                            });
-                                          },
-                                          isMapVisible: isMapVisible,
-                                        ),
-                                      );
-                                    }
-                                    final volunteering = _foundCards[index - 1];
-                                    return Column(
-                                      children: [
-                                        GestureDetector(
-                                          child: VolunteeringCard(
-                                              title: volunteering.title,
-                                              imageName:
-                                                  volunteering.imageName),
-                                          onTap: () => context.goNamed(
-                                              'selected-card',
-                                              params: {'id': index.toString()}),
-                                        ),
-                                        const SizedBox(height: 24),
-                                      ],
-                                    );
-                                  }))),
-
+                              child: Column(
+                                children: [
+                                  Flexible(
+                                      child: ListView.builder(
+                                          itemCount: _foundCards.length + 1,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            if (index == 0) {
+                                              return Column(
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 24,
+                                                            bottom: 32),
+                                                    child: SearchInput(
+                                                      search: (value) {
+                                                        _runFilter(value);
+                                                      },
+                                                      toggleMapVisibility:
+                                                          (bool value) {
+                                                        setState(() {
+                                                          isMapVisible = value;
+                                                        });
+                                                      },
+                                                      isMapVisible:
+                                                          isMapVisible,
+                                                    ),
+                                                  ),
+                                                  const Padding(
+                                                      padding: EdgeInsets.only(
+                                                          bottom: 24),
+                                                      child: Align(
+                                                        alignment: Alignment
+                                                            .centerLeft,
+                                                        child: Text(
+                                                          'Voluntariados',
+                                                          style: headLine01,
+                                                        ),
+                                                      ))
+                                                ],
+                                              );
+                                            }
+                                            final volunteering =
+                                                _foundCards[index - 1];
+                                            return Column(
+                                              children: [
+                                                GestureDetector(
+                                                  child: VolunteeringCard(
+                                                      title: volunteering.title,
+                                                      imageName: volunteering
+                                                          .imageName),
+                                                  onTap: () => context.goNamed(
+                                                      'selected-card',
+                                                      params: {
+                                                        'id': index.toString()
+                                                      }),
+                                                ),
+                                                const SizedBox(height: 24),
+                                              ],
+                                            );
+                                          }))
+                                ],
+                              ))),
                     // MI PERFIL
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
