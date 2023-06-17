@@ -1,6 +1,8 @@
 import 'package:dam_1c_2023/atoms/logos.dart';
 import 'package:dam_1c_2023/cells/modals.dart';
 import 'package:dam_1c_2023/models/volunteering.dart';
+import 'package:dam_1c_2023/molecules/components.dart';
+import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:dam_1c_2023/molecules/buttons.dart';
 import 'package:dam_1c_2023/atoms/icons/arrow_back.dart';
@@ -50,20 +52,30 @@ class SelectedCardPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Roboto',
-                    ),
-                  ),
+                  const Text('Acción social', style: overline),
+                  Text(title, style: headLine01),
                   const Padding(padding: EdgeInsets.only(bottom: 24)),
                   Text(
                     description,
                     style: const TextStyle(
                         fontSize: 14, fontWeight: FontWeight.w400),
                   ),
+                  const Padding(padding: EdgeInsets.only(bottom: 24)),
+                  const Text('Sobre la actividad', style: headLine02),
+                  const Padding(padding: EdgeInsets.only(bottom: 8)),
+                  const Text('Descripción de la actividad', style: body01),
+                  const Padding(padding: EdgeInsets.only(bottom: 24)),
+                  const Text('Participar del voluntariado', style: headLine02),
+                  const Padding(padding: EdgeInsets.only(bottom: 8)),
+                  const Text('Requisitos', style: subtitle01),
+                  const Padding(padding: EdgeInsets.only(bottom: 8)),
+                  const Text('Descripcion Requisitos', style: body01),
+                  const Padding(padding: EdgeInsets.only(bottom: 8)),
+                  const Text('Disponibilidad', style: subtitle01),
+                  const Padding(padding: EdgeInsets.only(bottom: 8)),
+                  const Text('Descripcion Disponibilidad', style: body01),
+                  const Padding(padding: EdgeInsets.only(bottom: 8)),
+                  Vacancies(counter: 10)
                 ],
               ),
             ),

@@ -53,7 +53,7 @@ class VolunteeringCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(right: 110),
+                        padding: const EdgeInsets.only(right: 101),
                         child: Vacancies(counter: 10),
                       ),
                       const Icon(
@@ -61,8 +61,8 @@ class VolunteeringCard extends StatelessWidget {
                         color: primary,
                       ),
                       VolLocation(() {
-                        MapsLauncher.launchQuery('Palmar 6841');
-                        //openMap('Palmar 6841');
+                        //MapsLauncher.launchQuery('Palmar 6841');
+                        openMap('Palmar 6841');
                       })
                     ],
                   ),
@@ -76,16 +76,17 @@ class VolunteeringCard extends StatelessWidget {
   }
 }
 
-// Future<void> openMap(String location) async {
-//   String googleUrl =
-//       'https://www.google.com/maps/search/?api=1&query=$location';
-//   final Uri _url = Uri.parse(googleUrl);
-//   if (await canLaunchUrl(_url) != null) {
-//     await canLaunchUrl(_url);
-//   } else {
-//     throw 'Could not open the map.';
-//   }
-// }
+Future<void> openMap(String location) async {
+  String googleUrl =
+      'https://www.google.com/maps/search/?api=1&query=$location';
+  final Uri url = Uri.parse(googleUrl);
+  // ignore: unnecessary_null_comparison
+  if (await canLaunchUrl(url) != null) {
+    await launchUrl(url);
+  } else {
+    throw 'Could not open the map.';
+  }
+}
 
 class EmptyVolunteeringCard extends StatelessWidget {
   const EmptyVolunteeringCard({super.key});

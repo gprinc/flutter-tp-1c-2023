@@ -43,7 +43,7 @@ const TextStyle body01 = TextStyle(
   fontSize: 14,
   //height: 20,
   letterSpacing: 0.25,
-  color: btnSecondary,
+  color: lbl,
 );
 
 const TextStyle body02 = TextStyle(
