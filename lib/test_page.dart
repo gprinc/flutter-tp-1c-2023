@@ -33,7 +33,7 @@ class TestPage extends StatelessWidget {
                 const SizedBox(
                   height: 25,
                 ),
-                RegisterForm(),
+                ProfilePicture(),
                 const SizedBox(
                   height: 25,
                 ),

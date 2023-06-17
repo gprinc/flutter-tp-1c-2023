@@ -17,3 +17,4 @@ const Color inactiveTab = Color(0xff2C98F0);
 const Color selectedTab = Color(0xff0D47A1);
 const Color logo2 = Color.fromRGBO(55, 129, 195, 0);
 const Color error = Color(0xffB3261E);
+const Color profile = Color(0xffCAE5FB);
