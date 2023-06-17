@@ -5,6 +5,7 @@ import 'package:dam_1c_2023/models/newsList.dart';
 import 'package:dam_1c_2023/models/volunteering_list.dart';
 import 'package:dam_1c_2023/molecules/buttons.dart';
 import 'package:dam_1c_2023/molecules/inputs.dart';
+import 'package:dam_1c_2023/pages/profile_tab.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -79,61 +80,7 @@ class Home extends StatelessWidget {
                           );
                         }),
                     // The other tabs...
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Container(
-                              decoration: BoxDecoration(),
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SizedBox(
-                                      width: 120,
-                                      height: 120,
-                                      child: Image.asset('assets/profile.png'),
-                                    ),
-                                    const SizedBox(height: 16),
-                                    const Text('Voluntario', style: overline),
-                                    const SizedBox(height: 8),
-                                    const Text('Juan Cruz', style: subtitle01),
-                                    const SizedBox(height: 8),
-                                    const Center(
-                                      child: Text(
-                                        "¡Completá tu perfil para tener acceso a mejores oportunidades!",
-                                        style: body01,
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Center(
-                          child: Container(
-                            width: 123,
-                            height: 48,
-                            margin: const EdgeInsets.only(bottom: 80),
-                            child: ShortButton(
-                              handlePress: () {
-                                // Do something when the button is pressed
-                              },
-                              text: 'Completar',
-                              enabledState: true,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                      ],
-                    ),
-
+                    const ProfileTab(isEmpty: false),
                     // NOVEDADES
                     ListView.builder(
                         itemCount: newsProvider.news.length,
