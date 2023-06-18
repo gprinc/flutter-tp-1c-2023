@@ -8,16 +8,9 @@ import 'package:dam_1c_2023/molecules/buttons.dart';
 import 'package:dam_1c_2023/atoms/icons/arrow_back.dart';
 
 class SelectedCardPage extends StatelessWidget {
-  final String imageName;
-  final String title;
-  final String description;
+  final Volunteering info;
 
-  const SelectedCardPage(
-      {Key? key,
-      required this.imageName,
-      required this.title,
-      required this.description})
-      : super(key: key);
+  const SelectedCardPage({Key? key, required this.info}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +24,7 @@ class SelectedCardPage extends StatelessWidget {
                 height: 243, // set the height here
                 width: double.infinity,
                 child: Image.asset(
-                  imageName,
+                  info.imageName,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -53,10 +46,10 @@ class SelectedCardPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   const Text('Acción social', style: overline),
-                  Text(title, style: headLine01),
+                  Text(info.title, style: headLine01),
                   const Padding(padding: EdgeInsets.only(bottom: 24)),
                   Text(
-                    description,
+                    info.description,
                     style: const TextStyle(
                         fontSize: 14, fontWeight: FontWeight.w400),
                   ),
@@ -69,13 +62,35 @@ class SelectedCardPage extends StatelessWidget {
                   const Padding(padding: EdgeInsets.only(bottom: 8)),
                   const Text('Requisitos', style: subtitle01),
                   const Padding(padding: EdgeInsets.only(bottom: 8)),
-                  const Text('Descripcion Requisitos', style: body01),
+                  Column(
+                    children: [
+                      for (var req in info.requisites)
+                        Row(
+                          children: [
+                            const Text("\u2022", style: body01),
+                            const SizedBox(width: 10),
+                            Expanded(child: Text(req, style: body01)),
+                          ],
+                        ),
+                    ],
+                  ),
                   const Padding(padding: EdgeInsets.only(bottom: 8)),
                   const Text('Disponibilidad', style: subtitle01),
                   const Padding(padding: EdgeInsets.only(bottom: 8)),
-                  const Text('Descripcion Disponibilidad', style: body01),
+                  Column(
+                    children: [
+                      for (var req in info.availability)
+                        Row(
+                          children: [
+                            const Text("\u2022", style: body01),
+                            const SizedBox(width: 10),
+                            Expanded(child: Text(req, style: body01)),
+                          ],
+                        ),
+                    ],
+                  ),
                   const Padding(padding: EdgeInsets.only(bottom: 8)),
-                  Vacancies(counter: 10)
+                  Vacancies(counter: 10),
                 ],
               ),
             ),
@@ -89,7 +104,7 @@ class SelectedCardPage extends StatelessWidget {
                     text: "Postularme",
                     enabledState: true,
                     handlePress: () {
-                      _showCustomDialog(context, title, description);
+                      _showCustomDialog(context, info.title, info.description);
                     }),
               ),
             ),
@@ -107,8 +122,6 @@ Future<void> _showCustomDialog(
     builder: (_) {
       return ApplyDialog(
         title: title,
-        description: 'Días sábados de 9.00 a 17.00 horas',
-        location: 'Caballito',
         cancelButtonText: 'Cancelar',
         confirmButtonText: 'Confirmar',
         onCancelPressed: () => Navigator.of(context).pop(),

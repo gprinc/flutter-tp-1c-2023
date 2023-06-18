@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 class ApplyDialog extends StatelessWidget {
   final String title;
-  final String description;
-  final String location;
   final String cancelButtonText;
   final String confirmButtonText;
   final void Function() onCancelPressed;
@@ -12,8 +10,6 @@ class ApplyDialog extends StatelessWidget {
   const ApplyDialog({
     Key? key,
     required this.title,
-    required this.description,
-    required this.location,
     required this.cancelButtonText,
     required this.confirmButtonText,
     required this.onCancelPressed,
@@ -45,35 +41,6 @@ class ApplyDialog extends StatelessWidget {
               fontSize: 20,
               height: 24 / 20,
               letterSpacing: 0.15,
-            ),
-          ),
-        ],
-      ),
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            description,
-            style: const TextStyle(
-              fontFamily: 'Roboto',
-              fontWeight: FontWeight.w400,
-              fontSize: 14,
-              height: 20 / 16,
-              letterSpacing: 0.25,
-              color: Colors.grey,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            location,
-            style: const TextStyle(
-              fontFamily: 'Roboto',
-              fontWeight: FontWeight.w400,
-              fontSize: 14,
-              height: 20 / 16,
-              letterSpacing: 0.25,
-              color: Colors.grey,
             ),
           ),
         ],
