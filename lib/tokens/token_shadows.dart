@@ -21,7 +21,7 @@ final cardShadow =
       spreadRadius: 2.0,
       color: Color.fromARGB(30, 0, 0, 0)),
   BoxShadow(
-      offset: Offset(0, 1), blurRadius: 2, color: Color.fromARGB(15, 0, 0, 0))
+      offset: Offset(1, 0), blurRadius: 2, color: Color.fromARGB(15, 0, 0, 0)),
 ]);
 
 //TODO: shadows, iconos y grid

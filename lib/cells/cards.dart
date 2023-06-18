@@ -34,6 +34,7 @@ class VolunteeringCard extends StatelessWidget {
               height: 135,
               child: Image.asset(
                 imageName,
+                fit: BoxFit.cover,
               ),
             ),
             Padding(
@@ -53,7 +54,7 @@ class VolunteeringCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(right: 101),
+                        padding: const EdgeInsets.only(right: 115),
                         child: Vacancies(counter: 10),
                       ),
                       const Icon(
@@ -81,7 +82,7 @@ Future<void> openMap(String location) async {
       'https://www.google.com/maps/search/?api=1&query=$location';
   final Uri url = Uri.parse(googleUrl);
   // ignore: unnecessary_null_comparison
-  if (await canLaunchUrl(url) != null) {
+  if (await canLaunchUrl(url)) {
     await launchUrl(url);
   } else {
     throw 'Could not open the map.';
