@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'firebase_options.dart';
 import 'package:dam_1c_2023/pages/home.dart';
 import 'package:dam_1c_2023/pages/login.dart';
@@ -15,7 +18,9 @@ import 'models/newsList.dart';
 import 'models/volunteering_list.dart';
 import 'pages/signup.dart';
 
-final GoRouter _router = GoRouter(
+GoRouter _router(FirebaseAnalyticsObserver obs) { 
+  return GoRouter(
+    observers: [obs],
   routes: [
     GoRoute(
         path: "/",
@@ -61,12 +66,22 @@ final GoRouter _router = GoRouter(
         }),
   ],
 );
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+  // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
+  
   runApp(const MyApp());
 }
 
@@ -91,7 +106,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp.router(
-        routerConfig: _router,
+        routerConfig: _router(observer),
         title: 'Flutter App',
         theme: ThemeData(
           primarySwatch: Colors.blue,
