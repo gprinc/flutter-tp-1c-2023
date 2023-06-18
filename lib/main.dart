@@ -5,6 +5,7 @@ import 'package:dam_1c_2023/pages/home.dart';
 import 'package:dam_1c_2023/pages/login.dart';
 import 'package:dam_1c_2023/pages/selected_card_page.dart';
 import 'package:dam_1c_2023/pages/welcome.dart';
+import 'package:dam_1c_2023/test_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -18,7 +19,7 @@ final GoRouter _router = GoRouter(
   routes: [
     GoRoute(
         path: "/",
-        builder: (context, state) => const MyInitialPage(),
+        builder: (context, state) => const WelcomePage(),
         routes: [
           GoRoute(
             name: 'login',
@@ -39,7 +40,9 @@ final GoRouter _router = GoRouter(
     GoRoute(
       name: 'home',
       path: "/home",
-      builder: (context, state) => const Home(),
+      builder: (context, state) => const Home(
+        key: Key("Home"),
+      ),
     ),
     GoRoute(
         name: 'selected-card',
@@ -53,9 +56,7 @@ final GoRouter _router = GoRouter(
           }
           final volunteering = volunteeringProvider.volunteering[index - 1];
           return SelectedCardPage(
-            imageName: volunteering.imageName,
-            title: volunteering.title,
-            description: volunteering.description,
+            info: volunteering,
           );
         }),
   ],

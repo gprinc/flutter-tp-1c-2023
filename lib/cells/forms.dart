@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../molecules/inputs.dart';
 import '../tokens/token_colors.dart';
+import '../validation.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -33,29 +34,6 @@ class _LoginFormState extends State<LoginForm> {
 
   bool _isComplete() {
     return _emailController.text.isNotEmpty && _passController.text.isNotEmpty;
-  }
-
-  String? emailValidator(String? email) {
-    if (email == null || email.isEmpty) return 'Campo requerido';
-
-    const pattern = r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'"
-        r'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-'
-        r'\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*'
-        r'[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4]'
-        r'[0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9]'
-        r'[0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\'
-        r'x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])';
-    final regex = RegExp(pattern);
-
-    return !regex.hasMatch(email) ? 'Ingrese un mail valido' : null;
-  }
-
-  String? passwordValidator(String? pass) {
-    //RegExp regex =
-    //    RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
-    if (pass == null || pass.isEmpty) return 'Ingrese una contraseña';
-    return null;
-    //return !regex.hasMatch(pass) ? 'Ingrese contraseña valida' : null;
   }
 
   _validate() {
@@ -93,8 +71,9 @@ class _LoginFormState extends State<LoginForm> {
           LabelTextInput(
             placeHolder: 'Email',
             controller: _emailController,
-            validator: emailValidator,
+            validator: Validator.emailValidator,
             label: 'Email',
+            keyboardType: TextInputType.emailAddress,
           ),
           const SizedBox(
             height: 64,
@@ -102,7 +81,7 @@ class _LoginFormState extends State<LoginForm> {
           LabelTextInput(
             placeHolder: 'Contraseña',
             controller: _passController,
-            validator: passwordValidator,
+            validator: Validator.passwordValidator,
             obscureInput: true,
             label: 'Contraseña',
           ),
@@ -221,7 +200,7 @@ class _RegisterFormState extends State<RegisterForm> {
             height: 176,
           ),
           LabelTextInput(
-            placeHolder: 'Nombre',
+            placeHolder: 'Ej: Juan ',
             controller: _firstNameController,
             validator: nameValidator,
             label: 'Nombre',
@@ -230,7 +209,7 @@ class _RegisterFormState extends State<RegisterForm> {
             height: 63,
           ),
           LabelTextInput(
-            placeHolder: 'Apellido',
+            placeHolder: 'Ej: Barcena',
             controller: _lastNameController,
             validator: nameValidator,
             label: 'Apellido',
@@ -239,20 +218,21 @@ class _RegisterFormState extends State<RegisterForm> {
             height: 63,
           ),
           LabelTextInput(
-            placeHolder: 'Contraseña',
-            controller: _passController,
-            validator: passwordValidator,
-            obscureInput: true,
-            label: 'Contraseña',
+            placeHolder: 'Ej: juanbarcena@mail.com',
+            controller: _emailController,
+            validator: emailValidator,
+            label: 'Email',
+            keyboardType: TextInputType.emailAddress,
           ),
           const SizedBox(
             height: 63,
           ),
           LabelTextInput(
-            placeHolder: 'Email',
-            controller: _emailController,
-            validator: emailValidator,
-            label: 'Email',
+            placeHolder: 'Ej: ABCD1234',
+            controller: _passController,
+            validator: passwordValidator,
+            obscureInput: true,
+            label: 'Contraseña',
           ),
           const SizedBox(
             height: 49,

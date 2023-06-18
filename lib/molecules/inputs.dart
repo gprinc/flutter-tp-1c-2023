@@ -2,6 +2,7 @@ import 'package:dam_1c_2023/atoms/icons/list.dart';
 import 'package:dam_1c_2023/tokens/token_shadows.dart';
 import 'package:flutter/material.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
+import 'package:intl/intl.dart';
 
 import '../atoms/icons/map.dart';
 import '../tokens/token_colors.dart';
@@ -10,9 +11,9 @@ class Input extends StatefulWidget {
   final String? Function(String?) validator;
   final String placeHolder;
   final bool obscureInput;
-  String? value;
+  final String? value;
 
-  Input(
+  const Input(
       {super.key,
       required this.validator,
       required this.placeHolder,
@@ -95,7 +96,6 @@ class _InputState extends State<Input> {
         key: formKey,
         onChanged: (value) {
           setState(() {
-            widget.value = value;
             formKey.currentState!.validate();
           });
         },
@@ -119,7 +119,7 @@ class _InputState extends State<Input> {
             ),
             suffixIcon: _getStateIcon()),
         style: subtitle01,
-        obscureText: widget.obscureInput,
+        obscureText: _isObscured,
         validator: (value) {
           String? validation = widget.validator(value);
           setState(() {
@@ -137,16 +137,18 @@ class LabelTextInput extends StatefulWidget {
   final String label;
   final bool obscureInput;
   final TextEditingController controller;
-  String? value;
+  final TextInputType keyboardType;
+  final String? value;
 
-  LabelTextInput(
+  const LabelTextInput(
       {super.key,
       required this.validator,
       required this.controller,
       required this.placeHolder,
       required this.label,
       this.obscureInput = false,
-      this.value = ''});
+      this.value = '',
+      this.keyboardType = TextInputType.text});
 
   @override
   State<LabelTextInput> createState() => _LabelTextInputState();
@@ -211,11 +213,7 @@ class _LabelTextInputState extends State<LabelTextInput> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-        onChanged: (value) {
-          setState(() {
-            widget.value = value;
-          });
-        },
+        keyboardType: widget.keyboardType,
         controller: _controller,
         decoration: InputDecoration(
             floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -359,5 +357,141 @@ class _SearchInputState extends State<SearchInput> {
           style: subtitle01,
           focusNode: _focus),
     );
+  }
+}
+
+class LabelDateInput extends StatefulWidget {
+  final String? Function(String?) validator;
+  final String placeHolder;
+  final String label;
+  final TextEditingController controller;
+  final String? value;
+
+  const LabelDateInput(
+      {super.key,
+      required this.validator,
+      required this.controller,
+      required this.placeHolder,
+      required this.label,
+      this.value = ''});
+
+  @override
+  State<LabelDateInput> createState() => _LabelDateInputState();
+}
+
+class _LabelDateInputState extends State<LabelDateInput> {
+  bool _hasError = false;
+  bool _hasFocus = false;
+  final FocusNode _focus = FocusNode();
+  late TextEditingController _controller;
+  bool autoCompleted = false;
+  late int currLength;
+  String? previousValue = '';
+
+  Widget? _getStateIcon() {
+    if (_hasError) return const Icon(Icons.error, color: Colors.red);
+
+    return IconButton(
+        onPressed: () async => await _handlePick(),
+        icon: const Icon(Icons.calendar_month),
+        color: primary);
+  }
+
+  _handlePick() async {
+    DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(), //get today's date
+        firstDate: DateTime(
+            2000), //DateTime.now() - not to allow to choose before today.
+        lastDate: DateTime(2101));
+    if (pickedDate != null) {
+      String formattedDate = DateFormat('yyyy/MM/dd').format(
+          pickedDate); // format date in required form here we use yyyy-MM-dd that means time is removed
+
+      setState(() {
+        _controller.text =
+            formattedDate; //set foratted date to TextField value.
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _focus.addListener(_onFocusChange);
+    currLength = widget.value?.length ?? 0;
+    _controller = widget.controller;
+    _controller.text = widget.value ?? '';
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _focus.removeListener(_onFocusChange);
+    _focus.dispose();
+    _controller.dispose();
+  }
+
+  void _onFocusChange() {
+    setState(() {
+      _hasFocus = !_hasFocus;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+        onChanged: (value) {
+          setState(() {
+            if (autoCompleted && value.length < previousValue!.length) {
+              // Backspace pressed, remove the trailing '/'
+              value = value.substring(0, value.length - 1);
+            }
+
+            if (value.length == 2 || value.length == 5) {
+              // Add a '/' after the second and fifth characters
+              value += '/';
+              autoCompleted = true;
+            }
+
+            previousValue = value;
+            _controller.value = _controller.value.copyWith(
+              text: value,
+              selection: TextSelection.collapsed(offset: value.length),
+            );
+          });
+        },
+        controller: _controller,
+        keyboardType: TextInputType.datetime,
+        decoration: InputDecoration(
+            helperText: 'Día / Mes / Año',
+            helperStyle: body02,
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            labelText: widget.label,
+            labelStyle: subtitle01,
+            hintText: widget.placeHolder,
+            hintStyle: subtitle01,
+            focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.blue),
+            ),
+            enabledBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey),
+            ),
+            errorBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.red),
+            ),
+            focusedErrorBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.red),
+            ),
+            suffixIcon: _getStateIcon()),
+        style: subtitle01,
+        validator: (value) {
+          String? validation = widget.validator(value);
+          setState(() {
+            _hasError = validation != null;
+          });
+          return validation;
+        },
+        focusNode: _focus);
   }
 }
