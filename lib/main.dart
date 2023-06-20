@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:dam_1c_2023/initial.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
