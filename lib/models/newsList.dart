@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../firebase/firebase_cloudstore.dart';
 import 'news.dart';
 
 class NewsList extends ChangeNotifier {
@@ -36,7 +37,18 @@ class NewsList extends ChangeNotifier {
     // Add more volunteerings here...
   ];
 
-  List<News> get news => _news;
+  final List<News> _firebaseNews = [];
+
+  List<News> get news => _firebaseNews;
+
+  Future<void> getFromFirebase() async{
+    var aux = await FirebaseCloudstoreITBA().db.collection('ser_manos_data').doc('noticias').get();
+    Map<String, dynamic>? data = aux.data();
+    var volunteersData = data?['values'] as List<dynamic>;
+    volunteersData.forEach((element) {
+      _firebaseNews.add(News.fromJson(element));
+    });
+  }
 
   void addVolunteering(News news) {
     _news.add(news);

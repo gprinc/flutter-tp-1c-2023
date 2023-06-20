@@ -1,3 +1,4 @@
+import 'package:dam_1c_2023/firebase/firebase_cloudstore.dart';
 import 'package:flutter/material.dart';
 
 import 'volunteering.dart';
@@ -32,7 +33,18 @@ class VolunteeringList extends ChangeNotifier {
     // Add more volunteerings here...
   ];
 
-  List<Volunteering> get volunteering => _volunteering;
+  final List<Volunteering> _firebaseVolunteerings = [];
+
+  List<Volunteering> get volunteering => _firebaseVolunteerings;
+
+  Future<void> getFromFirebase() async{
+    var aux = await FirebaseCloudstoreITBA().db.collection('ser_manos_data').doc('voluntariados').get();
+    Map<String, dynamic>? data = aux.data();
+    var volunteersData = data?['values'] as List<dynamic>;
+    volunteersData.forEach((element) {
+      _firebaseVolunteerings.add(Volunteering.fromJson(element));
+    });
+  }
 
   void addVolunteering(Volunteering volunteering) {
     _volunteering.add(volunteering);

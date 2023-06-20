@@ -11,4 +11,14 @@ class Volunteering {
       required this.imageName,
       required this.requisites,
       required this.availability});
+
+      factory Volunteering.fromJson(Map<String, dynamic> json ){
+        return Volunteering(
+          title: json['title'], 
+          description: json['description'], 
+          imageName: json['imageName'], 
+          requisites: json['requisites'], 
+          availability: json['availability']
+        );
+      }
 }

@@ -52,6 +52,9 @@ class HomeState extends State<Home> {
   Widget build(BuildContext context) {
     final newsProvider = Provider.of<NewsList>(context);
 
+    Provider.of<VolunteeringList>(context, listen: false).getFromFirebase();
+    Provider.of<NewsList>(context, listen: false).getFromFirebase();
+
     return DefaultTabController(
       // --> Puedo manejar el estado del TabBar de forma automatica.
       // Es una clase "Inherited" que no convenia a veces.
