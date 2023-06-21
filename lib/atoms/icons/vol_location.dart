@@ -21,6 +21,6 @@ class _VolLocationIconState extends State<VolLocation> {
           _icon,
           color: _color,
         ),
-        onPressed: () => widget.callback);
+        onPressed: () => widget.callback());
   }
 }
