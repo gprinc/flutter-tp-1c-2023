@@ -1,6 +1,7 @@
 import 'package:dam_1c_2023/initial.dart';
 import 'package:dam_1c_2023/pages/home.dart';
 import 'package:dam_1c_2023/pages/login.dart';
+import 'package:dam_1c_2023/pages/novedades.dart';
 import 'package:dam_1c_2023/pages/selected_card_page.dart';
 import 'package:dam_1c_2023/pages/welcome.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,26 @@ final GoRouter _router = GoRouter(
       name: 'home',
       path: "/home",
       builder: (context, state) => const Home(),
+    ),
+    GoRoute(
+      name: 'selected-news',
+      path: "/selected-news/:id",
+      builder: (context, state) {
+        final newsProvider = Provider.of<NewsList>(context);
+        final int? index = int.tryParse(state.params['id'] ?? '');
+        if (index == null) {
+          // handle the case where index is null (e.g. invalid input)
+          return Container();
+        }
+        final news = newsProvider.news[index];
+        return NewsPage(
+          imageName: news.imageName,
+          title: news.title,
+          description: news.description,
+          body: news.body,
+          header: news.header,
+        );
+      },
     ),
     GoRoute(
         name: 'selected-card',

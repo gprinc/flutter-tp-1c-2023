@@ -83,7 +83,7 @@ class CtaButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 328,
+      width: MediaQuery.of(context).size.width,
       height: 44,
       child: Button(
         text: text,
@@ -129,6 +129,38 @@ class ShortButton extends StatelessWidget {
           enabledState: enabledState,
           buttonStyle: buttonStyle,
           textStyle: textStyle),
+    );
+  }
+}
+
+class IconSplashButton extends StatefulWidget {
+  const IconSplashButton(
+      {super.key,
+      required this.icon,
+      required this.onPress,
+      this.enabledState = true});
+
+  final IconData icon;
+  final void Function() onPress;
+  final bool enabledState;
+
+  @override
+  State<IconSplashButton> createState() => _IconSplashButtonState();
+}
+
+class _IconSplashButtonState extends State<IconSplashButton> {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 14,
+      width: 14,
+      child: InkWell(
+          borderRadius: BorderRadius.circular(100),
+          onTap: widget.enabledState ? () => widget.onPress() : null,
+          child: Icon(
+            widget.icon,
+            color: btnSecondary,
+          )),
     );
   }
 }

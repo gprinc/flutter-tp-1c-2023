@@ -8,7 +8,10 @@ class SignupPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: SingleChildScrollView(
-        child: RegisterForm(),
+        child: Padding(
+          padding: EdgeInsets.only(left: 16, right: 16),
+          child: RegisterForm(),
+        ),
       ),
     );
   }

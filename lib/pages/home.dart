@@ -142,6 +142,7 @@ class Home extends StatelessWidget {
                           return Column(
                             children: [
                               NewsCard(
+                                  index: index,
                                   title: news.title,
                                   header: news.header,
                                   description: news.description,

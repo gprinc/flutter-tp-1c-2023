@@ -1,5 +1,7 @@
+import 'package:dam_1c_2023/tokens/token_colors.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class VolunteeringCard extends StatelessWidget {
   final String title;
@@ -55,9 +57,11 @@ class NewsCard extends StatelessWidget {
   final String header;
   final String description;
   final String imageName;
+  final int index;
 
   const NewsCard({
     Key? key,
+    required this.index,
     required this.title,
     required this.header,
     required this.description,
@@ -66,8 +70,7 @@ class NewsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 156,
+    return IntrinsicHeight(
       child: Card(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -79,7 +82,8 @@ class NewsCard extends StatelessWidget {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding:
+                    const EdgeInsets.only(top: 16.0, right: 8.0, left: 8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -88,10 +92,23 @@ class NewsCard extends StatelessWidget {
                     const SizedBox(height: 8),
                     Text(title, style: subtitle01),
                     const SizedBox(height: 8),
-                    Text(description,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: body02),
+                    Text(description, style: body02),
+                    //Text('Leer Más', style: btnModif(primary)),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              right: 8.0, left: 8.0, top: 12),
+                          child: TextButton(
+                            onPressed: () => context.goNamed('selected-news',
+                                params: {'id': index.toString()}),
+                            child: Text('Leer Más', style: btnModif(primary)),
+                          ),
+                        )
+                      ],
+                    )
                   ],
                 ),
               ),
