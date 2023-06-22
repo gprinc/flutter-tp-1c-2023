@@ -91,11 +91,11 @@ class Home extends StatelessWidget {
                           return Column(
                             children: [
                               NewsCard(
-                                title: news.title,
-                                header: news.header,
-                                description: news.description,
-                                imageName: news.imageName,
-                              ),
+                                  index: index,
+                                  title: news.title,
+                                  header: news.header,
+                                  description: news.description,
+                                  imageName: news.imageName),
                               const SizedBox(height: 24),
                             ],
                           );
