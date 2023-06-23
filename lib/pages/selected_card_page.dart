@@ -1,11 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dam_1c_2023/atoms/logos.dart';
 import 'package:dam_1c_2023/cells/modals.dart';
+import 'package:dam_1c_2023/firebase/firebase_cloudstore.dart';
+import 'package:dam_1c_2023/models/user.dart';
 import 'package:dam_1c_2023/models/volunteering.dart';
+import 'package:dam_1c_2023/models/volunteering_list.dart';
 import 'package:dam_1c_2023/molecules/components.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:dam_1c_2023/molecules/buttons.dart';
 import 'package:dam_1c_2023/atoms/icons/arrow_back.dart';
+import 'package:provider/provider.dart';
 
 class SelectedCardPage extends StatelessWidget {
   final Volunteering info;
@@ -104,7 +109,7 @@ class SelectedCardPage extends StatelessWidget {
                     text: "Postularme",
                     enabledState: true,
                     handlePress: () {
-                      _showCustomDialog(context, info.title, info.description);
+                      _showCustomDialog(context, info);
                     }),
               ),
             ),
@@ -116,17 +121,49 @@ class SelectedCardPage extends StatelessWidget {
 }
 
 Future<void> _showCustomDialog(
-    BuildContext context, String title, String description) async {
+    BuildContext context, Volunteering vol) async {
   await showDialog<void>(
     context: context,
     builder: (_) {
       return ApplyDialog(
-        title: title,
+        title: vol.title,
         cancelButtonText: 'Cancelar',
         confirmButtonText: 'Confirmar',
         onCancelPressed: () => Navigator.of(context).pop(),
-        onConfirmPressed: () => Navigator.of(context).pop(),
+        onConfirmPressed: () => addAsParticipant(context, vol),
       );
     },
   );
+}
+
+Future<void> addAsParticipant(BuildContext context, Volunteering vol) async {
+  final volunteerings = Provider.of<VolunteeringList>(context).volunteering;
+  List<Map<String, dynamic>> updatedList = [];
+  volunteerings.forEach((element) {
+    if (element.id == vol.id) {
+      element.participants.add(User(email: 'guido@princ.com', name: 'Guido', lastName: 'Princ'));
+    }
+    updatedList.add(Volunteering.toJson(element));
+  });
+  await FirebaseFirestore.instance
+    .collection('ser_manos_data')
+    .doc('test')
+    .update({ 'values': FieldValue.arrayUnion(updatedList)})
+    .then((value) => Navigator.of(context).pop());
+}
+
+Future<void> removeAsParticipant(BuildContext context, Volunteering vol) async {
+  final volunteerings = Provider.of<VolunteeringList>(context).volunteering;
+  List<Map<String, dynamic>> updatedList = [];
+  volunteerings.forEach((element) {
+    if (element.id == vol.id) {
+      element.participants.removeWhere((element) => element.email == 'guido@princ.com');
+    }
+    updatedList.add(Volunteering.toJson(element));
+  });
+  await FirebaseFirestore.instance
+    .collection('ser_manos_data')
+    .doc('test')
+    .update({ 'values': FieldValue.arrayUnion(updatedList)})
+    .then((value) => Navigator.of(context).pop());
 }

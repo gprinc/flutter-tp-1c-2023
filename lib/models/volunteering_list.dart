@@ -11,25 +11,29 @@ class VolunteeringList extends ChangeNotifier {
             'El propósito principal de "Un techo para mi país" es reducir el déficit habitacional y mejorar las condiciones de vida de las personas que no tienen acceso a una vivienda adecuada.',
         imageName: 'assets/voluntariado.png',
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
-        availability: ['Lunes a viernes de 7 a 10hs']),
+        availability: ['Lunes a viernes de 7 a 10hs'],
+        id: 0),
     Volunteering(
         title: 'Manos caritativas',
         description: 'Description for Manos Caritativas',
         imageName: 'assets/manos.png',
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
-        availability: ['Lunes a viernes de 7 a 10hs']),
+        availability: ['Lunes a viernes de 7 a 10hs'],
+        id: 1),
     Volunteering(
         title: 'Iglesia',
         description: 'Description for Otro título',
         imageName: 'assets/iglesia.png',
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
-        availability: ['Lunes a viernes de 7 a 10hs']),
+        availability: ['Lunes a viernes de 7 a 10hs'],
+        id: 2),
     Volunteering(
         title: 'Un techo para mi país',
         description: 'Description for Un techo para mi país',
         imageName: 'assets/voluntariado.png',
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
-        availability: ['Lunes a viernes de 7 a 10hs']),
+        availability: ['Lunes a viernes de 7 a 10hs'],
+        id: 3),
     // Add more volunteerings here...
   ];
 
