@@ -134,10 +134,10 @@ class ShortButton extends StatelessWidget {
         child: Row(
           children: [
             icon ? const PlusIcon() : const SizedBox.shrink(),
-            const SizedBox(width: 5),
+            icon ? const SizedBox(width: 5) : const SizedBox.shrink(),
             Expanded(
               child: Align(
-                alignment: Alignment.centerLeft,
+                alignment: icon ? Alignment.centerLeft : Alignment.center,
                 child: Text(text, style: textStyle),
               ),
             ),

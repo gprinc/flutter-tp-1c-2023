@@ -1,19 +1,27 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:dam_1c_2023/tokens/token_colors.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../molecules/buttons.dart';
 
 class ProfilePicture extends StatefulWidget {
-  const ProfilePicture({super.key});
+  final void Function(String?) handleImageSelect;
+  final String? encodedImage;
+
+  const ProfilePicture(
+      {super.key, required this.handleImageSelect, this.encodedImage});
 
   @override
   State<ProfilePicture> createState() => _ProfilePictureState();
 }
 
 class _ProfilePictureState extends State<ProfilePicture> {
-  bool _isImageSelected = false;
+  late bool _isImageSelected;
 
   String get btnText => _isImageSelected ? 'Cambiar foto' : 'Subir foto';
 
@@ -21,6 +29,29 @@ class _ProfilePictureState extends State<ProfilePicture> {
     setState(() {
       _isImageSelected = true;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _isImageSelected = widget.encodedImage != null;
+  }
+
+  void _pickFile() async {
+    FilePickerResult? result;
+
+    result = await FilePicker.platform.pickFiles(type: FileType.image);
+    setState(() {
+      _isImageSelected = true;
+    });
+    if (result != null) {
+      Uint8List? selectedBytes = result.files.single.bytes;
+      if (selectedBytes != null) {
+        widget.handleImageSelect(base64Encode(selectedBytes));
+      }
+    } else {
+      widget.handleImageSelect(null);
+    }
   }
 
   Widget getCardDisposition() {
@@ -37,7 +68,7 @@ class _ProfilePictureState extends State<ProfilePicture> {
                   ),
                   const SizedBox(height: 8),
                   ShortButton(
-                    handlePress: _selectImage,
+                    handlePress: _pickFile,
                     text: btnText,
                     enabledState: true,
                     icon: false,
@@ -45,10 +76,9 @@ class _ProfilePictureState extends State<ProfilePicture> {
                 ],
               ),
               SizedBox(
-                width: 84,
-                height: 84,
-                child: Image.asset('assets/profile.png'),
-              ),
+                  width: 84,
+                  height: 84,
+                  child: Image.memory(base64Decode(widget.encodedImage!))),
             ],
           )
         : Row(
@@ -59,7 +89,7 @@ class _ProfilePictureState extends State<ProfilePicture> {
                 style: subtitle01,
               ),
               ShortButton(
-                handlePress: _selectImage,
+                handlePress: _pickFile,
                 text: btnText,
                 icon: false,
                 enabledState: true,

@@ -20,74 +20,75 @@ import 'models/newsList.dart';
 import 'models/volunteering_list.dart';
 import 'pages/signup.dart';
 
-GoRouter _router(FirebaseAnalyticsObserver obs) { 
+GoRouter _router(FirebaseAnalyticsObserver obs) {
   return GoRouter(
     observers: [obs],
-  routes: [
-    GoRoute(
-        path: "/",
-        builder: (context, state) => const MyInitialPage(),
-        routes: [
-          GoRoute(
-            name: 'login',
-            path: "login",
-            builder: (context, state) => const LoginPage(),
-          ),
-          GoRoute(
-            name: 'signup',
-            path: "signup",
-            builder: (context, state) => const SignupPage(),
-          ),
-        ]),
-    GoRoute(
-      name: 'welcome',
-      path: "/welcome",
-      builder: (context, state) => const WelcomePage(),
-    ),
-    GoRoute(
-      name: 'home',
-      path: "/home",
-      builder: (context, state) => const Home(),
-    ),
-    GoRoute(
-      name: 'selected-news',
-      path: "/selected-news/:id",
-      builder: (context, state) {
-        final newsProvider = Provider.of<NewsList>(context);
-        final int? index = int.tryParse(state.params['id'] ?? '');
-        if (index == null) {
-          // handle the case where index is null (e.g. invalid input)
-          return Container();
-        }
-        final news = newsProvider.news[index];
-        return NewsPage(
-          imageName: news.imageName,
-          title: news.title,
-          description: news.description,
-          body: news.body,
-          header: news.header,
-        );
-      },
-    ),
-    GoRoute(
-        name: 'selected-card',
-        path: "/selected-card/:id",
+    routes: [
+      GoRoute(
+          path: "/",
+          builder: (context, state) => const MyInitialPage(),
+          routes: [
+            GoRoute(
+              name: 'login',
+              path: "login",
+              builder: (context, state) => const LoginPage(),
+            ),
+            GoRoute(
+              name: 'signup',
+              path: "signup",
+              builder: (context, state) => const SignupPage(),
+            ),
+          ]),
+      GoRoute(
+        name: 'welcome',
+        path: "/welcome",
+        builder: (context, state) => const WelcomePage(),
+      ),
+      GoRoute(
+        name: 'home',
+        path: "/home",
+        builder: (context, state) => const Home(),
+      ),
+      GoRoute(
+        name: 'selected-news',
+        path: "/selected-news/:id",
         builder: (context, state) {
-          final volunteeringProvider = Provider.of<VolunteeringList>(context);
+          final newsProvider = Provider.of<NewsList>(context);
           final int? index = int.tryParse(state.params['id'] ?? '');
           if (index == null) {
             // handle the case where index is null (e.g. invalid input)
             return Container();
           }
-          final volunteering = volunteeringProvider.volunteering[index - 1];
-          return SelectedCardPage(
-            imageName: volunteering.imageName,
-            title: volunteering.title,
-            description: volunteering.description,
+          final news = newsProvider.news[index];
+          return NewsPage(
+            imageName: news.imageName,
+            title: news.title,
+            description: news.description,
+            body: news.body,
+            header: news.header,
+            index: index,
           );
-        }),
-  ],
-);
+        },
+      ),
+      GoRoute(
+          name: 'selected-card',
+          path: "/selected-card/:id",
+          builder: (context, state) {
+            final volunteeringProvider = Provider.of<VolunteeringList>(context);
+            final int? index = int.tryParse(state.params['id'] ?? '');
+            if (index == null) {
+              // handle the case where index is null (e.g. invalid input)
+              return Container();
+            }
+            final volunteering = volunteeringProvider.volunteering[index - 1];
+            return SelectedCardPage(
+              imageName: volunteering.imageName,
+              title: volunteering.title,
+              description: volunteering.description,
+            );
+          }),
+    ],
+  );
 }
 
 void main() async {
@@ -103,7 +104,7 @@ void main() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
-  
+
   runApp(const MyApp());
 }
 

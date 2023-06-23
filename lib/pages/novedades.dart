@@ -4,6 +4,7 @@ import 'package:dam_1c_2023/tokens/token_colors.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:share_plus/share_plus.dart';
 
 class NewsPage extends StatelessWidget {
   final String imageName;
@@ -11,6 +12,7 @@ class NewsPage extends StatelessWidget {
   final String description;
   final String body;
   final String header;
+  final int index;
 
   const NewsPage(
       {super.key,
@@ -18,7 +20,8 @@ class NewsPage extends StatelessWidget {
       required this.title,
       required this.description,
       required this.header,
-      required this.body});
+      required this.body,
+      required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +29,16 @@ class NewsPage extends StatelessWidget {
       appBar: AppBar(
           leading: const ArrowBackIcon(),
           title: Padding(
-            padding: const EdgeInsets.only(right: 40),
+            padding: const EdgeInsets.only(right: 40, top: 20, bottom: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  'Novedades',
-                  style: subtitle01Modif(neutralBg),
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Novedades',
+                    style: subtitle01Modif(neutralBg),
+                  ),
                 ),
               ],
             ),
@@ -110,7 +116,13 @@ class NewsPage extends StatelessWidget {
                 height: 16,
               ),
               CtaButton(
-                  text: 'Compartir', handlePress: () {}, enabledState: true)
+                  text: 'Compartir',
+                  handlePress: () {
+                    Share.share(
+                        'mira esta novedad: https://sermanos.com/selected-news/' +
+                            index.toString());
+                  },
+                  enabledState: true)
             ],
           ),
         ),
