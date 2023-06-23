@@ -24,16 +24,28 @@ class NewsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const ArrowBackIcon(),
-        title: Padding(
+          leading: const ArrowBackIcon(),
+          title: Padding(
+            padding: const EdgeInsets.only(right: 40),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Novedades',
+                  style: subtitle01Modif(neutralBg),
+                ),
+              ],
+            ),
+          )
+          /*adding(
           padding:
               const EdgeInsets.only(top: 20, bottom: 20, right: 40, left: 64),
           child: Text(
             'Novedades',
             style: subtitle01Modif(neutralBg),
           ),
-        ),
-      ),
+        ),*/
+          ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(

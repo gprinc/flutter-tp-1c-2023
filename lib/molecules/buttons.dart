@@ -104,7 +104,7 @@ class ShortButton extends StatelessWidget {
   final void Function() handlePress;
   final bool enabledState;
   final bool disableAfterPress;
-
+  final bool icon;
   final TextStyle textStyle = btn;
 
   final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
@@ -114,13 +114,14 @@ class ShortButton extends StatelessWidget {
     ),
   );
 
-  ShortButton({
-    Key? key,
-    required this.text,
-    required this.handlePress,
-    required this.enabledState,
-    this.disableAfterPress = false,
-  }) : super(key: key);
+  ShortButton(
+      {Key? key,
+      required this.text,
+      required this.handlePress,
+      required this.enabledState,
+      this.disableAfterPress = false,
+      this.icon = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +133,7 @@ class ShortButton extends StatelessWidget {
         style: buttonStyle,
         child: Row(
           children: [
-            const PlusIcon(),
+            icon ? const PlusIcon() : const SizedBox.shrink(),
             const SizedBox(width: 5),
             Expanded(
               child: Align(

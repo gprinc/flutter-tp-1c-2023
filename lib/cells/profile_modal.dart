@@ -72,8 +72,9 @@ class _ProfileModalState extends State<ProfileModal> {
         child: Column(children: [
           Row(
             children: [
-              IconSplashButton(
-                  icon: Icons.close, onPress: () => Navigator.pop(context))
+              IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context))
               /*IconButton(
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.close, color: btnSecondary)),*/
