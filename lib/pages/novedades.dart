@@ -119,7 +119,7 @@ class NewsPage extends StatelessWidget {
                   text: 'Compartir',
                   handlePress: () {
                     Share.share(
-                        'mira esta novedad: https://sermanos.com/selected-news/' +
+                        'mira esta novedad: sermanos://pages/selected-news/' +
                             index.toString());
                   },
                   enabledState: true)

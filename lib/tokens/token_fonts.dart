@@ -41,7 +41,7 @@ TextStyle subtitle01Modif(Color givenColor) {
     fontFamily: 'Roboto',
     fontStyle: FontStyle.normal,
     fontWeight: FontWeight.w400,
-    fontSize: 14,
+    fontSize: 16,
     //height: 20,
     letterSpacing: 0.25,
     color: givenColor,
