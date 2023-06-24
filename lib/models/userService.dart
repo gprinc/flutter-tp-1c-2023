@@ -36,7 +36,8 @@ class UserService extends ChangeNotifier {
       return;
     }
     UserITBA auxUser = UserITBA(email: email, name: name, lastName: lastName);
-    await FirebaseCloudstoreITBA().db.collection('ser_manos_data').doc('users').update({"values": FieldValue.arrayUnion([UserITBA.toJson(auxUser)])});
+    await FirebaseCloudstoreITBA().db.collection('users').add(UserITBA.toJson(UserITBA(email: email, name: name, lastName: lastName)));
+    _firebaseUser = auxUser;
   }
 
   Future<void> loginUser(String email, String password) async {
@@ -45,13 +46,13 @@ class UserService extends ChangeNotifier {
       error = 'There was an error with the login';
       return;
     }
-    var dataAux = await FirebaseCloudstoreITBA().db.collection('ser_manos_data').doc('users').get();
-    Map<String, dynamic>? data = dataAux.data();
-    var usersData = data?['values'] as List<dynamic>;
-    usersData.forEach((element) {
-      if (element[email] == email) {
-        _firebaseUser = UserITBA.fromJson(element);
-      }
-    });
+    final snapshot  = await FirebaseCloudstoreITBA().db.collection('users').where('email', isEqualTo: email).get();
+    final userData = snapshot.docs.map((e) => UserITBA.fromSnapshot(e)).single;
+    _firebaseUser = userData;
+  }
+
+  void logoutUser() {
+    _firebaseUser = null;
+    FirebaseAuthenticationITBA().logout();
   }
 }
