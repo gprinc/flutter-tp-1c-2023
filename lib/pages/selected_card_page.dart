@@ -4,6 +4,7 @@ import 'package:dam_1c_2023/cells/modals.dart';
 import 'package:dam_1c_2023/firebase/firebase_cloudstore.dart';
 import 'package:dam_1c_2023/models/participant.dart';
 import 'package:dam_1c_2023/models/user.dart';
+import 'package:dam_1c_2023/models/userService.dart';
 import 'package:dam_1c_2023/models/volunteering.dart';
 import 'package:dam_1c_2023/models/volunteering_list.dart';
 import 'package:dam_1c_2023/molecules/components.dart';
@@ -96,7 +97,7 @@ class SelectedCardPage extends StatelessWidget {
                     ],
                   ),
                   const Padding(padding: EdgeInsets.only(bottom: 8)),
-                  Vacancies(counter: 10 - info.participants.length),
+                  Vacancies(counter: 10 - info.participantsEmail.length),
                 ],
               ),
             ),
@@ -106,12 +107,24 @@ class SelectedCardPage extends StatelessWidget {
               alignment: Alignment.bottomCenter,
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 56),
-                child: CtaButton(
-                    text: "Postularme",
-                    enabledState: true,
-                    handlePress: () {
-                      _showCustomDialog(context, info);
-                    }),
+                child:
+                info.appliersEmail.contains(Provider.of<UserService>(context, listen: false).user?.email) ?
+                    Align(
+                      alignment: Alignment.center,
+                      child: Column(
+                        children: [
+                          const Text("Te has postulado", style: headLine02),
+                          const Text("Pronto la organización se pondrá en contacto contigo y te inscribirá como participante"),
+                          CtaButton(text: "Retirar postulación", handlePress: () { _removeDialog(context, info); }, enabledState: true)
+                          ],
+                      ),
+                    ) :
+                    CtaButton(
+                        text: "Postularme",
+                        enabledState: true,
+                        handlePress: () {
+                          _showCustomDialog(context, info);
+                        }),
               ),
             ),
           )
@@ -127,6 +140,7 @@ Future<void> _showCustomDialog(
     context: context,
     builder: (_) {
       return ApplyDialog(
+        header: 'Te estas por postular a',
         title: vol.title,
         cancelButtonText: 'Cancelar',
         confirmButtonText: 'Confirmar',
@@ -138,33 +152,95 @@ Future<void> _showCustomDialog(
 }
 
 Future<void> addAsParticipant(BuildContext context, Volunteering vol) async {
-  final volunteerings = Provider.of<VolunteeringList>(context).volunteering;
-  List<Map<String, dynamic>> updatedList = [];
-  volunteerings.forEach((element) {
-    if (element.id == vol.id) {
-      element.participants.add(Participant(email: 'guido@princ.com'));
+  final volunteerings = Provider.of<VolunteeringList>(context, listen: false).volunteering;
+  final currentUser = Provider.of<UserService>(context, listen: false).user;
+  if (currentUser != null) {
+    List<Map<String, dynamic>> updatedList = [];
+
+    volunteerings.forEach((element) {
+      if (element.id == vol.id) {
+        element.appliersEmail.add(currentUser.email);
+      }
+      updatedList.add(Volunteering.toJson(element));
+    });
+
+    final userQuery = FirebaseFirestore.instance.collection('users').where('email', isEqualTo: currentUser.email);
+    final userSnapshot = await userQuery.get();
+
+    if (userSnapshot.docs.isNotEmpty) {
+      final userDoc = userSnapshot.docs.first.reference;
+
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        final userData = userSnapshot.docs.first.data();
+
+        // Update or add the 'volunteeringId' field
+        userData['volunteeringId'] = vol.id;
+
+        transaction.set(userDoc, userData);
+      });
+
+      await FirebaseFirestore.instance
+          .collection('ser_manos_data')
+          .doc('voluntariados')
+          .update({'values': FieldValue.arrayUnion(updatedList)})
+          .then((value) => Navigator.of(context).pop());
     }
-    updatedList.add(Volunteering.toJson(element));
-  });
-  await FirebaseFirestore.instance
-    .collection('ser_manos_data')
-    .doc('test')
-    .update({ 'values': FieldValue.arrayUnion(updatedList)})
-    .then((value) => Navigator.of(context).pop());
+  }
 }
 
+Future<void> _removeDialog(
+    BuildContext context, Volunteering vol) async {
+  await showDialog<void>(
+    context: context,
+    builder: (_) {
+      return ApplyDialog(
+        header: '¿Estas seguro que querés retirar tu postulación?',
+        title: vol.title,
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Confirmar',
+        onCancelPressed: () => Navigator.of(context).pop(),
+        onConfirmPressed: () => addAsParticipant(context, vol),
+      );
+    },
+  );
+}
+
+
 Future<void> removeAsParticipant(BuildContext context, Volunteering vol) async {
-  final volunteerings = Provider.of<VolunteeringList>(context).volunteering;
-  List<Map<String, dynamic>> updatedList = [];
-  volunteerings.forEach((element) {
-    if (element.id == vol.id) {
-      element.participants.removeWhere((element) => element.email == 'guido@princ.com');
+  final volunteerings = Provider.of<VolunteeringList>(context, listen: false).volunteering;
+  final currentUser = Provider.of<UserService>(context, listen: false).user;
+
+  if (currentUser != null) {
+    List<Map<String, dynamic>> updatedList = [];
+
+    volunteerings.forEach((element) {
+      if (element.id == vol.id) {
+        element.appliersEmail.removeWhere((email) => email == currentUser.email);
+        element.participantsEmail.removeWhere((email) => email == currentUser.email);
+      }
+      updatedList.add(Volunteering.toJson(element));
+    });
+
+    final userQuery = FirebaseFirestore.instance.collection('users').where('email', isEqualTo: currentUser.email);
+    final userSnapshot = await userQuery.get();
+
+    if (userSnapshot.docs.isNotEmpty) {
+      final userDoc = userSnapshot.docs.first.reference;
+
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        final userData = userSnapshot.docs.first.data();
+
+        // Update or add the 'volunteeringId' field
+        userData['volunteeringId'] = FieldValue.delete();
+
+        transaction.set(userDoc, userData);
+      });
+
+      await FirebaseFirestore.instance
+          .collection('ser_manos_data')
+          .doc('voluntariados')
+          .update({'values': FieldValue.arrayUnion(updatedList)})
+          .then((value) => Navigator.of(context).pop());
     }
-    updatedList.add(Volunteering.toJson(element));
-  });
-  await FirebaseFirestore.instance
-    .collection('ser_manos_data')
-    .doc('test')
-    .update({ 'values': FieldValue.arrayUnion(updatedList)})
-    .then((value) => Navigator.of(context).pop());
+  }
 }

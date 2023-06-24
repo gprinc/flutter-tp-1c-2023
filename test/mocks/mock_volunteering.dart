@@ -68,5 +68,8 @@ class MockVolunteeringList extends ChangeNotifier implements VolunteeringList {
     // Add more volunteerings here...
   ];
 
+  @override
+  late bool loading;
+
 }
 

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'volunteering.dart';
 
 class VolunteeringList extends ChangeNotifier {
+  bool loading = false;
   final List<Volunteering> _volunteering = [
     Volunteering(
         title: 'Un techo para mi país',
@@ -14,7 +15,9 @@ class VolunteeringList extends ChangeNotifier {
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
         availability: ['Lunes a viernes de 7 a 10hs'],
         id: 0,
-        participants: []),
+        appliersEmail: [],
+        participantsEmail: []
+    ),
     Volunteering(
         title: 'Manos caritativas',
         description: 'Description for Manos Caritativas',
@@ -23,7 +26,8 @@ class VolunteeringList extends ChangeNotifier {
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
         availability: ['Lunes a viernes de 7 a 10hs'],
         id: 1,
-        participants: []),
+        appliersEmail: [],
+        participantsEmail: []),
     Volunteering(
         title: 'Iglesia',
         description: 'Description for Otro título',
@@ -32,7 +36,8 @@ class VolunteeringList extends ChangeNotifier {
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
         availability: ['Lunes a viernes de 7 a 10hs'],
         id: 2,
-        participants: []),
+        appliersEmail: [],
+        participantsEmail: []),
     Volunteering(
         title: 'Un techo para mi país',
         description: 'Description for Un techo para mi país',
@@ -41,7 +46,8 @@ class VolunteeringList extends ChangeNotifier {
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
         availability: ['Lunes a viernes de 7 a 10hs'],
         id: 3,
-        participants: []),
+        appliersEmail: [],
+        participantsEmail: []),
     // Add more volunteerings here...
   ];
 
@@ -61,14 +67,26 @@ class VolunteeringList extends ChangeNotifier {
 
   List<Volunteering> get volunteering => _firebaseVolunteerings;
 
-  Future<void> getFromFirebase() async{
-    var aux = await _firebaseCloudstore.db.collection('ser_manos_data').doc('voluntariados').get();
-    Map<String, dynamic>? data = aux.data();
-    var volunteersData = data?['values'] as List<dynamic>;
-    volunteersData.forEach((element) {
-      _firebaseVolunteerings.add(Volunteering.fromJson(element));
-    });
+  Future<void> getFromFirebase() async {
+    loading = true;
+    try {
+      var aux = await _firebaseCloudstore.db
+          .collection('ser_manos_data')
+          .doc('voluntariados')
+          .get();
+      Map<String, dynamic>? data = aux.data();
+      var volunteersData = data?['values'] as List<dynamic>;
+      volunteersData.forEach((element) {
+        _firebaseVolunteerings.add(Volunteering.fromJson(element));
+      });
+    } catch (error, stackTrace) {
+      print('Error occurred during Firebase retrieval: $error');
+      print(stackTrace);
+    } finally {
+      loading = false;
+    }
   }
+
 
   void addVolunteering(Volunteering volunteering) {
     _volunteering.add(volunteering);

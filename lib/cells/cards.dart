@@ -300,7 +300,7 @@ class VolunteeringCard extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(right: 115),
-                        child: Vacancies(counter: 10 - volunteering.participants.length),
+                        child: Vacancies(counter: 10 - volunteering.participantsEmail.length),
                       ),
                       const Icon(
                         Icons.favorite_border,

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dam_1c_2023/firebase/firebase_authentication.dart';
 import 'package:dam_1c_2023/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -36,22 +35,24 @@ class UserService extends ChangeNotifier {
       return;
     }
     UserModel auxUser = UserModel(email: email, name: name, lastName: lastName);
-    await FirebaseCloudstoreITBA().db.collection('ser_manos_data').doc('users').update({"values": FieldValue.arrayUnion([UserModel.toJson(auxUser)])});
+    await FirebaseCloudstoreITBA().db.collection('users').add(UserModel.toJson(UserModel(email: email, name: name, lastName: lastName)));
+    _firebaseUser = auxUser;
   }
 
-  Future<void> loginUser(String email, String password) async {
+  Future<bool> loginUser(String email, String password) async {
     UserCredential? aux = await FirebaseAuthenticationITBA().loginUser(email, password);
     if (aux == null) {
       error = 'There was an error with the login';
-      return;
+      return false;
     }
-    var dataAux = await FirebaseCloudstoreITBA().db.collection('ser_manos_data').doc('users').get();
-    Map<String, dynamic>? data = dataAux.data();
-    var usersData = data?['values'] as List<dynamic>;
-    usersData.forEach((element) {
-      if (element[email] == email) {
-        _firebaseUser = UserModel.fromJson(element);
-      }
-    });
+    final snapshot  = await FirebaseCloudstoreITBA().db.collection('users').where('email', isEqualTo: email).get();
+    final userData = snapshot.docs.map((e) => UserModel.fromSnapshot(e)).single;
+    _firebaseUser = userData;
+    return true;
+  }
+
+  void logoutUser() {
+    _firebaseUser = null;
+    FirebaseAuthenticationITBA().logout();
   }
 }

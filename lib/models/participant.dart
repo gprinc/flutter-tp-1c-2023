@@ -1,22 +1,25 @@
 import 'package:dam_1c_2023/models/user.dart';
 
-enum Status {
+enum StatusITBA {
   aceptado,
   rechazado,
-  esperando,
+  esperando;
+
+  String toJson() => name;
+  static StatusITBA fromJson(String json) => values.byName(json);
 }
 
 class Participant {
-  Status status;
+  StatusITBA status;
   String email;
 
   Participant(
-      {this.status = Status.esperando,
+      {this.status = StatusITBA.esperando,
       required this.email});
   
   factory Participant.fromJson(Map<String, dynamic> json ){
     return Participant(
-      status: json['status'],  
+      status: StatusITBA.fromJson(json['status']),  
       email: json['email'],
     );
   }
@@ -31,7 +34,7 @@ class Participant {
 
   static Map<String, dynamic> toJson(Participant user) {
     return {
-      'status': user.status,
+      'status': user.status.toJson(),
       'email': user.email,
     };
   }

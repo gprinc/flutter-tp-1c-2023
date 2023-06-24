@@ -9,7 +9,8 @@ class Volunteering {
   var requisites = [];
   var availability = [];
   final int id;
-  List<Participant> participants;
+  List<dynamic> appliersEmail;
+  List<dynamic> participantsEmail;
 
   Volunteering(
       {required this.title,
@@ -19,7 +20,9 @@ class Volunteering {
       required this.requisites,
       required this.availability,
       required this.id,
-      this.participants = const [],});
+      this.appliersEmail = const [],
+        this.participantsEmail = const [],
+      });
 
       factory Volunteering.fromJson(Map<String, dynamic> json ){
         return Volunteering(
@@ -30,7 +33,8 @@ class Volunteering {
           requisites: json['requisites'], 
           availability: json['availability'],
           id: json['id'],
-          participants: Participant.fromJsonArray(json['participants'])
+          appliersEmail: json['appliersEmail'],
+          participantsEmail: json['participantsEmail']
         );
       }
 
@@ -43,15 +47,12 @@ class Volunteering {
         'requisites': requisites,
         'availability': availability,
         'id': id,
-        'participants': participants
+        'appliersEmail': appliersEmail,
+        'participantsEmail': participantsEmail
       };
     }
 
      static Map<String, dynamic> toJson(Volunteering vol) {
-        List<Map<String, dynamic>> auxParticipants = [];
-        vol.participants.forEach((element) { 
-          auxParticipants.add(Participant.toJson(element));
-        });
       return {
         'title': vol.title,
         'description': vol.description,
@@ -59,7 +60,8 @@ class Volunteering {
         'requisites': vol.requisites,
         'availability': vol.availability,
         'id': vol.id,
-        'participants': auxParticipants
+        'appliersEmail': vol.appliersEmail,
+        'participantsEmail': vol.participantsEmail
       };
   }
 }
