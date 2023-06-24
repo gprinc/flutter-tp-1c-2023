@@ -4,13 +4,13 @@ import 'package:go_router/go_router.dart';
 
 import '../cells/modal.dart';
 import '../cells/profile_modal.dart';
+import '../models/user.dart';
 import '../molecules/buttons.dart';
 import '../tokens/token_fonts.dart';
 
 class ProfileTab extends StatelessWidget {
-  const ProfileTab({super.key, this.isEmpty = true});
-
-  final bool isEmpty;
+  final UserITBA user;
+  const ProfileTab({super.key, required this.user});
 
   showProfileModal(BuildContext context) {
     buildModal(context, const ProfileModal());
@@ -140,6 +140,6 @@ class ProfileTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return isEmpty ? emptyProfile(context) : filledProfile(context);
+    return user. ? emptyProfile(context) : filledProfile(context);
   }
 }
