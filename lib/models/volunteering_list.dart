@@ -64,7 +64,6 @@ class VolunteeringList extends ChangeNotifier {
   Future<void> getFromFirebase() async{
     var aux = await _firebaseCloudstore.db.collection('ser_manos_data').doc('voluntariados').get();
     Map<String, dynamic>? data = aux.data();
-    print(data);
     var volunteersData = data?['values'] as List<dynamic>;
     volunteersData.forEach((element) {
       _firebaseVolunteerings.add(Volunteering.fromJson(element));

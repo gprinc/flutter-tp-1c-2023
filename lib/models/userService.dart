@@ -7,10 +7,10 @@ import 'package:dam_1c_2023/firebase/firebase_cloudstore.dart';
 
 class UserService extends ChangeNotifier {
 
-  UserITBA? _firebaseUser = null;
+  UserModel? _firebaseUser = null;
   String? error;
 
-  UserITBA? get user => _firebaseUser;
+  UserModel? get user => _firebaseUser;
   String? get geterror => error;
 
   Future<void> getUserFromFirebase(String email) async{
@@ -19,7 +19,7 @@ class UserService extends ChangeNotifier {
     var usersData = data?['values'] as List<dynamic>;
     usersData.forEach((element) {
       if(element['email'] == email) {
-        _firebaseUser = UserITBA.fromJson(element);
+        _firebaseUser = UserModel.fromJson(element);
       }
       return;
     });
@@ -35,8 +35,8 @@ class UserService extends ChangeNotifier {
       error = 'There was an error with the registration';
       return;
     }
-    UserITBA auxUser = UserITBA(email: email, name: name, lastName: lastName);
-    await FirebaseCloudstoreITBA().db.collection('ser_manos_data').doc('users').update({"values": FieldValue.arrayUnion([UserITBA.toJson(auxUser)])});
+    UserModel auxUser = UserModel(email: email, name: name, lastName: lastName);
+    await FirebaseCloudstoreITBA().db.collection('ser_manos_data').doc('users').update({"values": FieldValue.arrayUnion([UserModel.toJson(auxUser)])});
   }
 
   Future<void> loginUser(String email, String password) async {
@@ -50,7 +50,7 @@ class UserService extends ChangeNotifier {
     var usersData = data?['values'] as List<dynamic>;
     usersData.forEach((element) {
       if (element[email] == email) {
-        _firebaseUser = UserITBA.fromJson(element);
+        _firebaseUser = UserModel.fromJson(element);
       }
     });
   }
