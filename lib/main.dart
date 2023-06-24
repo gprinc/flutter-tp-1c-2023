@@ -6,6 +6,8 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -116,7 +118,9 @@ void main() async {
   };
 
 
-  runApp(const MyApp());
+  runApp(
+    const OverlaySupport(child: MyApp())
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -133,11 +137,11 @@ class _MyAppState extends State<MyApp>{
   void initState() {
     FirebaseMessaging.onMessage.listen(
           (RemoteMessage message) {
-            final msg = message.notification?.title?? "";
-        print("onMessage: $msg");
-        final snackBar =
-        SnackBar(content: Text(message.notification?.title ?? ""));
-        _scaffoldMessengerKey.currentState?.showSnackBar(snackBar);
+            showSimpleNotification(
+              Text(message.notification?.title ?? ""),
+              background: Colors.blue, // Customize the background color
+              duration: Duration(seconds: 2), //the duration for which the notification will be displayed
+            );
       },
     );
     super.initState();
@@ -149,6 +153,7 @@ class _MyAppState extends State<MyApp>{
 
   @override
   Widget build(BuildContext context) {
+
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.blue));
     return MultiProvider(
