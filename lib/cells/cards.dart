@@ -1,8 +1,12 @@
+import 'package:dam_1c_2023/models/user.dart';
+import 'package:dam_1c_2023/models/userService.dart';
 import 'package:dam_1c_2023/models/volunteering.dart';
+import 'package:dam_1c_2023/models/volunteering_list.dart';
 import 'package:dam_1c_2023/tokens/token_colors.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:dam_1c_2023/tokens/token_shadows.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../atoms/icons/vol_location.dart';
 import '../molecules/components.dart';
@@ -257,10 +261,12 @@ class _InputCardState extends State<InputCard> {
 
 class VolunteeringCard extends StatelessWidget {
   final Volunteering volunteering;
+  final void Function(Volunteering) onFavoritePressed;
 
   const VolunteeringCard({
     Key? key,
     required this.volunteering,
+    required this.onFavoritePressed
   }) : super(key: key);
 
   @override
@@ -302,9 +308,13 @@ class VolunteeringCard extends StatelessWidget {
                         padding: const EdgeInsets.only(right: 115),
                         child: Vacancies(counter: 10 - volunteering.participants.length),
                       ),
-                      const Icon(
-                        Icons.favorite_border,
-                        color: primary,
+                      IconButton(
+                        onPressed: () => onFavoritePressed(volunteering),
+                        padding: EdgeInsets.zero,
+                        constraints: BoxConstraints(),
+                        icon: const Icon(
+                          Icons.favorite_border,
+                          color: primary,)
                       ),
                       VolLocation(() {
                         openMap(volunteering.address);
