@@ -235,7 +235,7 @@ class _LabelTextInputState extends State<LabelTextInput> {
             ),
             suffixIcon: _getStateIcon()),
         style: subtitle01,
-        obscureText: widget.obscureInput,
+        obscureText: _isObscured,
         validator: (value) {
           String? validation = widget.validator(value);
           setState(() {
