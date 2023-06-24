@@ -147,18 +147,20 @@ class _MyAppState extends State<MyApp>{
     FirebaseMessaging.onMessage.listen(
           (RemoteMessage message) async {
 
-            showSimpleNotification(
-              Text(message.notification?.title ?? ""),
-              background: Colors.blue, // Customize the background color
-              duration: Duration(seconds: 2), //the duration for which the notification will be displayed
-            );
+            // showSimpleNotification(
+            //   Text(message.notification?.title ?? ""),
+            //   background: Colors.blue, // Customize the background color
+            //   duration: Duration(seconds: 2), //the duration for which the notification will be displayed
+            // );
             FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
             final AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('app_icon');
             await flutterLocalNotificationsPlugin.initialize(InitializationSettings(android: initializationSettingsAndroid));
             const AndroidNotificationDetails androidNotificationDetails =
-          AndroidNotificationDetails('fcm_default_channel', 'fcm_default_channel_name',
+          AndroidNotificationDetails(
+              'your channel id',
+              'your channel name',
               channelDescription: 'your channel description',
               importance: Importance.max,
               priority: Priority.max, fullScreenIntent: true,);
