@@ -54,12 +54,12 @@ class HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final newsProvider = Provider.of<NewsList>(context);
+    UserITBA? currentUser = Provider.of<UserService>(context, listen: false).user;
 
     Provider.of<VolunteeringList>(context, listen: false).getFromFirebase();
     Provider.of<NewsList>(context, listen: false).getFromFirebase();
 
     void onFavoritePressed(Volunteering vol) {
-      UserITBA? currentUser = Provider.of<UserService>(context, listen: false).user;
       if (currentUser != null) {
         Provider.of<VolunteeringList>(context).updateFavorites(vol, currentUser.email);
       }
@@ -197,7 +197,9 @@ class HomeState extends State<Home> {
                                               children: [
                                                 GestureDetector(
                                                   child: VolunteeringCard(
-                                                      volunteering: volunteering, onFavoritePressed: onFavoritePressed,),
+                                                      volunteering: volunteering,
+                                                      onFavoritePressed: onFavoritePressed,
+                                                      currentUser: currentUser),
                                                   onTap: () => context.goNamed(
                                                       'selected-card',
                                                       params: {
@@ -278,8 +280,8 @@ Widget _buildCarousel(BuildContext context, int carouselIndex) {
 Widget _buildCarouselItem(
     BuildContext context, int carouselIndex, int itemIndex, provider) {
   final volunteering = provider.volunteering[itemIndex];
+  UserITBA? currentUser = Provider.of<UserService>(context, listen: false).user;
   void onFavoritePressed(Volunteering vol) {
-      UserITBA? currentUser = Provider.of<UserService>(context, listen: false).user;
       if (currentUser != null) {
         Provider.of<VolunteeringList>(context).updateFavorites(vol, currentUser.email);
       }
@@ -288,7 +290,7 @@ Widget _buildCarouselItem(
     padding: const EdgeInsets.symmetric(horizontal: 0.0),
     child: GestureDetector(
       child: VolunteeringCard(
-          volunteering: volunteering, onFavoritePressed: onFavoritePressed,),
+          volunteering: volunteering, onFavoritePressed: onFavoritePressed, currentUser: currentUser),
       onTap: () => context
           .goNamed('selected-card', params: {'id': itemIndex.toString()}),
     ),

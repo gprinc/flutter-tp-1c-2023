@@ -262,11 +262,13 @@ class _InputCardState extends State<InputCard> {
 class VolunteeringCard extends StatelessWidget {
   final Volunteering volunteering;
   final void Function(Volunteering) onFavoritePressed;
+  final UserITBA? currentUser;
 
   const VolunteeringCard({
     Key? key,
     required this.volunteering,
-    required this.onFavoritePressed
+    required this.onFavoritePressed,
+    this.currentUser
   }) : super(key: key);
 
   @override
@@ -313,7 +315,7 @@ class VolunteeringCard extends StatelessWidget {
                         padding: EdgeInsets.zero,
                         constraints: BoxConstraints(),
                         icon: Icon(
-                          volunteering.favoritos.contains('guido@princ.com') ? Icons.favorite : Icons.favorite_border,
+                          volunteering.favoritos.contains(currentUser?.email) ? Icons.favorite : Icons.favorite_border,
                           color: primary,)
                       ),
                       VolLocation(() {
