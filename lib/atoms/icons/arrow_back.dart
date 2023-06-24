@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class ArrowBackIcon extends StatefulWidget {
-  const ArrowBackIcon({super.key});
+  final String? route;
+
+  const ArrowBackIcon({super.key, this.route});
 
   @override
   State<ArrowBackIcon> createState() => _ArrowBackIconState();
@@ -19,6 +21,8 @@ class _ArrowBackIconState extends State<ArrowBackIcon> {
           _icon,
           color: _color,
         ),
-        onPressed: () => context.go("/home"));
+        onPressed: () => widget.route != null
+            ? context.go(widget.route!)
+            : context.go("/home"));
   }
 }

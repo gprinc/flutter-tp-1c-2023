@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:dam_1c_2023/initial.dart';
-import 'package:dam_1c_2023/models/userService.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -15,6 +14,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:dam_1c_2023/pages/home.dart';
 import 'package:dam_1c_2023/pages/login.dart';
+import 'package:dam_1c_2023/pages/novedades.dart';
 import 'package:dam_1c_2023/pages/selected_card_page.dart';
 import 'package:dam_1c_2023/pages/welcome.dart';
 import 'package:flutter/material.dart';
@@ -23,10 +23,9 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'models/newsList.dart';
+import 'models/userService.dart';
 import 'models/volunteering_list.dart';
 import 'pages/signup.dart';
-
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 GoRouter _router(FirebaseAnalyticsObserver obs) {
   return GoRouter(
@@ -34,7 +33,7 @@ GoRouter _router(FirebaseAnalyticsObserver obs) {
     routes: [
       GoRoute(
           path: "/",
-          builder: (context, state) => const WelcomePage(),
+          builder: (context, state) => const MyInitialPage(),
           routes: [
             GoRoute(
               name: 'login',
@@ -58,6 +57,27 @@ GoRouter _router(FirebaseAnalyticsObserver obs) {
         builder: (context, state) => const Home(
           key: Key("Home"),
         ),
+      ),
+      GoRoute(
+        name: 'selected-news',
+        path: "/selected-news/:id",
+        builder: (context, state) {
+          final newsProvider = Provider.of<NewsList>(context);
+          final int? index = int.tryParse(state.params['id'] ?? '');
+          if (index == null) {
+            // handle the case where index is null (e.g. invalid input)
+            return Container();
+          }
+          final news = newsProvider.news[index];
+          return NewsPage(
+            imageName: news.imageName,
+            title: news.title,
+            description: news.description,
+            body: news.body,
+            header: news.header,
+            index: index,
+          );
+        },
       ),
       GoRoute(
           name: 'selected-card',
@@ -89,9 +109,11 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        FlutterLocalNotificationsPlugin();
-flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
-    AndroidFlutterLocalNotificationsPlugin>()?.requestPermission();
+      FlutterLocalNotificationsPlugin();
+  flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.requestPermission();
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
@@ -126,10 +148,7 @@ flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
     return true;
   };
 
-
-  runApp(
-    const OverlaySupport(child: MyApp())
-  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -139,35 +158,39 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp>{
-
+class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     FirebaseMessaging.onMessage.listen(
-          (RemoteMessage message) async {
-
-            // showSimpleNotification(
-            //   Text(message.notification?.title ?? ""),
-            //   background: Colors.blue, // Customize the background color
-            //   duration: Duration(seconds: 2), //the duration for which the notification will be displayed
-            // );
-            FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-            final AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('app_icon');
-            await flutterLocalNotificationsPlugin.initialize(InitializationSettings(android: initializationSettingsAndroid));
-            const AndroidNotificationDetails androidNotificationDetails =
-          AndroidNotificationDetails(
-              'your channel id',
-              'your channel name',
-              channelDescription: 'your channel description',
-              importance: Importance.max,
-              priority: Priority.max, fullScreenIntent: true,);
-          const NotificationDetails notificationDetails =
-              NotificationDetails(android: androidNotificationDetails);
-          await flutterLocalNotificationsPlugin.show(
-              0, message.notification?.title, message.notification?.body, notificationDetails,
-              payload: 'item x');
+      (RemoteMessage message) async {
+        // showSimpleNotification(
+        //   Text(message.notification?.title ?? ""),
+        //   background: Colors.blue, // Customize the background color
+        //   duration: Duration(seconds: 2), //the duration for which the notification will be displayed
+        // );
+        FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+            FlutterLocalNotificationsPlugin();
+        final AndroidInitializationSettings initializationSettingsAndroid =
+            AndroidInitializationSettings('app_icon');
+        await flutterLocalNotificationsPlugin.initialize(
+            InitializationSettings(android: initializationSettingsAndroid));
+        const AndroidNotificationDetails androidNotificationDetails =
+            AndroidNotificationDetails(
+          'your channel id',
+          'your channel name',
+          channelDescription: 'your channel description',
+          importance: Importance.max,
+          priority: Priority.max,
+          fullScreenIntent: true,
+        );
+        const NotificationDetails notificationDetails =
+            NotificationDetails(android: androidNotificationDetails);
+        await flutterLocalNotificationsPlugin.show(
+            0,
+            message.notification?.title,
+            message.notification?.body,
+            notificationDetails,
+            payload: 'item x');
       },
     );
     super.initState();
@@ -175,11 +198,10 @@ class _MyAppState extends State<MyApp>{
 
   static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   static FirebaseAnalyticsObserver observer =
-  FirebaseAnalyticsObserver(analytics: analytics);
+      FirebaseAnalyticsObserver(analytics: analytics);
 
   @override
   Widget build(BuildContext context) {
-
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.blue));
     return MultiProvider(

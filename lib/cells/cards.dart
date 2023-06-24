@@ -1,25 +1,31 @@
 import 'package:dam_1c_2023/models/volunteering.dart';
 import 'package:dam_1c_2023/tokens/token_colors.dart';
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:dam_1c_2023/tokens/token_shadows.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-
+import 'package:go_router/go_router.dart';
 import '../atoms/icons/vol_location.dart';
 import '../molecules/components.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../molecules/buttons.dart';
-import '../tokens/token_colors.dart';
 
 class ProfilePicture extends StatefulWidget {
-  const ProfilePicture({super.key});
+  final void Function(String?) handleImageSelect;
+  final String? encodedImage;
+
+  const ProfilePicture(
+      {super.key, required this.handleImageSelect, this.encodedImage});
 
   @override
   State<ProfilePicture> createState() => _ProfilePictureState();
 }
 
 class _ProfilePictureState extends State<ProfilePicture> {
-  bool _isImageSelected = false;
+  late bool _isImageSelected;
 
   String get btnText => _isImageSelected ? 'Cambiar foto' : 'Subir foto';
 
@@ -27,6 +33,29 @@ class _ProfilePictureState extends State<ProfilePicture> {
     setState(() {
       _isImageSelected = true;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _isImageSelected = widget.encodedImage != null;
+  }
+
+  void _pickFile() async {
+    FilePickerResult? result;
+
+    result = await FilePicker.platform.pickFiles(type: FileType.image);
+    setState(() {
+      _isImageSelected = true;
+    });
+    if (result != null) {
+      Uint8List? selectedBytes = result.files.single.bytes;
+      if (selectedBytes != null) {
+        widget.handleImageSelect(base64Encode(selectedBytes));
+      }
+    } else {
+      widget.handleImageSelect(null);
+    }
   }
 
   Widget getCardDisposition() {
@@ -43,17 +72,17 @@ class _ProfilePictureState extends State<ProfilePicture> {
                   ),
                   const SizedBox(height: 8),
                   ShortButton(
-                    handlePress: _selectImage,
+                    handlePress: _pickFile,
                     text: btnText,
                     enabledState: true,
+                    icon: false,
                   ),
                 ],
               ),
               SizedBox(
-                width: 84,
-                height: 84,
-                child: Image.asset('assets/profile.png'),
-              ),
+                  width: 84,
+                  height: 84,
+                  child: Image.memory(base64Decode(widget.encodedImage!))),
             ],
           )
         : Row(
@@ -63,10 +92,10 @@ class _ProfilePictureState extends State<ProfilePicture> {
                 'Foto de perfil',
                 style: subtitle01,
               ),
-              const SizedBox(height: 8),
               ShortButton(
-                handlePress: _selectImage,
+                handlePress: _pickFile,
                 text: btnText,
+                icon: false,
                 enabledState: true,
               ),
             ],
@@ -76,7 +105,6 @@ class _ProfilePictureState extends State<ProfilePicture> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 328,
         decoration: const BoxDecoration(
             color: profile,
             borderRadius: BorderRadius.all(Radius.circular(4.0))),
@@ -129,7 +157,6 @@ class InformationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 328,
       height: 136,
       color: cardBg,
       child: Column(children: [
@@ -192,15 +219,23 @@ class _InputCardState extends State<InputCard> {
         const SizedBox(
           width: 10,
         ),
-        TextButton(
+        /*TextButton(
             onPressed: () {
               widget.handlePick(text);
               genero = text;
             },
-            child: Text(
-              text,
-              style: body01,
-            )),
+            child: */
+        GestureDetector(
+          onTap: () {
+            widget.handlePick(text);
+            genero = text;
+          },
+          child: Text(
+            text,
+            style: body01,
+          ),
+        )
+        //),
       ],
     );
   }
@@ -213,7 +248,6 @@ class _InputCardState extends State<InputCard> {
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(4.0), topRight: Radius.circular(4.0))),
       height: 152,
-      width: 328,
       child: Column(
         children: [
           Container(
@@ -241,7 +275,6 @@ class _InputCardState extends State<InputCard> {
             padding: const EdgeInsets.only(left: 22),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              mainAxisSize: MainAxisSize.min,
               children: [
                 _radio("Hombre"),
                 _radio("Mujer"),
@@ -300,7 +333,8 @@ class VolunteeringCard extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(right: 115),
-                        child: Vacancies(counter: 10 - volunteering.participants.length),
+                        child: Vacancies(
+                            counter: 10 - volunteering.participants.length),
                       ),
                       const Icon(
                         Icons.favorite_border,
@@ -358,9 +392,11 @@ class NewsCard extends StatelessWidget {
   final String header;
   final String description;
   final String imageName;
+  final int index;
 
   const NewsCard({
     Key? key,
+    required this.index,
     required this.title,
     required this.header,
     required this.description,
@@ -369,63 +405,48 @@ class NewsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 156,
+    return IntrinsicHeight(
       child: Card(
-        child: Stack(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Image.asset(
-                  imageName,
-                  width: 118,
-                  fit: BoxFit.cover,
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Image.asset(
+              imageName,
+              width: 118,
+              fit: BoxFit.cover,
+            ),
+            Expanded(
+              child: Padding(
+                padding:
+                    const EdgeInsets.only(top: 16.0, right: 8.0, left: 8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(header, style: overline),
+                    const SizedBox(height: 8),
+                    Text(title, style: subtitle01),
+                    const SizedBox(height: 8),
+                    Text(description, style: body02),
+                    //Text('Leer Más', style: btnModif(primary)),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(header, style: overline),
-                            const SizedBox(height: 8),
-                            Text(
-                              title,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: subtitle01,
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              description,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: body02,
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 40,
-                          child: Align(
-                            alignment: Alignment.bottomRight,
-                            child: TextButton(
-                              onPressed: () {
-                                // TODO: Handle "Leer mas" button press
-                              },
-                              child: const Text("Leer mas", style: btnGreen),
-                            ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              right: 8.0, left: 8.0, top: 12),
+                          child: TextButton(
+                            onPressed: () => context.goNamed('selected-news',
+                                params: {'id': index.toString()}),
+                            child: Text('Leer Más', style: btnModif(primary)),
                           ),
-                        ),
+                        )
                       ],
-                    ),
-                  ),
+                    )
+                  ],
                 ),
-              ],
+              ),
             ),
           ],
         ),

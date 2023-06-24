@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:dam_1c_2023/cells/cards.dart';
 import 'package:dam_1c_2023/molecules/inputs.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
@@ -18,6 +21,7 @@ class _ProfileModalState extends State<ProfileModal> {
   late TextEditingController _emailController;
   late TextEditingController _phoneController;
   late String? gender;
+  String? _image = null;
   bool _enabled = true;
   late bool _isFresh;
 
@@ -55,6 +59,12 @@ class _ProfileModalState extends State<ProfileModal> {
         gender != null;
   }
 
+  void _onImageSelected(String? image) {
+    setState(() {
+      _image = image;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -72,8 +82,9 @@ class _ProfileModalState extends State<ProfileModal> {
         child: Column(children: [
           Row(
             children: [
-              IconSplashButton(
-                  icon: Icons.close, onPress: () => Navigator.pop(context))
+              IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context))
               /*IconButton(
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.close, color: btnSecondary)),*/
@@ -105,13 +116,16 @@ class _ProfileModalState extends State<ProfileModal> {
           const SizedBox(
             height: 24,
           ),
-          ProfilePicture(),
+          ProfilePicture(
+            handleImageSelect: _onImageSelected,
+            encodedImage: _image,
+          ),
           const SizedBox(
             height: 32,
           ),
           Row(
-            children: [
-              const Text(
+            children: const [
+              Text(
                 'DATOS DE CONTACTO',
                 style: headLine01,
               ),
@@ -126,7 +140,7 @@ class _ProfileModalState extends State<ProfileModal> {
             style: subtitle01,
           ),
           const SizedBox(
-            height: 16,
+            height: 24,
           ),
           LabelTextInput(
             placeHolder: 'Ej: +541178445459',
