@@ -13,7 +13,8 @@ void main() {
     final fakeFirestore = FakeFirebaseFirestore();
 
     // Mock firebase backend model
-    final volunteeringsToInsert = MockVolunteeringList().volunteering[0].toJson();
+    final volunteeringsToInsert = MockVolunteeringList().volunteering[0].toJsonReduced();
+    print(volunteeringsToInsert);
     final volunteeringsArray = [];
     volunteeringsArray.add(volunteeringsToInsert);
     final firebaseData = {

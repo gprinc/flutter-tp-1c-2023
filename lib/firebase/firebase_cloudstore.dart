@@ -11,6 +11,12 @@ class FirebaseCloudstoreITBA {
 
   Future<void> addData(String collection, Map<String, dynamic> data) async {
     await db.collection(collection).add(data);
+    void addData(String collection, String docId, String innerCollection,
+        Map<String, dynamic> data) async {
+      await db.collection(collection).doc(docId)
+          .collection(innerCollection)
+          .add(data);
+    }
   }
 
   Future<void> getData(String collection) async {
