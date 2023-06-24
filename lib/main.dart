@@ -1,12 +1,10 @@
 import 'dart:ui';
-import 'package:dam_1c_2023/firebase/firebase_authentication.dart';
 import 'package:dam_1c_2023/models/userService.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:overlay_support/overlay_support.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:dam_1c_2023/pages/home.dart';
@@ -17,11 +15,10 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import 'initial.dart';
 import 'models/newsList.dart';
 import 'models/volunteering_list.dart';
 import 'pages/signup.dart';
-
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 GoRouter _router(FirebaseAnalyticsObserver obs) {
   return GoRouter(
@@ -29,7 +26,7 @@ GoRouter _router(FirebaseAnalyticsObserver obs) {
     routes: [
       GoRoute(
           path: "/",
-          builder: (context, state) => const WelcomePage(),
+          builder: (context, state) => const MyInitialPage(),
           routes: [
             GoRoute(
               name: 'login',
@@ -84,10 +81,12 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        FlutterLocalNotificationsPlugin();
-  flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>()?.requestPermission();
- 
+      FlutterLocalNotificationsPlugin();
+  flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.requestPermission();
+  await UserService().loginUser('fluter@itba.com', 'prueba123');
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   NotificationSettings settings = await messaging.requestPermission(
@@ -121,10 +120,7 @@ void main() async {
     return true;
   };
 
-
-  runApp(
-    const OverlaySupport(child: MyApp())
-  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -134,35 +130,39 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp>{
-
+class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     FirebaseMessaging.onMessage.listen(
-          (RemoteMessage message) async {
-
-            // showSimpleNotification(
-            //   Text(message.notification?.title ?? ""),
-            //   background: Colors.blue, // Customize the background color
-            //   duration: Duration(seconds: 2), //the duration for which the notification will be displayed
-            // );
-            FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-            final AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('app_icon');
-            await flutterLocalNotificationsPlugin.initialize(InitializationSettings(android: initializationSettingsAndroid));
-            const AndroidNotificationDetails androidNotificationDetails =
-          AndroidNotificationDetails(
-              'your channel id',
-              'your channel name',
-              channelDescription: 'your channel description',
-              importance: Importance.max,
-              priority: Priority.max, fullScreenIntent: true,);
-          const NotificationDetails notificationDetails =
-              NotificationDetails(android: androidNotificationDetails);
-          await flutterLocalNotificationsPlugin.show(
-              0, message.notification?.title, message.notification?.body, notificationDetails,
-              payload: 'item x');
+      (RemoteMessage message) async {
+        // showSimpleNotification(
+        //   Text(message.notification?.title ?? ""),
+        //   background: Colors.blue, // Customize the background color
+        //   duration: Duration(seconds: 2), //the duration for which the notification will be displayed
+        // );
+        FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+            FlutterLocalNotificationsPlugin();
+        final AndroidInitializationSettings initializationSettingsAndroid =
+            AndroidInitializationSettings('app_icon');
+        await flutterLocalNotificationsPlugin.initialize(
+            InitializationSettings(android: initializationSettingsAndroid));
+        const AndroidNotificationDetails androidNotificationDetails =
+            AndroidNotificationDetails(
+          'your channel id',
+          'your channel name',
+          channelDescription: 'your channel description',
+          importance: Importance.max,
+          priority: Priority.max,
+          fullScreenIntent: true,
+        );
+        const NotificationDetails notificationDetails =
+            NotificationDetails(android: androidNotificationDetails);
+        await flutterLocalNotificationsPlugin.show(
+            0,
+            message.notification?.title,
+            message.notification?.body,
+            notificationDetails,
+            payload: 'item x');
       },
     );
     super.initState();
@@ -170,11 +170,10 @@ class _MyAppState extends State<MyApp>{
 
   static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   static FirebaseAnalyticsObserver observer =
-  FirebaseAnalyticsObserver(analytics: analytics);
+      FirebaseAnalyticsObserver(analytics: analytics);
 
   @override
   Widget build(BuildContext context) {
-
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.blue));
     return MultiProvider(

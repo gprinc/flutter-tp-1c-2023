@@ -85,7 +85,7 @@ class CtaButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 328,
+      width: MediaQuery.of(context).size.width,
       height: 44,
       child: Button(
         text: text,
@@ -104,7 +104,7 @@ class ShortButton extends StatelessWidget {
   final void Function() handlePress;
   final bool enabledState;
   final bool disableAfterPress;
-
+  final bool icon;
   final TextStyle textStyle = btn;
 
   final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
@@ -114,13 +114,14 @@ class ShortButton extends StatelessWidget {
     ),
   );
 
-  ShortButton({
-    Key? key,
-    required this.text,
-    required this.handlePress,
-    required this.enabledState,
-    this.disableAfterPress = false,
-  }) : super(key: key);
+  ShortButton(
+      {Key? key,
+      required this.text,
+      required this.handlePress,
+      required this.enabledState,
+      this.disableAfterPress = false,
+      this.icon = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -132,11 +133,11 @@ class ShortButton extends StatelessWidget {
         style: buttonStyle,
         child: Row(
           children: [
-            const PlusIcon(),
-            const SizedBox(width: 5),
+            icon ? const PlusIcon() : const SizedBox.shrink(),
+            icon ? const SizedBox(width: 5) : const SizedBox.shrink(),
             Expanded(
               child: Align(
-                alignment: Alignment.centerLeft,
+                alignment: icon ? Alignment.centerLeft : Alignment.center,
                 child: Text(text, style: textStyle),
               ),
             ),

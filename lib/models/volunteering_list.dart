@@ -47,31 +47,40 @@ class VolunteeringList extends ChangeNotifier {
     // Add more volunteerings here...
   ];
 
-  VolunteeringList.withFirebaseCloudstore(FirebaseCloudstoreITBA firebaseCloudstoreITBA){
+  VolunteeringList.withFirebaseCloudstore(
+      FirebaseCloudstoreITBA firebaseCloudstoreITBA) {
     _firebaseCloudstore = firebaseCloudstoreITBA;
   }
 
-  VolunteeringList(){
+  VolunteeringList() {
     _firebaseCloudstore = FirebaseCloudstoreITBA();
   }
 
   final List<Volunteering> _firebaseVolunteerings = [];
   late FirebaseCloudstoreITBA _firebaseCloudstore;
-  void setFirebaseCloudstore(FirebaseCloudstoreITBA firebaseCloudstore){
+  void setFirebaseCloudstore(FirebaseCloudstoreITBA firebaseCloudstore) {
     _firebaseCloudstore = firebaseCloudstore;
   }
 
   List<Volunteering> get volunteering => _firebaseVolunteerings;
 
-  Future<void> getFromFirebase() async{
+  Future<void> getFromFirebase() async {
     loading = true;
-    var aux = await _firebaseCloudstore.db.collection('ser_manos_data').doc('voluntariados').get();
-    Map<String, dynamic>? data = aux.data();
-    var volunteersData = data?['values'] as List<dynamic>;
-    volunteersData.forEach((element) {
-      _firebaseVolunteerings.add(Volunteering.fromJson(element));
-    });
-    loading = false;
+    try {
+      var aux = await _firebaseCloudstore.db
+          .collection('ser_manos_data')
+          .doc('voluntariados')
+          .get();
+      Map<String, dynamic>? data = aux.data();
+      var volunteersData = data?['values'] as List<dynamic>;
+      volunteersData.forEach((element) {
+        _firebaseVolunteerings.add(Volunteering.fromJson(element));
+      });
+    } catch (error, stackTrace) {
+      print('Error occurred during Firebase retrieval: $error');
+    } finally {
+      loading = false;
+    }
   }
 
   void addVolunteering(Volunteering volunteering) {
