@@ -131,7 +131,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp>{
-  final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
   @override
   void initState() {
@@ -166,7 +165,6 @@ class _MyAppState extends State<MyApp>{
         ),
       ],
       child: MaterialApp.router(
-        key: _scaffoldMessengerKey,
         routerConfig: _router(observer),
         title: 'Flutter App',
         theme: ThemeData(

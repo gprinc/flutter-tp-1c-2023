@@ -24,6 +24,9 @@
             <meta-data
                 android:name="com.google.firebase.messaging.default_notification_channel_id"
                 android:value="high_importance_channel" />
+           <meta-data
+               android:name="flutter_deeplinking_enabled"
+               android:value="true" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -33,7 +36,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
            <!-- Deep Links -->
-           <intent-filter>
+           <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
