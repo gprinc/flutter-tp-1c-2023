@@ -1,8 +1,10 @@
 import 'package:dam_1c_2023/atoms/logos.dart';
+import 'package:dam_1c_2023/models/userService.dart';
 import 'package:dam_1c_2023/molecules/buttons.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../molecules/inputs.dart';
 import '../tokens/token_colors.dart';
@@ -44,7 +46,8 @@ class _LoginFormState extends State<LoginForm> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Validando')),
       );
-      context.goNamed('home');
+      // context.goNamed('home');
+      Provider.of<UserService>(context, listen: false).loginUser(_emailController.text, _passController.text);
     }
   }
 
@@ -172,7 +175,8 @@ class _RegisterFormState extends State<RegisterForm> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Validando')),
       );
-      context.goNamed('welcome');
+      // context.goNamed('welcome');
+      Provider.of<UserService>(context, listen: false).registerUser(_emailController.text, _firstNameController.text, _lastNameController.text, _passController.text);
     }
   }
 

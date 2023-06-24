@@ -12,28 +12,32 @@ class VolunteeringList extends ChangeNotifier {
         imageName: 'assets/voluntariado.png',
         address: 'Corrientes 343',
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
-        availability: ['Lunes a viernes de 7 a 10hs']),
+        availability: ['Lunes a viernes de 7 a 10hs'],
+        id: 0),
     Volunteering(
         title: 'Manos caritativas',
         description: 'Description for Manos Caritativas',
         imageName: 'assets/manos.png',
         address: 'Santa Fe 1432',
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
-        availability: ['Lunes a viernes de 7 a 10hs']),
+        availability: ['Lunes a viernes de 7 a 10hs'],
+        id: 1),
     Volunteering(
         title: 'Iglesia',
         description: 'Description for Otro título',
         imageName: 'assets/iglesia.png',
         address: 'Av 9 de julio 2000',
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
-        availability: ['Lunes a viernes de 7 a 10hs']),
+        availability: ['Lunes a viernes de 7 a 10hs'],
+        id: 2),
     Volunteering(
         title: 'Un techo para mi país',
         description: 'Description for Un techo para mi país',
         imageName: 'assets/voluntariado.png',
         address: 'Corrientes 343',
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
-        availability: ['Lunes a viernes de 7 a 10hs']),
+        availability: ['Lunes a viernes de 7 a 10hs'],
+        id: 3),
     // Add more volunteerings here...
   ];
 

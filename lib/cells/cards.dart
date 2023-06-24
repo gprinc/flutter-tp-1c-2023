@@ -260,7 +260,7 @@ class VolunteeringCard extends StatelessWidget {
 
   const VolunteeringCard({
     Key? key,
-    required this.volunteering
+    required this.volunteering,
   }) : super(key: key);
 
   @override
@@ -300,7 +300,7 @@ class VolunteeringCard extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(right: 115),
-                        child: Vacancies(counter: 10),
+                        child: Vacancies(counter: 10 - volunteering.participants.length),
                       ),
                       const Icon(
                         Icons.favorite_border,
