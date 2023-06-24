@@ -6,10 +6,11 @@ class Volunteering {
   final String description;
   final String imageName;
   final String address;
-  var requisites = [];
-  var availability = [];
+  List<String> requisites = [];
+  List<String> availability = [];
   final int id;
   List<Participant> participants;
+  List<String> favoritos;
 
   Volunteering(
       {required this.title,
@@ -19,7 +20,8 @@ class Volunteering {
       required this.requisites,
       required this.availability,
       required this.id,
-      this.participants = const [],});
+      this.participants = const [],
+      this.favoritos = const []});
 
       factory Volunteering.fromJson(Map<String, dynamic> json ){
         return Volunteering(
@@ -30,7 +32,8 @@ class Volunteering {
           requisites: json['requisites'], 
           availability: json['availability'],
           id: json['id'],
-          participants: Participant.fromJsonArray(json['participants'])
+          participants: Participant.fromJsonArray(json['participants']),
+          favoritos: json['favoritos']
         );
       }
 
@@ -43,7 +46,8 @@ class Volunteering {
         'requisites': requisites,
         'availability': availability,
         'id': id,
-        'participants': participants
+        'participants': participants,
+        'favoritos': favoritos
       };
     }
 
@@ -59,7 +63,8 @@ class Volunteering {
         'requisites': vol.requisites,
         'availability': vol.availability,
         'id': vol.id,
-        'participants': auxParticipants
+        'participants': auxParticipants,
+        'favoritos': vol.favoritos
       };
   }
 }
