@@ -29,11 +29,11 @@ class Volunteering {
           description: json['description'], 
           imageName: json['imageName'],
           address: json['address'],
-          requisites: json['requisites'], 
-          availability: json['availability'],
+          requisites: List.from(['requisites']), 
+          availability: List.from(json['availability']),
           id: json['id'],
           participants: Participant.fromJsonArray(json['participants']),
-          favoritos: json['favoritos']
+          favoritos: List.from(json['favoritos'])
         );
       }
 

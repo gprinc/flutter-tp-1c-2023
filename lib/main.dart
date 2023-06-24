@@ -100,8 +100,8 @@ void main() async {
     sound: true,
   );
 
-  String? token = await messaging.getToken();
-  print(token);
+  // String? token = await messaging.getToken();
+  // print(token);
 
   if (settings.authorizationStatus == AuthorizationStatus.authorized) {
     print('User granted permission');
