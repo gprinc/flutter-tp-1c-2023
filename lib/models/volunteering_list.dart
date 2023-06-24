@@ -101,6 +101,6 @@ class VolunteeringList extends ChangeNotifier {
     await FirebaseCloudstoreITBA().db
       .collection('ser_manos_data')
       .doc('voluntariados')
-      .update({ 'values': FieldValue.arrayUnion(updatedList)});
+      .update({ 'values': updatedList});
   }
 }

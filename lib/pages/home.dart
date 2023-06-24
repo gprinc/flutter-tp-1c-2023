@@ -59,7 +59,7 @@ class HomeState extends State<Home> {
     Provider.of<NewsList>(context, listen: false).getFromFirebase();
 
     void onFavoritePressed(Volunteering vol) {
-      UserITBA? currentUser = Provider.of<UserService>(context).user;
+      UserITBA? currentUser = Provider.of<UserService>(context, listen: false).user;
       if (currentUser != null) {
         Provider.of<VolunteeringList>(context).updateFavorites(vol, currentUser.email);
       }
@@ -280,7 +280,6 @@ Widget _buildCarouselItem(
   final volunteering = provider.volunteering[itemIndex];
   void onFavoritePressed(Volunteering vol) {
       UserITBA? currentUser = Provider.of<UserService>(context, listen: false).user;
-      print(currentUser);
       if (currentUser != null) {
         Provider.of<VolunteeringList>(context).updateFavorites(vol, currentUser.email);
       }

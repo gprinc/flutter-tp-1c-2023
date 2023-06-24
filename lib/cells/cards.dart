@@ -312,8 +312,8 @@ class VolunteeringCard extends StatelessWidget {
                         onPressed: () => onFavoritePressed(volunteering),
                         padding: EdgeInsets.zero,
                         constraints: BoxConstraints(),
-                        icon: const Icon(
-                          Icons.favorite_border,
+                        icon: Icon(
+                          volunteering.favoritos.contains('guido@princ.com') ? Icons.favorite : Icons.favorite_border,
                           color: primary,)
                       ),
                       VolLocation(() {

@@ -152,7 +152,7 @@ Future<void> addAsParticipant(BuildContext context, Volunteering vol) async {
     await FirebaseCloudstoreITBA().db
       .collection('ser_manos_data')
       .doc('voluntariados')
-      .update({ 'values': FieldValue.arrayUnion(updatedList)})
+      .update({ 'values': updatedList})
       .then((value) => Navigator.of(context).pop());
   }
 }
@@ -171,7 +171,7 @@ Future<void> removeAsParticipant(BuildContext context, Volunteering vol) async {
     await FirebaseCloudstoreITBA().db
       .collection('ser_manos_data')
       .doc('voluntariados')
-      .update({ 'values': FieldValue.arrayUnion(updatedList)})
+      .update({ 'values': updatedList})
       .then((value) => Navigator.of(context).pop());
   }
 }
