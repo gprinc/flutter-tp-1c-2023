@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserITBA {
+  final String? id;
   final String email;
   final String name;
   final String lastName;
 
   UserITBA(
-      {required this.email,
+      {this.id,
+      required this.email,
       required this.name,
       required this.lastName});
 
@@ -20,7 +22,7 @@ class UserITBA {
 
   factory UserITBA.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> document) {
     final data = document.data()!;
-    return UserITBA(email: data['email'], name: data['name'], lastName: data['lastName']);
+    return UserITBA(id: document.id!, email: data['email'], name: data['name'], lastName: data['lastName']);
   }
 
   static List<UserITBA> fromJsonArray(List<dynamic> jsonArray) {

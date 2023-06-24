@@ -35,9 +35,8 @@ class UserService extends ChangeNotifier {
       error = 'There was an error with the registration';
       return;
     }
-    UserITBA auxUser = UserITBA(email: email, name: name, lastName: lastName);
-    await FirebaseCloudstoreITBA().db.collection('users').add(UserITBA.toJson(UserITBA(email: email, name: name, lastName: lastName)));
-    _firebaseUser = auxUser;
+    var document = await FirebaseCloudstoreITBA().db.collection('users').add(UserITBA.toJson(UserITBA(email: email, name: name, lastName: lastName)));
+    _firebaseUser = UserITBA(email: email, name: name, lastName: lastName, id: document.id);
   }
 
   Future<void> loginUser(String email, String password) async {
@@ -54,5 +53,9 @@ class UserService extends ChangeNotifier {
   void logoutUser() {
     _firebaseUser = null;
     FirebaseAuthenticationITBA().logout();
+  }
+
+  Future<void> updateUser(UserITBA newUser) async{
+    await FirebaseCloudstoreITBA().db.collection('users').doc(_firebaseUser!.id).update(UserITBA.toJson(newUser));
   }
 }

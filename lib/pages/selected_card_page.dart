@@ -149,10 +149,10 @@ Future<void> addAsParticipant(BuildContext context, Volunteering vol) async {
       }
       updatedList.add(Volunteering.toJson(element));
     });
-    await FirebaseFirestore.instance
+    await FirebaseCloudstoreITBA().db
       .collection('ser_manos_data')
-      .doc('test')
-      .update({ 'values': FieldValue.arrayUnion(updatedList)})
+      .doc('voluntariados')
+      .update({ 'values': updatedList})
       .then((value) => Navigator.of(context).pop());
   }
 }
@@ -168,10 +168,10 @@ Future<void> removeAsParticipant(BuildContext context, Volunteering vol) async {
       }
       updatedList.add(Volunteering.toJson(element));
     });
-    await FirebaseFirestore.instance
+    await FirebaseCloudstoreITBA().db
       .collection('ser_manos_data')
-      .doc('test')
-      .update({ 'values': FieldValue.arrayUnion(updatedList)})
+      .doc('voluntariados')
+      .update({ 'values': updatedList})
       .then((value) => Navigator.of(context).pop());
   }
 }

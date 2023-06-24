@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dam_1c_2023/firebase/firebase_cloudstore.dart';
 import 'package:flutter/material.dart';
 
@@ -93,5 +94,22 @@ class VolunteeringList extends ChangeNotifier {
       final lowercaseTitle = volunteering.title.toLowerCase();
       return lowercaseTitle.contains(lowercaseQuery);
     }).toList();
+  }
+
+  Future<void> updateFavorites(Volunteering vol, String email) async {
+    List<Map<String, dynamic>> updatedList = [];
+    _firebaseVolunteerings.forEach((element) {
+      if (element.id == vol.id) {
+        if(element.favoritos.contains(email))
+          element.favoritos.remove(email);
+        else
+          element.favoritos.add(email);
+      }
+      updatedList.add(Volunteering.toJson(element));
+    });
+    await FirebaseCloudstoreITBA().db
+      .collection('ser_manos_data')
+      .doc('voluntariados')
+      .update({ 'values': updatedList});
   }
 }
