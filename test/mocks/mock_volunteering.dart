@@ -13,25 +13,24 @@ class MockVolunteeringList extends ChangeNotifier implements VolunteeringList {
   }
 
   @override
-    Future<void> getFromFirebase() async{
-      return Future.value();
-    }
+  Future<void> getFromFirebase() async {
+    return Future.value();
+  }
 
   List<Volunteering> searchVolunteerings(String query) {
     return _volunteering;
   }
 
   @override
-  void setFirebaseCloudstore(FirebaseCloudstoreITBA firebaseCloudstoreITBA){
+  void setFirebaseCloudstore(FirebaseCloudstoreITBA firebaseCloudstoreITBA) {
     return;
   }
-
 
   final List<Volunteering> _volunteering = [
     Volunteering(
         title: 'Un techo para mi país',
         description:
-        'El propósito principal de "Un techo para mi país" es reducir el déficit habitacional y mejorar las condiciones de vida de las personas que no tienen acceso a una vivienda adecuada.',
+            'El propósito principal de "Un techo para mi país" es reducir el déficit habitacional y mejorar las condiciones de vida de las personas que no tienen acceso a una vivienda adecuada.',
         imageName: 'assets/voluntariado.png',
         address: 'Corrientes 343',
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
@@ -68,5 +67,6 @@ class MockVolunteeringList extends ChangeNotifier implements VolunteeringList {
     // Add more volunteerings here...
   ];
 
+  @override
+  late bool loading;
 }
-
