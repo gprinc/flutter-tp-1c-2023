@@ -20,7 +20,7 @@ class FirebaseAuthenticationITBA {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
-        loginUser(email, password);
+        print('Email is already in use.');
       }
       return null;
     } catch (e) {

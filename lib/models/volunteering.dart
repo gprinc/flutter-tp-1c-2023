@@ -1,3 +1,4 @@
+import 'package:dam_1c_2023/models/participant.dart';
 import 'package:dam_1c_2023/models/user.dart';
 
 class Volunteering {
@@ -7,7 +8,7 @@ class Volunteering {
   var requisites = [];
   var availability = [];
   final int id;
-  List<User> participants;
+  List<Participant> participants;
 
   Volunteering(
       {required this.title,
@@ -26,14 +27,14 @@ class Volunteering {
           requisites: json['requisites'], 
           availability: json['availability'],
           id: json['id'],
-          participants: User.fromJsonArray(json['participants'])
+          participants: Participant.fromJsonArray(json['participants'])
         );
       }
 
       static Map<String, dynamic> toJson(Volunteering vol) {
         List<Map<String, dynamic>> auxParticipants = [];
         vol.participants.forEach((element) { 
-          auxParticipants.add(User.toJson(element));
+          auxParticipants.add(Participant.toJson(element));
         });
       return {
         'title': vol.title,

@@ -257,11 +257,13 @@ class _InputCardState extends State<InputCard> {
 class VolunteeringCard extends StatelessWidget {
   final String title;
   final String imageName;
+  final int participantsAmount;
 
   const VolunteeringCard({
     Key? key,
     required this.title,
     required this.imageName,
+    this.participantsAmount = 0
   }) : super(key: key);
 
   @override
@@ -301,7 +303,7 @@ class VolunteeringCard extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(right: 115),
-                        child: Vacancies(counter: 10),
+                        child: Vacancies(counter: 10 - participantsAmount),
                       ),
                       const Icon(
                         Icons.favorite_border,

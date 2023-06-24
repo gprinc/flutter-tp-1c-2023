@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dam_1c_2023/atoms/logos.dart';
 import 'package:dam_1c_2023/cells/modals.dart';
 import 'package:dam_1c_2023/firebase/firebase_cloudstore.dart';
+import 'package:dam_1c_2023/models/participant.dart';
 import 'package:dam_1c_2023/models/user.dart';
 import 'package:dam_1c_2023/models/volunteering.dart';
 import 'package:dam_1c_2023/models/volunteering_list.dart';
@@ -95,7 +96,7 @@ class SelectedCardPage extends StatelessWidget {
                     ],
                   ),
                   const Padding(padding: EdgeInsets.only(bottom: 8)),
-                  Vacancies(counter: 10),
+                  Vacancies(counter: 10 - info.participants.length),
                 ],
               ),
             ),
@@ -141,7 +142,7 @@ Future<void> addAsParticipant(BuildContext context, Volunteering vol) async {
   List<Map<String, dynamic>> updatedList = [];
   volunteerings.forEach((element) {
     if (element.id == vol.id) {
-      element.participants.add(User(email: 'guido@princ.com', name: 'Guido', lastName: 'Princ'));
+      element.participants.add(Participant(email: 'guido@princ.com'));
     }
     updatedList.add(Volunteering.toJson(element));
   });

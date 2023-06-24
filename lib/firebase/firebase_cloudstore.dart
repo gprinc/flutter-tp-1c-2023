@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class FirebaseCloudstoreITBA {
   final db = FirebaseFirestore.instance;
 
-  void addData(String collection, Map<String, dynamic> data) async {
-    await db.collection(collection).add(data);
+  void addData(String collection, String docId, String innerCollection, Map<String, dynamic> data) async {
+    await db.collection(collection).doc(docId).collection(innerCollection).add(data);
   }
 
   void getData(String collection) async {
