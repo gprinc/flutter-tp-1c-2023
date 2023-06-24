@@ -37,13 +37,26 @@ class VolunteeringList extends ChangeNotifier {
     // Add more volunteerings here...
   ];
 
+  VolunteeringList.withFirebaseCloudstore(FirebaseCloudstoreITBA firebaseCloudstoreITBA){
+    _firebaseCloudstore = firebaseCloudstoreITBA;
+  }
+
+  VolunteeringList(){
+    _firebaseCloudstore = FirebaseCloudstoreITBA();
+  }
+
   final List<Volunteering> _firebaseVolunteerings = [];
+  late FirebaseCloudstoreITBA _firebaseCloudstore;
+  void setFirebaseCloudstore(FirebaseCloudstoreITBA firebaseCloudstore){
+    _firebaseCloudstore = firebaseCloudstore;
+  }
 
   List<Volunteering> get volunteering => _firebaseVolunteerings;
 
   Future<void> getFromFirebase() async{
-    var aux = await FirebaseCloudstoreITBA().db.collection('ser_manos_data').doc('voluntariados').get();
+    var aux = await _firebaseCloudstore.db.collection('ser_manos_data').doc('voluntariados').get();
     Map<String, dynamic>? data = aux.data();
+    print(data);
     var volunteersData = data?['values'] as List<dynamic>;
     volunteersData.forEach((element) {
       _firebaseVolunteerings.add(Volunteering.fromJson(element));

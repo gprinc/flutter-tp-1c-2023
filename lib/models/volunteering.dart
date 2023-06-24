@@ -24,4 +24,17 @@ class Volunteering {
           availability: json['availability']
         );
       }
+
+    Map<String, dynamic> toJson() {
+      return {
+        'title': title,
+        'description': description,
+        'imageName': imageName,
+        'address': address,
+        'requisites': requisites,
+        'availability': availability,
+      };
+    }
+
+
 }
