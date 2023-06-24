@@ -147,11 +147,11 @@ class _MyAppState extends State<MyApp>{
     FirebaseMessaging.onMessage.listen(
           (RemoteMessage message) async {
 
-            // showSimpleNotification(
-            //   Text(message.notification?.title ?? ""),
-            //   background: Colors.blue, // Customize the background color
-            //   duration: Duration(seconds: 2), //the duration for which the notification will be displayed
-            // );
+            showSimpleNotification(
+              Text(message.notification?.title ?? ""),
+              background: Colors.blue, // Customize the background color
+              duration: Duration(seconds: 2), //the duration for which the notification will be displayed
+            );
             FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
             final AndroidInitializationSettings initializationSettingsAndroid =
