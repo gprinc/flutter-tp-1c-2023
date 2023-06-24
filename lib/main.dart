@@ -161,8 +161,7 @@ class _MyAppState extends State<MyApp>{
           AndroidNotificationDetails('fcm_default_channel', 'fcm_default_channel_name',
               channelDescription: 'your channel description',
               importance: Importance.max,
-              priority: Priority.high,
-              ticker: 'ticker');
+              priority: Priority.max, fullScreenIntent: true,);
           const NotificationDetails notificationDetails =
               NotificationDetails(android: androidNotificationDetails);
           await flutterLocalNotificationsPlugin.show(
