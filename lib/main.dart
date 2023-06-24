@@ -1,10 +1,14 @@
 import 'dart:ui';
 import 'package:dam_1c_2023/initial.dart';
-import 'package:dam_1c_2023/api/firebase_notifications.dart';
 import 'package:dam_1c_2023/models/userService.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -23,54 +27,59 @@ import 'pages/signup.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-GoRouter _router(FirebaseAnalyticsObserver obs) { 
+GoRouter _router(FirebaseAnalyticsObserver obs) {
   return GoRouter(
     observers: [obs],
-  routes: [
-    GoRoute(
-        path: "/",
+    routes: [
+      GoRoute(
+          path: "/",
+          builder: (context, state) => const WelcomePage(),
+          routes: [
+            GoRoute(
+              name: 'login',
+              path: "login",
+              builder: (context, state) => const LoginPage(),
+            ),
+            GoRoute(
+              name: 'signup',
+              path: "signup",
+              builder: (context, state) => const SignupPage(),
+            ),
+          ]),
+      GoRoute(
+        name: 'welcome',
+        path: "/welcome",
         builder: (context, state) => const WelcomePage(),
-        routes: [
-          GoRoute(
-            name: 'login',
-            path: "login",
-            builder: (context, state) => const LoginPage(),
-          ),
-          GoRoute(
-            name: 'signup',
-            path: "signup",
-            builder: (context, state) => const SignupPage(),
-          ),
-        ]),
-    GoRoute(
-      name: 'welcome',
-      path: "/welcome",
-      builder: (context, state) => const WelcomePage(),
-    ),
-    GoRoute(
-      name: 'home',
-      path: "/home",
-      builder: (context, state) => const Home(
-        key: Key("Home"),
       ),
-    ),
-    GoRoute(
-        name: 'selected-card',
-        path: "/selected-card/:id",
-        builder: (context, state) {
-          final volunteeringProvider = Provider.of<VolunteeringList>(context);
-          final int? index = int.tryParse(state.params['id'] ?? '');
-          if (index == null) {
-            // handle the case where index is null (e.g. invalid input)
-            return Container();
-          }
-          final volunteering = volunteeringProvider.volunteering[index - 1];
-          return SelectedCardPage(
-            info: volunteering,
-          );
-        }),
-  ],
-);
+      GoRoute(
+        name: 'home',
+        path: "/home",
+        builder: (context, state) => const Home(
+          key: Key("Home"),
+        ),
+      ),
+      GoRoute(
+          name: 'selected-card',
+          path: "/selected-card/:id",
+          builder: (context, state) {
+            final volunteeringProvider = Provider.of<VolunteeringList>(context);
+            final int? index = int.tryParse(state.params['id'] ?? '');
+            if (index == null) {
+              // handle the case where index is null (e.g. invalid input)
+              return Container();
+            }
+            final volunteering = volunteeringProvider.volunteering[index - 1];
+            return SelectedCardPage(
+              info: volunteering,
+            );
+          }),
+    ],
+  );
+}
+
+Future<void> _firebaseMessagingBackgroundHandler(message) async {
+  await Firebase.initializeApp();
+  print('Handling a background message ${message.messageId}');
 }
 
 void main() async {
@@ -78,7 +87,28 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    print('User granted permission');
+  } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+    print('User granted provisional permission');
+  } else {
+    print('User declined or has not accepted permission');
+  }
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
   };
@@ -87,28 +117,44 @@ void main() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
-  
-  await FirebaseNotifications().initNotifications();
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
 
-      if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification}');
-      }
-    });
-  runApp(const MyApp());
+
+  runApp(
+    const OverlaySupport(child: MyApp())
+  );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp>{
+  final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
+  @override
+  void initState() {
+    FirebaseMessaging.onMessage.listen(
+          (RemoteMessage message) {
+            showSimpleNotification(
+              Text(message.notification?.title ?? ""),
+              background: Colors.blue, // Customize the background color
+              duration: Duration(seconds: 2), //the duration for which the notification will be displayed
+            );
+      },
+    );
+    super.initState();
+  }
 
   static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   static FirebaseAnalyticsObserver observer =
-      FirebaseAnalyticsObserver(analytics: analytics);
+  FirebaseAnalyticsObserver(analytics: analytics);
 
   @override
   Widget build(BuildContext context) {
+
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.blue));
     return MultiProvider(
@@ -124,6 +170,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp.router(
+        key: _scaffoldMessengerKey,
         routerConfig: _router(observer),
         title: 'Flutter App',
         theme: ThemeData(

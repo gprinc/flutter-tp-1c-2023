@@ -1,3 +1,4 @@
+import 'package:dam_1c_2023/models/volunteering.dart';
 import 'package:dam_1c_2023/tokens/token_colors.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:dam_1c_2023/tokens/token_shadows.dart';
@@ -255,15 +256,11 @@ class _InputCardState extends State<InputCard> {
 }
 
 class VolunteeringCard extends StatelessWidget {
-  final String title;
-  final String imageName;
-  final int participantsAmount;
+  final Volunteering volunteering;
 
   const VolunteeringCard({
     Key? key,
-    required this.title,
-    required this.imageName,
-    this.participantsAmount = 0
+    required this.volunteering,
   }) : super(key: key);
 
   @override
@@ -281,7 +278,7 @@ class VolunteeringCard extends StatelessWidget {
             SizedBox(
               height: 135,
               child: Image.asset(
-                imageName,
+                volunteering.imageName,
                 fit: BoxFit.cover,
               ),
             ),
@@ -295,7 +292,7 @@ class VolunteeringCard extends StatelessWidget {
                     style: overline,
                   ),
                   Text(
-                    title,
+                    volunteering.title,
                     style: subtitle01,
                   ),
                   Row(
@@ -303,15 +300,14 @@ class VolunteeringCard extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(right: 115),
-                        child: Vacancies(counter: 10 - participantsAmount),
+                        child: Vacancies(counter: 10 - volunteering.participants.length),
                       ),
                       const Icon(
                         Icons.favorite_border,
                         color: primary,
                       ),
                       VolLocation(() {
-                        //MapsLauncher.launchQuery('Palmar 6841');
-                        openMap('Palmar 6841');
+                        openMap(volunteering.address);
                       })
                     ],
                   ),

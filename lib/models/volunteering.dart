@@ -5,6 +5,7 @@ class Volunteering {
   final String title;
   final String description;
   final String imageName;
+  final String address;
   var requisites = [];
   var availability = [];
   final int id;
@@ -14,6 +15,7 @@ class Volunteering {
       {required this.title,
       required this.description,
       required this.imageName,
+        required this.address,
       required this.requisites,
       required this.availability,
       required this.id,
@@ -23,7 +25,8 @@ class Volunteering {
         return Volunteering(
           title: json['title'], 
           description: json['description'], 
-          imageName: json['imageName'], 
+          imageName: json['imageName'],
+          address: json['address'],
           requisites: json['requisites'], 
           availability: json['availability'],
           id: json['id'],

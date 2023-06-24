@@ -26,6 +26,7 @@ class HomeState extends State<Home> {
   List<Volunteering> _foundCards = [];
   List<Volunteering> _allCards = [];
 
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -187,9 +188,7 @@ class HomeState extends State<Home> {
                                               children: [
                                                 GestureDetector(
                                                   child: VolunteeringCard(
-                                                      title: volunteering.title,
-                                                      imageName: volunteering.imageName,
-                                                      participantsAmount: volunteering.participants.length,),
+                                                      volunteering: volunteering),
                                                   onTap: () => context.goNamed(
                                                       'selected-card',
                                                       params: {
@@ -274,7 +273,7 @@ Widget _buildCarouselItem(
     padding: const EdgeInsets.symmetric(horizontal: 0.0),
     child: GestureDetector(
       child: VolunteeringCard(
-          title: volunteering.title, imageName: volunteering.imageName, participantsAmount: volunteering.participants.length),
+          volunteering: volunteering),
       onTap: () => context
           .goNamed('selected-card', params: {'id': itemIndex.toString()}),
     ),

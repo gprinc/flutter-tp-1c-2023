@@ -48,6 +48,9 @@ dependencies:
   equatable: ^2.0.5
   flutter_bloc: ^8.1.2
   firebase_crashlytics: ^3.3.3
+  flutter_local_notifications: ^14.1.1
+  overlay_support: ^2.1.0
+
 
 dev_dependencies:
   flutter_test:
