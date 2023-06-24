@@ -4,6 +4,7 @@ import 'package:dam_1c_2023/cells/modals.dart';
 import 'package:dam_1c_2023/firebase/firebase_cloudstore.dart';
 import 'package:dam_1c_2023/models/participant.dart';
 import 'package:dam_1c_2023/models/user.dart';
+import 'package:dam_1c_2023/models/userService.dart';
 import 'package:dam_1c_2023/models/volunteering.dart';
 import 'package:dam_1c_2023/models/volunteering_list.dart';
 import 'package:dam_1c_2023/molecules/components.dart';
@@ -139,32 +140,38 @@ Future<void> _showCustomDialog(
 
 Future<void> addAsParticipant(BuildContext context, Volunteering vol) async {
   final volunteerings = Provider.of<VolunteeringList>(context).volunteering;
-  List<Map<String, dynamic>> updatedList = [];
-  volunteerings.forEach((element) {
-    if (element.id == vol.id) {
-      element.participants.add(Participant(email: 'guido@princ.com'));
-    }
-    updatedList.add(Volunteering.toJson(element));
-  });
-  await FirebaseFirestore.instance
-    .collection('ser_manos_data')
-    .doc('test')
-    .update({ 'values': FieldValue.arrayUnion(updatedList)})
-    .then((value) => Navigator.of(context).pop());
+  final currentUser = Provider.of<UserService>(context).user;
+  if (currentUser != null) {
+    List<Map<String, dynamic>> updatedList = [];
+    volunteerings.forEach((element) {
+      if (element.id == vol.id) {
+        element.participants.add(Participant(email: currentUser.email));
+      }
+      updatedList.add(Volunteering.toJson(element));
+    });
+    await FirebaseFirestore.instance
+      .collection('ser_manos_data')
+      .doc('test')
+      .update({ 'values': FieldValue.arrayUnion(updatedList)})
+      .then((value) => Navigator.of(context).pop());
+  }
 }
 
 Future<void> removeAsParticipant(BuildContext context, Volunteering vol) async {
   final volunteerings = Provider.of<VolunteeringList>(context).volunteering;
-  List<Map<String, dynamic>> updatedList = [];
-  volunteerings.forEach((element) {
-    if (element.id == vol.id) {
-      element.participants.removeWhere((element) => element.email == 'guido@princ.com');
-    }
-    updatedList.add(Volunteering.toJson(element));
-  });
-  await FirebaseFirestore.instance
-    .collection('ser_manos_data')
-    .doc('test')
-    .update({ 'values': FieldValue.arrayUnion(updatedList)})
-    .then((value) => Navigator.of(context).pop());
+  final currentUser = Provider.of<UserService>(context).user;
+  if (currentUser != null) {
+    List<Map<String, dynamic>> updatedList = [];
+    volunteerings.forEach((element) {
+      if (element.id == vol.id) {
+        element.participants.removeWhere((element) => element.email == currentUser.email);
+      }
+      updatedList.add(Volunteering.toJson(element));
+    });
+    await FirebaseFirestore.instance
+      .collection('ser_manos_data')
+      .doc('test')
+      .update({ 'values': FieldValue.arrayUnion(updatedList)})
+      .then((value) => Navigator.of(context).pop());
+  }
 }
