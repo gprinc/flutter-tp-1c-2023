@@ -50,4 +50,9 @@ class UserService extends ChangeNotifier {
     final userData = snapshot.docs.map((e) => UserITBA.fromSnapshot(e)).single;
     _firebaseUser = userData;
   }
+
+  void logoutUser() {
+    _firebaseUser = null;
+    FirebaseAuthenticationITBA().logout();
+  }
 }

@@ -53,27 +53,6 @@ GoRouter _router(FirebaseAnalyticsObserver obs) {
         ),
       ),
       GoRoute(
-        name: 'selected-news',
-        path: "/selected-news/:id",
-        builder: (context, state) {
-          final newsProvider = Provider.of<NewsList>(context);
-          final int? index = int.tryParse(state.params['id'] ?? '');
-          if (index == null) {
-            // handle the case where index is null (e.g. invalid input)
-            return Container();
-          }
-          final news = newsProvider.news[index];
-          return NewsPage(
-            imageName: news.imageName,
-            title: news.title,
-            description: news.description,
-            body: news.body,
-            header: news.header,
-            index: index,
-          );
-        },
-      ),
-      GoRoute(
           name: 'selected-card',
           path: "/selected-card/:id",
           builder: (context, state) {
@@ -108,7 +87,7 @@ void main() async {
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
       ?.requestPermission();
-
+  await UserService().loginUser('fluter@itba.com', 'prueba123');
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   NotificationSettings settings = await messaging.requestPermission(
