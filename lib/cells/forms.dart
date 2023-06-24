@@ -46,8 +46,7 @@ class _LoginFormState extends State<LoginForm> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Validando')),
       );
-      // context.goNamed('home');
-      Provider.of<UserService>(context, listen: false).loginUser(_emailController.text, _passController.text);
+      Provider.of<UserService>(context, listen: false).loginUser(_emailController.text, _passController.text).then((value) => context.goNamed('home'));
     }
   }
 
@@ -175,8 +174,7 @@ class _RegisterFormState extends State<RegisterForm> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Validando')),
       );
-      // context.goNamed('welcome');
-      Provider.of<UserService>(context, listen: false).registerUser(_emailController.text, _firstNameController.text, _lastNameController.text, _passController.text);
+      Provider.of<UserService>(context, listen: false).registerUser(_emailController.text, _firstNameController.text, _lastNameController.text, _passController.text).then((value) => context.goNamed('welcome'));
     }
   }
 
