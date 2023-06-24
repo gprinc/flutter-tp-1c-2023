@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'volunteering.dart';
 
 class VolunteeringList extends ChangeNotifier {
+  bool loading = false;
   final List<Volunteering> _volunteering = [
     Volunteering(
         title: 'Un techo para mi país',
@@ -62,13 +63,16 @@ class VolunteeringList extends ChangeNotifier {
   List<Volunteering> get volunteering => _firebaseVolunteerings;
 
   Future<void> getFromFirebase() async{
-    var aux = await _firebaseCloudstore.db.collection('ser_manos_data').doc('voluntariados').get();
-    Map<String, dynamic>? data = aux.data();
-    print(data);
-    var volunteersData = data?['values'] as List<dynamic>;
-    volunteersData.forEach((element) {
-      _firebaseVolunteerings.add(Volunteering.fromJson(element));
-    });
+    loading = true;
+    var aux = await _firebaseCloudstore.db.collection('ser_manos_data').doc('voluntariados').get().then((value) {
+      Map<String, dynamic>? data = value.data();
+      print(data);
+      var volunteersData = data?['values'] as List<dynamic>;
+      volunteersData.forEach((element) {
+        _firebaseVolunteerings.add(Volunteering.fromJson(element));
+      });
+      loading = false;
+    }).catchError(() => loading = false);    
   }
 
   void addVolunteering(Volunteering volunteering) {
