@@ -7,6 +7,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'firebase_options.dart';
@@ -87,6 +88,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        FlutterLocalNotificationsPlugin();
+flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
+    AndroidFlutterLocalNotificationsPlugin>()?.requestPermission();
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
@@ -99,6 +104,9 @@ void main() async {
     provisional: false,
     sound: true,
   );
+
+  String? token = await messaging.getToken();
+  print(token);
 
   if (settings.authorizationStatus == AuthorizationStatus.authorized) {
     print('User granted permission');
@@ -137,12 +145,30 @@ class _MyAppState extends State<MyApp>{
   @override
   void initState() {
     FirebaseMessaging.onMessage.listen(
-          (RemoteMessage message) {
-            showSimpleNotification(
-              Text(message.notification?.title ?? ""),
-              background: Colors.blue, // Customize the background color
-              duration: Duration(seconds: 2), //the duration for which the notification will be displayed
-            );
+          (RemoteMessage message) async {
+
+            // showSimpleNotification(
+            //   Text(message.notification?.title ?? ""),
+            //   background: Colors.blue, // Customize the background color
+            //   duration: Duration(seconds: 2), //the duration for which the notification will be displayed
+            // );
+            FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+            final AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('app_icon');
+            await flutterLocalNotificationsPlugin.initialize(InitializationSettings(android: initializationSettingsAndroid));
+            const AndroidNotificationDetails androidNotificationDetails =
+          AndroidNotificationDetails(
+              'your channel id',
+              'your channel name',
+              channelDescription: 'your channel description',
+              importance: Importance.max,
+              priority: Priority.max, fullScreenIntent: true,);
+          const NotificationDetails notificationDetails =
+              NotificationDetails(android: androidNotificationDetails);
+          await flutterLocalNotificationsPlugin.show(
+              0, message.notification?.title, message.notification?.body, notificationDetails,
+              payload: 'item x');
       },
     );
     super.initState();
