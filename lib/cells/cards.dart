@@ -300,28 +300,25 @@ class CurrentVolunteeringCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 72,
-      width: 328,
+      //height: 72,
       decoration: cardShadow,
       child: Card(
         color: primaryLight,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(6),
-          side: const BorderSide(
-            color: primary
-          )
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 16),
+            borderRadius: BorderRadius.circular(6),
+            side: const BorderSide(color: primary)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     const Text(
-                      "Acción social",
+                      "ACCIÓN SOCIAL",
                       style: overline,
                     ),
                     Text(
@@ -331,25 +328,30 @@ class CurrentVolunteeringCard extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  VolLocation(() {
-                    openMap(volunteering.address);
-                  }),
-                ],
-              ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: VolLocationNoPadding(() {
+                  openMap(volunteering.address);
+                }),
+              )
+              /*Align(
+                alignment: Alignment.centerRight,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    VolLocation(() {
+                      openMap(volunteering.address);
+                    }),
+                  ],
+                ),
+              ),*/
+            ],
+          ),
         ),
       ),
     );
   }
 }
-
 
 class VolunteeringCard extends StatelessWidget {
   final Volunteering volunteering;
