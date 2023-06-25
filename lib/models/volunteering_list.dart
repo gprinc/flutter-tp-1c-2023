@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dam_1c_2023/firebase/firebase_cloudstore.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +15,9 @@ class VolunteeringList extends ChangeNotifier {
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
         availability: ['Lunes a viernes de 7 a 10hs'],
         id: 0,
-        participants: []),
+        appliersEmail: [],
+        participantsEmail: []
+    ),
     Volunteering(
         title: 'Manos caritativas',
         description: 'Description for Manos Caritativas',
@@ -25,7 +26,8 @@ class VolunteeringList extends ChangeNotifier {
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
         availability: ['Lunes a viernes de 7 a 10hs'],
         id: 1,
-        participants: []),
+        appliersEmail: [],
+        participantsEmail: []),
     Volunteering(
         title: 'Iglesia',
         description: 'Description for Otro título',
@@ -34,7 +36,8 @@ class VolunteeringList extends ChangeNotifier {
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
         availability: ['Lunes a viernes de 7 a 10hs'],
         id: 2,
-        participants: []),
+        appliersEmail: [],
+        participantsEmail: []),
     Volunteering(
         title: 'Un techo para mi país',
         description: 'Description for Un techo para mi país',
@@ -43,7 +46,8 @@ class VolunteeringList extends ChangeNotifier {
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
         availability: ['Lunes a viernes de 7 a 10hs'],
         id: 3,
-        participants: []),
+        appliersEmail: [],
+        participantsEmail: []),
     // Add more volunteerings here...
   ];
 
@@ -72,16 +76,22 @@ class VolunteeringList extends ChangeNotifier {
           .doc('voluntariados')
           .get();
       Map<String, dynamic>? data = aux.data();
-      var volunteersData = data?['values'] as List<dynamic>;
-      volunteersData.forEach((element) {
-        _firebaseVolunteerings.add(Volunteering.fromJson(element));
-      });
+      if (data != null) {
+        var volunteersData = data['values'] as List<dynamic>;
+        volunteersData.forEach((element) {
+          print(element);
+          _firebaseVolunteerings.add(Volunteering.fromJson(element));
+        });
+      }
+      notifyListeners();
     } catch (error, stackTrace) {
-      print('Error occurred during Firebase retrieval: $error');
+      print('Error occurred during Firebase voluntariados retrieval: $error');
+      print(stackTrace);
     } finally {
       loading = false;
     }
   }
+
 
   void addVolunteering(Volunteering volunteering) {
     _volunteering.add(volunteering);
@@ -111,5 +121,6 @@ class VolunteeringList extends ChangeNotifier {
       .collection('ser_manos_data')
       .doc('voluntariados')
       .update({ 'values': updatedList});
+    notifyListeners();
   }
 }

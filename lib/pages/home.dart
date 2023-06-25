@@ -52,12 +52,18 @@ class HomeState extends State<Home> {
   }
 
   @override
+  void initState() {
+    //Future.delayed(Duration.zero, () {
+      Provider.of<VolunteeringList>(context, listen: false).getFromFirebase();
+      Provider.of<NewsList>(context, listen: false).getFromFirebase();
+    //});
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final newsProvider = Provider.of<NewsList>(context);
-    UserITBA? currentUser = Provider.of<UserService>(context, listen: false).user;
-
-    Provider.of<VolunteeringList>(context, listen: false).getFromFirebase();
-    Provider.of<NewsList>(context, listen: false).getFromFirebase();
+    UserModel? currentUser = Provider.of<UserService>(context, listen: false).user;
 
     void onFavoritePressed(Volunteering vol) {
       if (currentUser != null) {
@@ -175,6 +181,38 @@ class HomeState extends State<Home> {
                                                           isMapVisible,
                                                     ),
                                                   ),
+                                                  Visibility(
+                                                    visible: currentUser?.volunteeringId != null,
+                                                    child: Column(
+                                                      children: [
+                                                        const Padding(
+                                                          padding: EdgeInsets.only(bottom: 24),
+                                                          child: Align(
+                                                            alignment: Alignment.centerLeft,
+                                                            child: Text(
+                                                              'Tu actividad',
+                                                              style: headLine01,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        if (currentUser?.volunteeringId != null && _allCards.isNotEmpty)
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(bottom: 24),
+                                                            child: GestureDetector(
+                                                              child: CurrentVolunteeringCard(
+                                                                volunteering: _allCards[currentUser!.volunteeringId!],
+                                                              ),
+                                                              onTap: () => context.goNamed(
+                                                                'selected-card',
+                                                                params: {
+                                                                  'id': currentUser.volunteeringId?.toString() ?? '',
+                                                                },
+                                                              ),
+                                                            ),
+                                                          )
+                                                      ],
+                                                    ),
+                                                  ),
                                                   const Padding(
                                                       padding: EdgeInsets.only(
                                                           bottom: 24),
@@ -203,7 +241,7 @@ class HomeState extends State<Home> {
                                                   onTap: () => context.goNamed(
                                                       'selected-card',
                                                       params: {
-                                                        'id': index.toString()
+                                                        'id': (index-1).toString()
                                                       }),
                                                 ),
                                                 const SizedBox(height: 24),
@@ -280,7 +318,7 @@ Widget _buildCarousel(BuildContext context, int carouselIndex) {
 Widget _buildCarouselItem(
     BuildContext context, int carouselIndex, int itemIndex, provider) {
   final volunteering = provider.volunteering[itemIndex];
-  UserITBA? currentUser = Provider.of<UserService>(context, listen: false).user;
+  UserModel? currentUser = Provider.of<UserService>(context, listen: false).user;
   void onFavoritePressed(Volunteering vol) {
       if (currentUser != null) {
         Provider.of<VolunteeringList>(context).updateFavorites(vol, currentUser.email);

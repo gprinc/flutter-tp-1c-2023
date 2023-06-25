@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:dam_1c_2023/tokens/token_colors.dart';
 
 class VolLocation extends StatefulWidget {
-  VoidCallback callback;
+  void Function() callback;
   VolLocation(this.callback, {super.key});
 
   @override

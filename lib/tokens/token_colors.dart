@@ -9,6 +9,7 @@ const Color btnSecondary = Color(0xff666666);
 const Color textBtn = Color(0xff737373);
 
 const Color primary = Color(0xff14903F);
+const Color primaryLight = Color(0xfff3f9f5);
 
 const Color topBarBg = Color(0xff90CAF9);
 const Color locationBackground = Color(0xffE7F4EC);

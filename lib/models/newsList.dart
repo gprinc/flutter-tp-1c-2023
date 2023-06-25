@@ -4,6 +4,7 @@ import '../firebase/firebase_cloudstore.dart';
 import 'news.dart';
 
 class NewsList extends ChangeNotifier {
+  bool loading = false;
   final List<News> _news = [
     News(
       header: 'REPORTE 2820',
@@ -46,13 +47,24 @@ class NewsList extends ChangeNotifier {
 
   List<News> get news => _firebaseNews;
 
-  Future<void> getFromFirebase() async{
-    var aux = await FirebaseCloudstoreITBA().db.collection('ser_manos_data').doc('noticias').get();
-    Map<String, dynamic>? data = aux.data();
-    var volunteersData = data?['values'] as List<dynamic>;
-    volunteersData.forEach((element) {
-      _firebaseNews.add(News.fromJson(element));
-    });
+  Future<void> getFromFirebase() async {
+    loading = true;
+    try {
+      var aux = await FirebaseCloudstoreITBA().db.collection('ser_manos_data').doc('novedades').get();
+      Map<String, dynamic>? data = aux.data();
+      if (data != null) {
+        var volunteersData = data['values'] as List<dynamic>;
+        volunteersData.forEach((element) {
+          _firebaseNews.add(News.fromJson(element));
+        });
+      }
+      notifyListeners();
+    } catch (error, stackTrace) {
+      print('Error occurred during Firebase news retrieval: $error');
+      print(stackTrace);
+    } finally {
+      loading = false;
+    }
   }
 
   void addVolunteering(News news) {
