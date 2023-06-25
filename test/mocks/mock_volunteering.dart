@@ -71,8 +71,8 @@ class MockVolunteeringList extends ChangeNotifier implements VolunteeringList {
   late bool loading;
 
   @override
-  Future<void> updateFavorites(Volunteering vol, String email) {
+  Future<void> updateFavorites(Volunteering vol, String email) async {
     // TODO: implement updateFavorites
-    throw UnimplementedError();
+    return Future.value();
   }
 }

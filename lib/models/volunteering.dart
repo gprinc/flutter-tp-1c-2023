@@ -60,6 +60,7 @@ class Volunteering {
         'title': vol.title,
         'description': vol.description,
         'imageName': vol.imageName,
+        'address': vol.address,
         'requisites': vol.requisites,
         'availability': vol.availability,
         'id': vol.id,

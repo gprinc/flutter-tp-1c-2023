@@ -77,6 +77,7 @@ class VolunteeringList extends ChangeNotifier {
           .get();
       Map<String, dynamic>? data = aux.data();
       if (data != null) {
+        _firebaseVolunteerings.clear(); // Clear the list before adding volunteerings
         var volunteersData = data['values'] as List<dynamic>;
         volunteersData.forEach((element) {
           print(element);
@@ -93,6 +94,7 @@ class VolunteeringList extends ChangeNotifier {
   }
 
 
+
   void addVolunteering(Volunteering volunteering) {
     _volunteering.add(volunteering);
     notifyListeners();
@@ -100,7 +102,7 @@ class VolunteeringList extends ChangeNotifier {
 
   List<Volunteering> searchVolunteerings(String query) {
     final lowercaseQuery = query.toLowerCase();
-    return _volunteering.where((volunteering) {
+    return _firebaseVolunteerings.where((volunteering) {
       final lowercaseTitle = volunteering.title.toLowerCase();
       return lowercaseTitle.contains(lowercaseQuery);
     }).toList();

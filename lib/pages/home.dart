@@ -53,10 +53,10 @@ class HomeState extends State<Home> {
 
   @override
   void initState() {
-    Future.delayed(Duration.zero, () {
+    //Future.delayed(Duration.zero, () {
       Provider.of<VolunteeringList>(context, listen: false).getFromFirebase();
       Provider.of<NewsList>(context, listen: false).getFromFirebase();
-    });
+    //});
     super.initState();
   }
 
@@ -193,6 +193,38 @@ class HomeState extends State<Home> {
                                                           isMapVisible,
                                                     ),
                                                   ),
+                                                  Visibility(
+                                                    visible: currentUser?.volunteeringId != null,
+                                                    child: Column(
+                                                      children: [
+                                                        const Padding(
+                                                          padding: EdgeInsets.only(bottom: 24),
+                                                          child: Align(
+                                                            alignment: Alignment.centerLeft,
+                                                            child: Text(
+                                                              'Tu actividad',
+                                                              style: headLine01,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        if (currentUser?.volunteeringId != null && _allCards.isNotEmpty)
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(bottom: 24),
+                                                            child: GestureDetector(
+                                                              child: CurrentVolunteeringCard(
+                                                                volunteering: _allCards[currentUser!.volunteeringId!],
+                                                              ),
+                                                              onTap: () => context.goNamed(
+                                                                'selected-card',
+                                                                params: {
+                                                                  'id': currentUser.volunteeringId?.toString() ?? '',
+                                                                },
+                                                              ),
+                                                            ),
+                                                          )
+                                                      ],
+                                                    ),
+                                                  ),
                                                   const Padding(
                                                       padding: EdgeInsets.only(
                                                           bottom: 24),
@@ -231,7 +263,7 @@ class HomeState extends State<Home> {
                                                   onTap: () => context.goNamed(
                                                       'selected-card',
                                                       params: {
-                                                        'id': index.toString()
+                                                        'id': (index-1).toString()
                                                       }),
                                                 ),
                                                 const SizedBox(height: 24),

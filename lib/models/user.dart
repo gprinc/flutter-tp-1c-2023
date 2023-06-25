@@ -5,7 +5,7 @@ class UserModel {
   final String email;
   final String name;
   final String lastName;
-  final int? volunteeringId;
+  int? volunteeringId;
   final String? birthDay;
   final String? phoneNumber;
   final String? encodedPicture;

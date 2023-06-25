@@ -76,4 +76,8 @@ class UserService extends ChangeNotifier {
     //final userQuery = await FirebaseCloudstoreITBA().db.collection('users').where('id', isEqualTo: newUser.id);
     //  userQuery.docs.map()
   }
+
+  Future<void> updateVolunteeringId(int? volunteeringId) async {
+      _firebaseUser!.volunteeringId = volunteeringId;
+  }
 }

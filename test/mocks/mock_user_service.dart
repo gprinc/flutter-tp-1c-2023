@@ -1,6 +1,5 @@
 import 'package:dam_1c_2023/models/user.dart';
 import 'package:dam_1c_2023/models/userService.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
 class MockUserService extends ChangeNotifier implements UserService {
@@ -33,15 +32,4 @@ class MockUserService extends ChangeNotifier implements UserService {
 
   @override
   String? error;
-
-  @override
-  void logoutUser() {
-    // TODO: implement logoutUser
-  }
-
-  @override
-  Future<void> updateUser(UserModel newUser) {
-    // TODO: implement updateUser
-    throw UnimplementedError();
-  }
 }
