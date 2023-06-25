@@ -250,15 +250,11 @@ class _LabelTextInputState extends State<LabelTextInput> {
 
 class SearchInput extends StatefulWidget {
   final void Function(String value) search;
-  final void Function(bool value) toggleMapVisibility;
-  final bool isMapVisible;
   //final String placeHolder;
 
   const SearchInput({
     Key? key,
     required this.search,
-    required this.toggleMapVisibility,
-    required this.isMapVisible,
   }) : super(key: key);
 
   @override
@@ -279,21 +275,9 @@ class _SearchInputState extends State<SearchInput> {
           );
   }
 
-  Widget? _getSuffixStateIcon(bool isMapVisible) {
+  Widget? _getSuffixStateIcon() {
     // If no focus, and no text => Map Icon
-    return _controller.text.isEmpty && !_hasFocus
-        ? isMapVisible
-            ? ListIcon(
-                onPressed: (value) {
-                  widget.toggleMapVisibility(!isMapVisible);
-                },
-              )
-            : MapIcon(
-                onPressed: (value) {
-                  widget.toggleMapVisibility(!isMapVisible);
-                },
-              )
-        : _hasFocus && _controller.text.isNotEmpty
+    return _hasFocus && _controller.text.isNotEmpty
             // If focus and text => return Clear Icon
             ? IconButton(
                 icon: const Icon(
@@ -354,7 +338,7 @@ class _SearchInputState extends State<SearchInput> {
                 borderSide: BorderSide(color: Colors.grey),
               ),
               prefixIcon: _getPrefixStateIcon(),
-              suffixIcon: _getSuffixStateIcon(widget.isMapVisible)),
+              suffixIcon: _getSuffixStateIcon()),
           style: subtitle01,
           focusNode: _focus),
     );

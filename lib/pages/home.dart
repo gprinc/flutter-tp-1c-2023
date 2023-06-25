@@ -24,8 +24,6 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-  var isMapVisible = false;
-
   List<Volunteering> _foundCards = [];
   List<Volunteering> _allCards = [];
 
@@ -115,50 +113,6 @@ class HomeState extends State<Home> {
                 child: TabBarView(
                   children: [
                     // Postulaciones
-                    if (isMapVisible)
-                      Container(
-                          color: secondaryBlue,
-                          child: Stack(
-                            children: [
-                              Align(
-                                  alignment: Alignment.topCenter,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(16),
-                                    child: SearchInput(
-                                      search: (value) {
-                                        _runFilter(value);
-                                      },
-                                      toggleMapVisibility: (bool value) {
-                                        setState(() {
-                                          isMapVisible = value;
-                                        });
-                                      },
-                                      isMapVisible: isMapVisible,
-                                    ),
-                                  )),
-                              const Positioned(
-                                  bottom: 286,
-                                  right: 16,
-                                  child: LocationIcon()),
-                              Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Container(
-                                    margin: const EdgeInsets.only(bottom: 16),
-                                    height: 270,
-                                    child: ListView.builder(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8.0),
-                                      itemCount: 1,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return _buildCarousel(
-                                            context, index ~/ 2);
-                                      },
-                                    ),
-                                  ))
-                            ],
-                          ))
-                    else
                       Container(
                           color: secondaryBlue,
                           child: Padding(
@@ -183,14 +137,6 @@ class HomeState extends State<Home> {
                                                       search: (value) {
                                                         _runFilter(value);
                                                       },
-                                                      toggleMapVisibility:
-                                                          (bool value) {
-                                                        setState(() {
-                                                          isMapVisible = value;
-                                                        });
-                                                      },
-                                                      isMapVisible:
-                                                          isMapVisible,
                                                     ),
                                                   ),
                                                   Visibility(
