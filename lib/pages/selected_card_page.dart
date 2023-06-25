@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dam_1c_2023/cells/modals.dart';
+import 'package:dam_1c_2023/firebase/firebase_cloudstore.dart';
 import 'package:dam_1c_2023/models/userService.dart';
 import 'package:dam_1c_2023/models/volunteering.dart';
 import 'package:dam_1c_2023/models/volunteering_list.dart';
@@ -160,7 +161,7 @@ Future<void> addAsParticipant(BuildContext context, Volunteering vol) async {
       updatedList.add(Volunteering.toJson(element));
     });
 
-    final userQuery = FirebaseFirestore.instance.collection('users').where('email', isEqualTo: currentUser.email);
+    final userQuery = FirebaseCloudstoreITBA().db.collection('users').where('email', isEqualTo: currentUser.email);
     final userSnapshot = await userQuery.get();
 
     if (userSnapshot.docs.isNotEmpty) {
@@ -175,10 +176,10 @@ Future<void> addAsParticipant(BuildContext context, Volunteering vol) async {
         transaction.set(userDoc, userData);
       });
 
-      await FirebaseFirestore.instance
+      await FirebaseCloudstoreITBA().db
           .collection('ser_manos_data')
           .doc('voluntariados')
-          .update({'values': FieldValue.arrayUnion(updatedList)})
+          .update({'values': updatedList})
           .then((value) => Navigator.of(context).pop());
     }
   }
@@ -235,7 +236,7 @@ Future<void> removeAsParticipant(BuildContext context, Volunteering vol) async {
       await FirebaseFirestore.instance
           .collection('ser_manos_data')
           .doc('voluntariados')
-          .update({'values': FieldValue.arrayUnion(updatedList)})
+          .update({'values': updatedList})
           .then((value) => Navigator.of(context).pop());
     }
   }
