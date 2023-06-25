@@ -245,7 +245,8 @@ class HomeState extends State<Home> {
                     ProfileTab(user: Provider.of<UserService>(context).user!),
                     // NOVEDADES
                     Padding(
-                      padding: const EdgeInsets.only(top: 32.0),
+                      padding: const EdgeInsets.only(
+                          top: 32.0, right: 16.0, left: 16.0),
                       child: ListView.builder(
                         itemCount: newsProvider.news.length,
                         itemBuilder: (BuildContext context, int index) {

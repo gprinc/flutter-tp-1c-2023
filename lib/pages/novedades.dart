@@ -27,6 +27,7 @@ class NewsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+          elevation: 0,
           leading: const ArrowBackIcon(),
           title: Padding(
             padding: const EdgeInsets.only(right: 40, top: 20, bottom: 20),
@@ -78,12 +79,14 @@ class NewsPage extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  SizedBox(
-                    width: 328,
-                    height: 160,
-                    child: Image.asset(
-                      imageName,
-                      fit: BoxFit.fitWidth,
+                  Expanded(
+                    child: SizedBox(
+                      //width: 328,
+                      height: 160,
+                      child: Image.asset(
+                        imageName,
+                        fit: BoxFit.fitWidth,
+                      ),
                     ),
                   ),
                 ],
@@ -94,7 +97,7 @@ class NewsPage extends StatelessWidget {
               ),
               Text(
                 description,
-                style: subtitle01Modif(secondaryBlue),
+                style: subtitle01Modif(selectedTab),
               ),
               const SizedBox(
                 height: 16,
@@ -105,7 +108,7 @@ class NewsPage extends StatelessWidget {
                 textAlign: TextAlign.start,
               ),
               const SizedBox(
-                height: 16,
+                height: 24,
               ),
               const Center(
                   child: Text(
@@ -113,14 +116,13 @@ class NewsPage extends StatelessWidget {
                 style: headLine02,
               )),
               const SizedBox(
-                height: 16,
+                height: 32,
               ),
               CtaButton(
                   text: 'Compartir',
                   handlePress: () {
                     Share.share(
-                        'mira esta novedad: sermanos://pages/selected-news/' +
-                            index.toString());
+                        'mira esta novedad: sermanos://pages/selected-news/$index');
                   },
                   enabledState: true)
             ],

@@ -9,11 +9,15 @@ import '../molecules/buttons.dart';
 import '../tokens/token_fonts.dart';
 
 class ProfileTab extends StatelessWidget {
-  final UserITBA user;
+  final UserModel user;
   const ProfileTab({super.key, required this.user});
 
   showProfileModal(BuildContext context) {
-    buildModal(context, const ProfileModal());
+    buildModal(
+        context,
+        ProfileModal(
+          user: user,
+        ));
   }
 
   Widget filledProfile(BuildContext context) {
@@ -32,33 +36,33 @@ class ProfileTab extends StatelessWidget {
                       SizedBox(
                         width: 120,
                         height: 120,
-                        child: Image.asset('assets/profile.png'),
+                        child: Image.asset('assets/icon_picture.png'),
                       ),
                       const SizedBox(height: 16),
                       const Text('Voluntario', style: overline),
                       const SizedBox(height: 2),
-                      const Text('Juan Cruz Gonzalez', style: subtitle01),
+                      Text('${user.name} ${user.lastName}', style: subtitle01),
                       const SizedBox(height: 2),
                       Text(
-                        "mimail@gmail.com",
+                        user.email,
                         style: body01Modif(const Color(0xff0D47A1)),
                         textAlign: TextAlign.center,
                       ),
                     ],
                   ),
-                  const InformationCard(
+                  InformationCard(
                     title: 'Información personal',
                     label1: 'FECHA DE NACIMIENTO',
-                    content1: '10/08/1990',
+                    content1: user.birthDay!,
                     label2: 'Género',
-                    content2: 'Hombre',
+                    content2: user.gender!,
                   ),
-                  const InformationCard(
+                  InformationCard(
                     title: 'Datos de contacto',
                     label1: 'Teléfono',
-                    content1: '+5491165863216',
+                    content1: user.phoneNumber!,
                     label2: 'E-MAIL',
-                    content2: 'mimail@gmail.com',
+                    content2: user.email,
                   ),
                   SizedBox(
                     child: Column(
@@ -96,7 +100,7 @@ class ProfileTab extends StatelessWidget {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Expanded(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Container(
             decoration: BoxDecoration(),
             child: Center(
@@ -107,12 +111,12 @@ class ProfileTab extends StatelessWidget {
                   SizedBox(
                     width: 120,
                     height: 120,
-                    child: Image.asset('assets/profile.png'),
+                    child: Image.asset('assets/icon_picture.png'),
                   ),
                   const SizedBox(height: 16),
                   const Text('Voluntario', style: overline),
                   const SizedBox(height: 8),
-                  const Text('Juan Cruz', style: subtitle01),
+                  Text('${user.name} ${user.lastName}', style: subtitle01),
                   const SizedBox(height: 8),
                   const Center(
                     child: Text(
@@ -129,10 +133,8 @@ class ProfileTab extends StatelessWidget {
       ),
       const SizedBox(height: 16),
       Center(
-        child: Container(
-          width: 123,
-          height: 48,
-          margin: const EdgeInsets.only(bottom: 80),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 80),
           child: ShortButton(
             handlePress: () => showProfileModal(context),
             text: 'Completar',
@@ -146,6 +148,8 @@ class ProfileTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return user.name == null ? emptyProfile(context) : filledProfile(context);
+    return user.phoneNumber == null || user.phoneNumber == ''
+        ? emptyProfile(context)
+        : filledProfile(context);
   }
 }

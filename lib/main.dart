@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:dam_1c_2023/models/userService.dart';
+import 'package:dam_1c_2023/pages/novedades.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -66,6 +67,27 @@ GoRouter _router(FirebaseAnalyticsObserver obs) {
               info: volunteering,
             );
           }),
+      GoRoute(
+        name: 'selected-news',
+        path: "/selected-news/:id",
+        builder: (context, state) {
+          final newsProvider = Provider.of<NewsList>(context);
+          final int? index = int.tryParse(state.params['id'] ?? '');
+          if (index == null) {
+            // handle the case where index is null (e.g. invalid input)
+            return Container();
+          }
+          final news = newsProvider.news[index];
+          return NewsPage(
+            imageName: news.imageName,
+            title: news.title,
+            description: news.description,
+            body: news.body,
+            header: news.header,
+            index: index,
+          );
+        },
+      ),
     ],
   );
 }

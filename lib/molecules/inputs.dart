@@ -102,9 +102,9 @@ class _InputState extends State<Input> {
         controller: _controller,
         decoration: InputDecoration(
             labelText: _getLabelText(),
-            labelStyle: subtitle01,
+            labelStyle: subtitle01Modif(searchLbl),
             hintText: _hasFocus ? '' : widget.placeHolder,
-            hintStyle: subtitle01,
+            hintStyle: subtitle01Modif(searchLbl),
             focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.blue),
             ),
@@ -219,9 +219,9 @@ class _LabelTextInputState extends State<LabelTextInput> {
         decoration: InputDecoration(
             floatingLabelBehavior: FloatingLabelBehavior.always,
             labelText: widget.label,
-            labelStyle: subtitle01,
+            labelStyle: subtitle01Modif(searchLbl),
             hintText: widget.placeHolder,
-            hintStyle: subtitle01,
+            hintStyle: subtitle01Modif(searchLbl),
             focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.blue),
             ),
@@ -346,7 +346,7 @@ class _SearchInputState extends State<SearchInput> {
           controller: _controller,
           decoration: InputDecoration(
               hintText: 'Buscar',
-              hintStyle: subtitle01,
+              hintStyle: subtitle01Modif(searchLbl),
               enabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey),
               ),
@@ -465,13 +465,12 @@ class _LabelDateInputState extends State<LabelDateInput> {
         controller: _controller,
         keyboardType: TextInputType.datetime,
         decoration: InputDecoration(
-            helperText: 'Día / Mes / Año',
             helperStyle: body02,
             floatingLabelBehavior: FloatingLabelBehavior.always,
             labelText: widget.label,
-            labelStyle: subtitle01,
+            labelStyle: subtitle01Modif(searchLbl),
             hintText: widget.placeHolder,
-            hintStyle: subtitle01,
+            hintStyle: subtitle01Modif(searchLbl),
             focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.blue),
             ),

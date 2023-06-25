@@ -1,3 +1,4 @@
+import 'package:dam_1c_2023/tokens/token_colors.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,8 +20,11 @@ class WelcomeApp extends StatelessWidget {
         const SystemUiOverlayStyle(statusBarColor: Colors.blue));
     return MaterialApp(
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+          primarySwatch: Colors.blue,
+          radioTheme: RadioThemeData(
+            fillColor: MaterialStateColor.resolveWith(
+                (states) => primary), //<-- SEE HERE
+          )),
       home: const WelcomePage(),
     );
   }

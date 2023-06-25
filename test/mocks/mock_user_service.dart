@@ -10,13 +10,14 @@ class MockUserService extends ChangeNotifier implements UserService {
   String? get geterror => error;
 
   @override
-  Future<void> getUserFromFirebase(String email) async{
-    firebaseUser = UserModel(email: "user@itba.edu.ar", name: 'User', lastName: 'Model');
+  Future<void> getUserFromFirebase(String email) async {
+    firebaseUser =
+        UserModel(email: "user@itba.edu.ar", name: 'User', lastName: 'Model');
   }
 
   @override
-  Future<void> loginUser(String email, String password) async {
-    return Future.value();
+  Future<bool> loginUser(String email, String password) async {
+    return Future.value(true);
   }
 
   @override
@@ -25,11 +26,22 @@ class MockUserService extends ChangeNotifier implements UserService {
   }
 
   @override
-  Future<void> registerUser(String email, String name, String lastName, String password) async {
+  Future<void> registerUser(
+      String email, String name, String lastName, String password) async {
     return Future.value();
   }
 
   @override
   String? error;
 
+  @override
+  void logoutUser() {
+    // TODO: implement logoutUser
+  }
+
+  @override
+  Future<void> updateUser(UserModel newUser) {
+    // TODO: implement updateUser
+    throw UnimplementedError();
+  }
 }

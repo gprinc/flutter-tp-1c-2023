@@ -53,7 +53,7 @@ class NewsList extends ChangeNotifier {
       var aux = await FirebaseCloudstoreITBA()
           .db
           .collection('ser_manos_data')
-          .doc('noticias')
+          .doc('novedades')
           .get();
       Map<String, dynamic>? data = aux.data();
       if (data != null) {
