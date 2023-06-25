@@ -52,12 +52,18 @@ class HomeState extends State<Home> {
   }
 
   @override
+  void initState() {
+    Future.delayed(Duration.zero, () {
+      Provider.of<VolunteeringList>(context, listen: false).getFromFirebase();
+      Provider.of<NewsList>(context, listen: false).getFromFirebase();
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final newsProvider = Provider.of<NewsList>(context);
     UserITBA? currentUser = Provider.of<UserService>(context, listen: false).user;
-
-    Provider.of<VolunteeringList>(context, listen: false).getFromFirebase();
-    Provider.of<NewsList>(context, listen: false).getFromFirebase();
 
     void onFavoritePressed(Volunteering vol) {
       if (currentUser != null) {

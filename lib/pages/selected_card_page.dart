@@ -145,7 +145,7 @@ Future<void> addAsParticipant(BuildContext context, Volunteering vol) async {
     List<Map<String, dynamic>> updatedList = [];
     volunteerings.forEach((element) {
       if (element.id == vol.id) {
-        element.participants.add(Participant(email: currentUser.email));
+        element.participants.add(currentUser.email);
       }
       updatedList.add(Volunteering.toJson(element));
     });
@@ -164,7 +164,7 @@ Future<void> removeAsParticipant(BuildContext context, Volunteering vol) async {
     List<Map<String, dynamic>> updatedList = [];
     volunteerings.forEach((element) {
       if (element.id == vol.id) {
-        element.participants.removeWhere((element) => element.email == currentUser.email);
+        element.participants.remove(currentUser.email);
       }
       updatedList.add(Volunteering.toJson(element));
     });

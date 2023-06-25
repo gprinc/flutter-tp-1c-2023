@@ -9,7 +9,7 @@ class Volunteering {
   List<String> requisites = [];
   List<String> availability = [];
   final int id;
-  List<Participant> participants;
+  List<String> participants;
   List<String> favoritos;
 
   Volunteering(
@@ -32,7 +32,7 @@ class Volunteering {
           requisites: List.from(['requisites']), 
           availability: List.from(json['availability']),
           id: json['id'],
-          participants: Participant.fromJsonArray(json['participants']),
+          participants: List.from(json['participantsEmail']),
           favoritos: List.from(json['favoritos'])
         );
       }
@@ -46,16 +46,12 @@ class Volunteering {
         'requisites': requisites,
         'availability': availability,
         'id': id,
-        'participants': participants,
+        'participantsEmail': participants,
         'favoritos': favoritos
       };
     }
 
      static Map<String, dynamic> toJson(Volunteering vol) {
-        List<Map<String, dynamic>> auxParticipants = [];
-        vol.participants.forEach((element) { 
-          auxParticipants.add(Participant.toJson(element));
-        });
       return {
         'title': vol.title,
         'description': vol.description,
@@ -63,7 +59,7 @@ class Volunteering {
         'requisites': vol.requisites,
         'availability': vol.availability,
         'id': vol.id,
-        'participants': auxParticipants,
+        'participantsEmail': vol.participants,
         'favoritos': vol.favoritos
       };
   }

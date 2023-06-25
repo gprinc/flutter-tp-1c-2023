@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dam_1c_2023/firebase/firebase_cloudstore.dart';
 import 'package:flutter/material.dart';
 
@@ -72,12 +71,17 @@ class VolunteeringList extends ChangeNotifier {
           .doc('voluntariados')
           .get();
       Map<String, dynamic>? data = aux.data();
-      var volunteersData = data?['values'] as List<dynamic>;
-      volunteersData.forEach((element) {
-        _firebaseVolunteerings.add(Volunteering.fromJson(element));
-      });
+      if (data != null) {
+        var volunteersData = data['values'] as List<dynamic>;
+        volunteersData.forEach((element) {
+          print(element);
+          _firebaseVolunteerings.add(Volunteering.fromJson(element));
+        });
+      }
+      notifyListeners();
     } catch (error, stackTrace) {
-      print('Error occurred during Firebase retrieval: $error');
+      print('Error occurred during Firebase voluntariados retrieval: $error');
+      print(stackTrace);
     } finally {
       loading = false;
     }
@@ -111,5 +115,6 @@ class VolunteeringList extends ChangeNotifier {
       .collection('ser_manos_data')
       .doc('voluntariados')
       .update({ 'values': updatedList});
+    notifyListeners();
   }
 }
