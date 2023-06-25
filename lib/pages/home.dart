@@ -1,6 +1,8 @@
 import 'package:dam_1c_2023/atoms/icons/location.dart';
 import 'package:dam_1c_2023/cells/cards.dart';
 import 'package:dam_1c_2023/models/newsList.dart';
+import 'package:dam_1c_2023/models/user.dart';
+import 'package:dam_1c_2023/models/userService.dart';
 import 'package:dam_1c_2023/models/volunteering.dart';
 import 'package:dam_1c_2023/models/volunteering_list.dart';
 import 'package:dam_1c_2023/molecules/buttons.dart';
@@ -50,11 +52,26 @@ class HomeState extends State<Home> {
   }
 
   @override
+  void initState() {
+    Future.delayed(Duration.zero, () {
+      Provider.of<VolunteeringList>(context, listen: false).getFromFirebase();
+      Provider.of<NewsList>(context, listen: false).getFromFirebase();
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final newsProvider = Provider.of<NewsList>(context);
+    UserModel? currentUser =
+        Provider.of<UserService>(context, listen: false).user;
 
-    Provider.of<VolunteeringList>(context, listen: false).getFromFirebase();
-    Provider.of<NewsList>(context, listen: false).getFromFirebase();
+    void onFavoritePressed(Volunteering vol) {
+      if (currentUser != null) {
+        Provider.of<VolunteeringList>(context)
+            .updateFavorites(vol, currentUser.email);
+      }
+    }
 
     return DefaultTabController(
       // --> Puedo manejar el estado del TabBar de forma automatica.
@@ -207,7 +224,10 @@ class HomeState extends State<Home> {
                                                 GestureDetector(
                                                   child: VolunteeringCard(
                                                       volunteering:
-                                                          volunteering),
+                                                          volunteering,
+                                                      onFavoritePressed:
+                                                          onFavoritePressed,
+                                                      currentUser: currentUser),
                                                   onTap: () => context.goNamed(
                                                       'selected-card',
                                                       params: {
@@ -288,10 +308,22 @@ Widget _buildCarousel(BuildContext context, int carouselIndex) {
 Widget _buildCarouselItem(
     BuildContext context, int carouselIndex, int itemIndex, provider) {
   final volunteering = provider.volunteering[itemIndex];
+  UserModel? currentUser =
+      Provider.of<UserService>(context, listen: false).user;
+  void onFavoritePressed(Volunteering vol) {
+    if (currentUser != null) {
+      Provider.of<VolunteeringList>(context)
+          .updateFavorites(vol, currentUser.email);
+    }
+  }
+
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 0.0),
     child: GestureDetector(
-      child: VolunteeringCard(volunteering: volunteering),
+      child: VolunteeringCard(
+          volunteering: volunteering,
+          onFavoritePressed: onFavoritePressed,
+          currentUser: currentUser),
       onTap: () => context
           .goNamed('selected-card', params: {'id': itemIndex.toString()}),
     ),

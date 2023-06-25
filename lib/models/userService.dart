@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dam_1c_2023/firebase/firebase_authentication.dart';
 import 'package:dam_1c_2023/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,10 +6,10 @@ import 'package:dam_1c_2023/firebase/firebase_cloudstore.dart';
 
 class UserService extends ChangeNotifier {
 
-  UserITBA? _firebaseUser = null;
+  UserModel? _firebaseUser = null;
   String? error;
 
-  UserITBA? get user => _firebaseUser;
+  UserModel? get user => _firebaseUser;
   String? get geterror => error;
 
   Future<void> getUserFromFirebase(String email) async{
@@ -19,7 +18,7 @@ class UserService extends ChangeNotifier {
     var usersData = data?['values'] as List<dynamic>;
     usersData.forEach((element) {
       if(element['email'] == email) {
-        _firebaseUser = UserITBA.fromJson(element);
+        _firebaseUser = UserModel.fromJson(element);
       }
       return;
     });
@@ -35,24 +34,29 @@ class UserService extends ChangeNotifier {
       error = 'There was an error with the registration';
       return;
     }
-    UserITBA auxUser = UserITBA(email: email, name: name, lastName: lastName);
-    await FirebaseCloudstoreITBA().db.collection('users').add(UserITBA.toJson(UserITBA(email: email, name: name, lastName: lastName)));
+    UserModel auxUser = UserModel(email: email, name: name, lastName: lastName);
+    await FirebaseCloudstoreITBA().db.collection('users').add(UserModel.toJson(UserModel(email: email, name: name, lastName: lastName)));
     _firebaseUser = auxUser;
   }
 
-  Future<void> loginUser(String email, String password) async {
+  Future<bool> loginUser(String email, String password) async {
     UserCredential? aux = await FirebaseAuthenticationITBA().loginUser(email, password);
     if (aux == null) {
       error = 'There was an error with the login';
-      return;
+      return false;
     }
     final snapshot  = await FirebaseCloudstoreITBA().db.collection('users').where('email', isEqualTo: email).get();
-    final userData = snapshot.docs.map((e) => UserITBA.fromSnapshot(e)).single;
+    final userData = snapshot.docs.map((e) => UserModel.fromSnapshot(e)).single;
     _firebaseUser = userData;
+    return true;
   }
 
   void logoutUser() {
     _firebaseUser = null;
     FirebaseAuthenticationITBA().logout();
+  }
+
+  Future<void> updateUser(UserModel newUser) async{
+    await FirebaseCloudstoreITBA().db.collection('users').doc(_firebaseUser!.id).update(UserModel.toJson(newUser));
   }
 }

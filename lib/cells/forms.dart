@@ -38,18 +38,24 @@ class _LoginFormState extends State<LoginForm> {
     return _emailController.text.isNotEmpty && _passController.text.isNotEmpty;
   }
 
-  _validate() {
-    // Validate returns true if the form is valid, or false otherwise.
+  _validate() async {
     if (_formKey.currentState!.validate()) {
-      // If the form is valid, display a snackbar. In the real world,
-      // you'd often call a server or save the information in a database.
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Validando')),
+        const SnackBar(content: Text('Validating')),
       );
-      // context.goNamed('home');
-      Provider.of<UserService>(context, listen: false)
-          .loginUser(_emailController.text, _passController.text)
-          .then((value) => context.goNamed('home'));
+
+      bool isValid = await Provider.of<UserService>(context, listen: false)
+          .loginUser(_emailController.text, _passController.text);
+
+      if (isValid) {
+        // Navigate to home screen
+        context.goNamed('home');
+      } else {
+        // Display an error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Invalid credentials')),
+        );
+      }
     }
   }
 

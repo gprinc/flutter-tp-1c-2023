@@ -25,6 +25,7 @@ class Participant {
   }
 
   static List<Participant> fromJsonArray(List<dynamic> jsonArray) {
+    if (jsonArray.isEmpty) return [];
     List<Participant> participantsArray = [];
     jsonArray.forEach((element) { 
       participantsArray.add(Participant.fromJson(element));

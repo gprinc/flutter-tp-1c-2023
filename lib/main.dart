@@ -1,15 +1,14 @@
 import 'dart:ui';
+import 'package:dam_1c_2023/models/userService.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:overlay_support/overlay_support.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:dam_1c_2023/pages/home.dart';
 import 'package:dam_1c_2023/pages/login.dart';
-import 'package:dam_1c_2023/pages/novedades.dart';
 import 'package:dam_1c_2023/pages/selected_card_page.dart';
 import 'package:dam_1c_2023/pages/welcome.dart';
 import 'package:flutter/services.dart';
@@ -18,7 +17,6 @@ import 'package:provider/provider.dart';
 
 import 'initial.dart';
 import 'models/newsList.dart';
-import 'models/userService.dart';
 import 'models/volunteering_list.dart';
 import 'pages/signup.dart';
 
@@ -101,8 +99,8 @@ void main() async {
     sound: true,
   );
 
-  String? token = await messaging.getToken();
-  print(token);
+  // String? token = await messaging.getToken();
+  // print(token);
 
   if (settings.authorizationStatus == AuthorizationStatus.authorized) {
     print('User granted permission');

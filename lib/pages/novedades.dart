@@ -72,7 +72,7 @@ class NewsPage extends StatelessWidget {
                 title,
                 style: headLine02,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               Row(
@@ -89,14 +89,14 @@ class NewsPage extends StatelessWidget {
                 ],
               ),
               // Imagen
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               Text(
                 description,
                 style: subtitle01Modif(secondaryBlue),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               Text(
@@ -104,15 +104,15 @@ class NewsPage extends StatelessWidget {
                 style: body01,
                 textAlign: TextAlign.start,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
-              Center(
+              const Center(
                   child: Text(
                 'Comparte esta nota',
                 style: headLine02,
               )),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               CtaButton(

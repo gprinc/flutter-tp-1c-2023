@@ -1,41 +1,47 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-class UserITBA {
+class UserModel {
+  final String? id;
   final String email;
   final String name;
   final String lastName;
+  final int? volunteeringId;
 
-  UserITBA(
-      {required this.email,
+  UserModel(
+      {this.id,
+      required this.email,
       required this.name,
-      required this.lastName});
+      required this.lastName,
+      this.volunteeringId});
 
-  factory UserITBA.fromJson(Map<String, dynamic> json ){
-    return UserITBA(
+  factory UserModel.fromJson(Map<String, dynamic> json ){
+    return UserModel(
       email: json['email'], 
       name: json['name'], 
-      lastName: json['lastName'],  
+      lastName: json['lastName'],
+      volunteeringId: json['volunteeringId']
     );
   }
 
-  factory UserITBA.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> document) {
+
+  factory UserModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> document) {
     final data = document.data()!;
-    return UserITBA(email: data['email'], name: data['name'], lastName: data['lastName']);
+    return UserModel(id: document.id, email: data['email'], name: data['name'], lastName: data['lastName'], volunteeringId: data['volunteeringId']);
   }
 
-  static List<UserITBA> fromJsonArray(List<dynamic> jsonArray) {
-    List<UserITBA> usersArray = [];
-    jsonArray.forEach((element) { 
-      usersArray.add(UserITBA.fromJson(element));
+  static List<UserModel> fromJsonArray(List<dynamic> jsonArray) {
+    List<UserModel> usersArray = [];
+    jsonArray.forEach((element) {
+      usersArray.add(UserModel.fromJson(element));
     });
     return usersArray;
   }
 
-  static Map<String, dynamic> toJson(UserITBA user) {
+  static Map<String, dynamic> toJson(UserModel user) {
     return {
       'email': user.email,
       'name': user.name,
-      'lastName': user.lastName
+      'lastName': user.lastName,
+      'volunteeringId': user.volunteeringId
     };
   }
 }
