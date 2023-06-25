@@ -43,7 +43,7 @@ TextStyle subtitle01Modif(Color givenColor) {
     fontWeight: FontWeight.w400,
     fontSize: 16,
     //height: 20,
-    letterSpacing: 0.25,
+    letterSpacing: 0.15,
     color: givenColor,
   );
 }

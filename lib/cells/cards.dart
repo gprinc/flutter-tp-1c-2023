@@ -1,3 +1,4 @@
+import 'package:dam_1c_2023/atoms/icons/heart.dart';
 import 'package:dam_1c_2023/models/user.dart';
 import 'package:dam_1c_2023/models/volunteering.dart';
 import 'package:dam_1c_2023/tokens/token_colors.dart';
@@ -142,11 +143,11 @@ class InformationCard extends StatelessWidget {
               children: [
                 Text(
                   label,
-                  style: body01,
+                  style: overline,
                 ),
                 Text(
                   content,
-                  style: overline,
+                  style: body01,
                 )
               ]),
         ),
@@ -299,28 +300,25 @@ class CurrentVolunteeringCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 72,
-      width: 328,
+      //height: 72,
       decoration: cardShadow,
       child: Card(
         color: primaryLight,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(6),
-          side: const BorderSide(
-            color: primary
-          )
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 16),
+            borderRadius: BorderRadius.circular(6),
+            side: const BorderSide(color: primary)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     const Text(
-                      "Acción social",
+                      "ACCIÓN SOCIAL",
                       style: overline,
                     ),
                     Text(
@@ -330,43 +328,47 @@ class CurrentVolunteeringCard extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  VolLocation(() {
-                    openMap(volunteering.address);
-                  }),
-                ],
-              ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: VolLocationNoPadding(() {
+                  openMap(volunteering.address);
+                }),
+              )
+              /*Align(
+                alignment: Alignment.centerRight,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    VolLocation(() {
+                      openMap(volunteering.address);
+                    }),
+                  ],
+                ),
+              ),*/
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-
 class VolunteeringCard extends StatelessWidget {
   final Volunteering volunteering;
   final void Function(Volunteering) onFavoritePressed;
   final UserModel? currentUser;
 
-  const VolunteeringCard({
-    Key? key,
-    required this.volunteering,
-    required this.onFavoritePressed,
-    this.currentUser
-  }) : super(key: key);
+  const VolunteeringCard(
+      {Key? key,
+      required this.volunteering,
+      required this.onFavoritePressed,
+      this.currentUser})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 234,
-      width: 328,
+      //height: 234,
       decoration: cardShadow,
       child: Card(
         shape: RoundedRectangleBorder(
@@ -374,16 +376,24 @@ class VolunteeringCard extends StatelessWidget {
         ),
         child: Column(
           children: [
-            SizedBox(
-              height: 135,
-              child: Image.asset(
-                volunteering.imageName,
-                fit: BoxFit.cover,
-              ),
+            Row(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: 138,
+                    child: Image.asset(
+                      volunteering.imageName,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ],
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 8, left: 16),
+              padding: const EdgeInsets.only(
+                  top: 8, left: 16, right: 16, bottom: 16),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
@@ -394,21 +404,83 @@ class VolunteeringCard extends StatelessWidget {
                     volunteering.title,
                     style: subtitle01,
                   ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      VacanciesNoConstrains(
+                        counter: 10 - volunteering.participantsEmail.length,
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          FavoriteIcon(
+                            callback: () => onFavoritePressed(volunteering),
+                            icon: volunteering.favoritos
+                                    .contains(currentUser?.email)
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: primary,
+                          ),
+                          const SizedBox(
+                            width: 16,
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(right: 4.0, left: 4.0),
+                            child: VolLocationNoPadding(() {
+                              openMap(volunteering.address);
+                            }),
+                          )
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
+            )
+            /*Padding(
+              padding: const EdgeInsets.only(
+                  top: 8, left: 16, right: 16, bottom: 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'ACCIÓN SOCIAL',
+                    style: overline,
+                  ),
+                  Text(
+                    volunteering.title,
+                    style: subtitle01,
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(right: 115),
-                        child: Vacancies(counter: 10 - volunteering.participantsEmail.length),
+                        child: Vacancies(
+                            counter:
+                                10 - volunteering.participantsEmail.length),
                       ),
                       IconButton(
-                        onPressed: () => onFavoritePressed(volunteering),
-                        padding: EdgeInsets.zero,
-                        constraints: BoxConstraints(),
-                        icon: Icon(
-                          volunteering.favoritos.contains(currentUser?.email) ? Icons.favorite : Icons.favorite_border,
-                          color: primary,)
-                      ),
+                          onPressed: () => onFavoritePressed(volunteering),
+                          padding: EdgeInsets.zero,
+                          constraints: BoxConstraints(),
+                          icon: Icon(
+                            volunteering.favoritos.contains(currentUser?.email)
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: primary,
+                          )),
                       VolLocation(() {
                         openMap(volunteering.address);
                       })
@@ -416,7 +488,7 @@ class VolunteeringCard extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
+            ),*/
           ],
         ),
       ),
@@ -437,19 +509,24 @@ Future<void> openMap(String location) async {
 }
 
 class EmptyVolunteeringCard extends StatelessWidget {
-  const EmptyVolunteeringCard({super.key});
+  final String msg;
+
+  const EmptyVolunteeringCard({super.key, required this.msg});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: neutralBg,
       height: 108,
-      child: const Align(
-        alignment: Alignment.center,
-        child: Text(
-          'No hay voluntariados vigentes para tu búsqueda.',
-          style: subtitle01,
-          textAlign: TextAlign.center,
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Align(
+          alignment: Alignment.center,
+          child: Text(
+            msg,
+            style: subtitle01,
+            textAlign: TextAlign.center,
+          ),
         ),
       ),
     );
@@ -493,11 +570,14 @@ class NewsCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(header, style: overline),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 2),
                     Text(title, style: subtitle01),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 2),
                     Text(description, style: body02),
                     //Text('Leer Más', style: btnModif(primary)),
+                    const SizedBox(
+                      height: 8,
+                    ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisAlignment: MainAxisAlignment.end,

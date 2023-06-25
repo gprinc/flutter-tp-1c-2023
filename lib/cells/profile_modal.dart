@@ -1,15 +1,16 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:dam_1c_2023/cells/cards.dart';
+import 'package:dam_1c_2023/models/userService.dart';
 import 'package:dam_1c_2023/molecules/inputs.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:flutter/material.dart';
+import '../models/user.dart';
 import '../molecules/buttons.dart';
 import '../validation.dart';
 
 class ProfileModal extends StatefulWidget {
-  const ProfileModal({super.key});
+  final UserModel user;
+
+  const ProfileModal({super.key, required this.user});
 
   @override
   State<ProfileModal> createState() => _ProfileModalState();
@@ -37,16 +38,25 @@ class _ProfileModalState extends State<ProfileModal> {
     dateController = TextEditingController();
     _emailController = TextEditingController();
     _phoneController = TextEditingController();
+    dateController.text = widget.user.birthDay ?? '';
+    _emailController.text = widget.user.email;
+    _phoneController.text = widget.user.phoneNumber ?? '';
     _isFresh = true;
   }
 
   _validate() {
     // Validate returns true if the form is valid, or false otherwise.
     if (_formKey.currentState!.validate()) {
-      print(dateController.text);
-      print(_emailController.text);
-      print(_phoneController.text);
-      print(gender);
+      UserModel u = UserModel(
+          email: widget.user.email,
+          name: widget.user.name,
+          lastName: widget.user.lastName,
+          volunteeringId: widget.user.volunteeringId,
+          birthDay: dateController.text,
+          phoneNumber: _phoneController.text,
+          encodedPicture: '',
+          gender: gender);
+      UserService().updateUser(u);
       Navigator.pop(context);
       //context.goNamed('home');
     }
@@ -78,7 +88,7 @@ class _ProfileModalState extends State<ProfileModal> {
       key: _formKey,
       child: Padding(
         padding:
-            const EdgeInsets.only(left: 16, right: 16, top: 35, bottom: 33),
+            const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 33),
         child: Column(children: [
           Row(
             children: [
@@ -91,7 +101,7 @@ class _ProfileModalState extends State<ProfileModal> {
             ],
           ),
           const SizedBox(
-            height: 40,
+            height: 36,
           ),
           Row(
             children: const [
@@ -102,15 +112,16 @@ class _ProfileModalState extends State<ProfileModal> {
             ],
           ),
           const SizedBox(
-            height: 16,
+            height: 24,
           ),
           LabelDateInput(
               validator: Validator.dateValidator,
               controller: dateController,
               placeHolder: 'DD/MM/YYYY',
+              value: dateController.text,
               label: 'Fecha de nacimiento'),
           const SizedBox(
-            height: 30,
+            height: 24,
           ),
           InputCard(handlePick: _setGender),
           const SizedBox(
@@ -145,22 +156,24 @@ class _ProfileModalState extends State<ProfileModal> {
           LabelTextInput(
             placeHolder: 'Ej: +541178445459',
             controller: _phoneController,
+            value: _phoneController.text,
             validator: Validator.phoneNumberValidator,
             label: 'Telefono',
             keyboardType: TextInputType.phone,
           ),
           const SizedBox(
-            height: 22,
+            height: 24,
           ),
           LabelTextInput(
             placeHolder: 'Ej: mimail@mail.com',
             controller: _emailController,
+            value: _emailController.text,
             validator: Validator.emailValidator,
-            label: 'Email',
+            label: 'Mail',
             keyboardType: TextInputType.emailAddress,
           ),
           const SizedBox(
-            height: 38,
+            height: 32,
           ),
           CtaButton(
             text: 'Guardar datos',

@@ -36,7 +36,7 @@ class MockVolunteeringList extends ChangeNotifier implements VolunteeringList {
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
         availability: ['Lunes a viernes de 7 a 10hs'],
         id: 0,
-        participantsEmail: []),
+        participantsEmail: [], about: ''),
     Volunteering(
         title: 'Manos caritativas',
         description: 'Description for Manos Caritativas',
@@ -45,7 +45,7 @@ class MockVolunteeringList extends ChangeNotifier implements VolunteeringList {
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
         availability: ['Lunes a viernes de 7 a 10hs'],
         id: 1,
-        participantsEmail: []),
+        participantsEmail: [], about: ''),
     Volunteering(
         title: 'Iglesia',
         description: 'Description for Otro título',
@@ -54,7 +54,7 @@ class MockVolunteeringList extends ChangeNotifier implements VolunteeringList {
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
         availability: ['Lunes a viernes de 7 a 10hs'],
         id: 2,
-        participantsEmail: []),
+        participantsEmail: [], about: ''),
     Volunteering(
         title: 'Un techo para mi país',
         description: 'Description for Un techo para mi país',
@@ -63,13 +63,13 @@ class MockVolunteeringList extends ChangeNotifier implements VolunteeringList {
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
         availability: ['Lunes a viernes de 7 a 10hs'],
         id: 3,
-        participantsEmail: []),
+        participantsEmail: [], about: ''),
     // Add more volunteerings here...
   ];
 
   @override
   late bool loading;
-  
+
   @override
   Future<void> updateFavorites(Volunteering vol, String email) async {
     // TODO: implement updateFavorites

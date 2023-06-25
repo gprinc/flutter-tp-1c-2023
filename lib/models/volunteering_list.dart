@@ -8,6 +8,7 @@ class VolunteeringList extends ChangeNotifier {
   final List<Volunteering> _volunteering = [
     Volunteering(
         title: 'Un techo para mi país',
+        about: 'Sobre un techo',
         description:
             'El propósito principal de "Un techo para mi país" es reducir el déficit habitacional y mejorar las condiciones de vida de las personas que no tienen acceso a una vivienda adecuada.',
         imageName: 'assets/voluntariado.png',
@@ -16,10 +17,10 @@ class VolunteeringList extends ChangeNotifier {
         availability: ['Lunes a viernes de 7 a 10hs'],
         id: 0,
         appliersEmail: [],
-        participantsEmail: []
-    ),
+        participantsEmail: []),
     Volunteering(
         title: 'Manos caritativas',
+        about: 'Sobre manos',
         description: 'Description for Manos Caritativas',
         imageName: 'assets/manos.png',
         address: 'Santa Fe 1432',
@@ -30,6 +31,7 @@ class VolunteeringList extends ChangeNotifier {
         participantsEmail: []),
     Volunteering(
         title: 'Iglesia',
+        about: 'sobre otro titulo',
         description: 'Description for Otro título',
         imageName: 'assets/iglesia.png',
         address: 'Av 9 de julio 2000',
@@ -40,6 +42,7 @@ class VolunteeringList extends ChangeNotifier {
         participantsEmail: []),
     Volunteering(
         title: 'Un techo para mi país',
+        about: 'Sobre un techo',
         description: 'Description for Un techo para mi país',
         imageName: 'assets/voluntariado.png',
         address: 'Corrientes 343',
@@ -77,7 +80,8 @@ class VolunteeringList extends ChangeNotifier {
           .get();
       Map<String, dynamic>? data = aux.data();
       if (data != null) {
-        _firebaseVolunteerings.clear(); // Clear the list before adding volunteerings
+        _firebaseVolunteerings
+            .clear(); // Clear the list before adding volunteerings
         var volunteersData = data['values'] as List<dynamic>;
         volunteersData.forEach((element) {
           print(element);
@@ -92,8 +96,6 @@ class VolunteeringList extends ChangeNotifier {
       loading = false;
     }
   }
-
-
 
   void addVolunteering(Volunteering volunteering) {
     _volunteering.add(volunteering);
@@ -112,17 +114,18 @@ class VolunteeringList extends ChangeNotifier {
     List<Map<String, dynamic>> updatedList = [];
     _firebaseVolunteerings.forEach((element) {
       if (element.id == vol.id) {
-        if(element.favoritos.contains(email))
+        if (element.favoritos.contains(email))
           element.favoritos.remove(email);
         else
           element.favoritos.add(email);
       }
       updatedList.add(Volunteering.toJson(element));
     });
-    await FirebaseCloudstoreITBA().db
-      .collection('ser_manos_data')
-      .doc('voluntariados')
-      .update({ 'values': updatedList});
+    await FirebaseCloudstoreITBA()
+        .db
+        .collection('ser_manos_data')
+        .doc('voluntariados')
+        .update({'values': updatedList});
     notifyListeners();
   }
 }

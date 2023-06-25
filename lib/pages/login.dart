@@ -6,13 +6,23 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return const Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(left: 16, right: 16),
-          child: LoginForm(),
-        ),
+      resizeToAvoidBottomInset: false,
+      body: Padding(
+        padding: EdgeInsets.only(left: 16, right: 16, bottom: 32, top: 147),
+        child: LoginForm(),
       ),
+      /*SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minWidth: width, minHeight: height),
+          child: const Padding(
+            padding: EdgeInsets.only(left: 16, right: 16),
+            child: LoginForm(),
+          ),
+        ),
+      ),*/
     );
   }
 }

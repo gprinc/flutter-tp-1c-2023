@@ -102,9 +102,9 @@ class _InputState extends State<Input> {
         controller: _controller,
         decoration: InputDecoration(
             labelText: _getLabelText(),
-            labelStyle: subtitle01,
+            labelStyle: subtitle01Modif(searchLbl),
             hintText: _hasFocus ? '' : widget.placeHolder,
-            hintStyle: subtitle01,
+            hintStyle: subtitle01Modif(searchLbl),
             focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.blue),
             ),
@@ -157,7 +157,7 @@ class LabelTextInput extends StatefulWidget {
 class _LabelTextInputState extends State<LabelTextInput> {
   bool _hasError = false;
   bool _hasFocus = false;
-  bool _isObscured = true;
+  late bool _isObscured;
   final FocusNode _focus = FocusNode();
   late TextEditingController _controller;
 
@@ -194,6 +194,7 @@ class _LabelTextInputState extends State<LabelTextInput> {
     _focus.addListener(_onFocusChange);
     _controller = widget.controller;
     _controller.text = widget.value ?? '';
+    _isObscured = widget.obscureInput;
   }
 
   @override
@@ -218,9 +219,9 @@ class _LabelTextInputState extends State<LabelTextInput> {
         decoration: InputDecoration(
             floatingLabelBehavior: FloatingLabelBehavior.always,
             labelText: widget.label,
-            labelStyle: subtitle01,
+            labelStyle: subtitle01Modif(searchLbl),
             hintText: widget.placeHolder,
-            hintStyle: subtitle01,
+            hintStyle: subtitle01Modif(searchLbl),
             focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.blue),
             ),
@@ -329,7 +330,7 @@ class _SearchInputState extends State<SearchInput> {
           controller: _controller,
           decoration: InputDecoration(
               hintText: 'Buscar',
-              hintStyle: subtitle01,
+              hintStyle: subtitle01Modif(searchLbl),
               enabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey),
               ),
@@ -448,13 +449,12 @@ class _LabelDateInputState extends State<LabelDateInput> {
         controller: _controller,
         keyboardType: TextInputType.datetime,
         decoration: InputDecoration(
-            helperText: 'Día / Mes / Año',
             helperStyle: body02,
             floatingLabelBehavior: FloatingLabelBehavior.always,
             labelText: widget.label,
-            labelStyle: subtitle01,
+            labelStyle: subtitle01Modif(searchLbl),
             hintText: widget.placeHolder,
-            hintStyle: subtitle01,
+            hintStyle: subtitle01Modif(searchLbl),
             focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.blue),
             ),

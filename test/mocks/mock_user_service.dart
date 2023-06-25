@@ -3,18 +3,20 @@ import 'package:dam_1c_2023/models/userService.dart';
 import 'package:flutter/cupertino.dart';
 
 class MockUserService extends ChangeNotifier implements UserService {
-  UserModel? firebaseUser = UserModel(
-      id: "1",
-      name: "John",
-      lastName: "Doe",
-      email: "asdaaa@asdasd.aaa",);
+  UserModel? firebaseUser;
 
   UserModel? get user => firebaseUser;
   String? get geterror => error;
 
   @override
-  Future<void> getUserFromFirebase(String email) async{
-    firebaseUser = UserModel(email: "user@itba.edu.ar", name: 'User', lastName: 'Model');
+  Future<void> getUserFromFirebase(String email) async {
+    firebaseUser =
+        UserModel(email: "user@itba.edu.ar", name: 'User', lastName: 'Model');
+  }
+
+  @override
+  Future<bool> loginUser(String email, String password) async {
+    return Future.value(true);
   }
 
   @override
@@ -23,34 +25,28 @@ class MockUserService extends ChangeNotifier implements UserService {
   }
 
   @override
-  Future<void> registerUser(String email, String name, String lastName, String password) async {
+  Future<void> registerUser(
+      String email, String name, String lastName, String password) async {
     return Future.value();
   }
 
   @override
   String? error;
-  
+
   @override
   void logoutUser() {
-    return;
+    // TODO: implement logoutUser
   }
-  
+
   @override
   Future<void> updateUser(UserModel newUser) {
     // TODO: implement updateUser
-    return Future.value();
+    throw UnimplementedError();
   }
-  
+
   @override
   Future<void> updateVolunteeringId(int? volunteeringId) {
     // TODO: implement updateVolunteeringId
-    return Future.value();
+    throw UnimplementedError();
   }
-  
-  @override
-  Future<bool> loginUser(String email, String password) {
-    // TODO: implement loginUser
-    return Future.value();
-  }
-
 }

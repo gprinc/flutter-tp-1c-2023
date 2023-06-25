@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../atoms/logos.dart';
+import '../models/userService.dart';
 import '../tokens/token_colors.dart';
 
 class Home extends StatefulWidget {
@@ -25,7 +26,6 @@ class Home extends StatefulWidget {
 class HomeState extends State<Home> {
   List<Volunteering> _foundCards = [];
   List<Volunteering> _allCards = [];
-
 
   @override
   void didChangeDependencies() {
@@ -61,11 +61,13 @@ class HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final newsProvider = Provider.of<NewsList>(context);
-    UserModel? currentUser = Provider.of<UserService>(context, listen: false).user;
+    UserModel? currentUser =
+        Provider.of<UserService>(context, listen: false).user;
 
     void onFavoritePressed(Volunteering vol) {
       if (currentUser != null) {
-        Provider.of<VolunteeringList>(context).updateFavorites(vol, currentUser.email);
+        Provider.of<VolunteeringList>(context)
+            .updateFavorites(vol, currentUser.email);
       }
     }
 
@@ -76,11 +78,21 @@ class HomeState extends State<Home> {
       child: Scaffold(
           appBar: AppBar(
             toolbarHeight: 41,
-            leadingWidth: 197,
+            //leadingWidth: 197,
             elevation: 0,
-            leading: SizedBox(
-              width: 50, // Adjust this value as needed
-              child: Row(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 0),
+                  child: rectangularLogo,
+                ),
+              ],
+            ),
+            /*leading: SizedBox(
+                width: 16, // Adjust this value as needed
+                child: rectangularLogo
+                Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
@@ -89,7 +101,7 @@ class HomeState extends State<Home> {
                   ),
                 ],
               ),
-            ),
+                ),*/
             bottom: PreferredSize(
               preferredSize: _tabBar.preferredSize,
               child: Container(color: inactiveTab, child: _tabBar),
@@ -170,8 +182,16 @@ class HomeState extends State<Home> {
                                                           style: headLine01,
                                                         ),
                                                       )),
-                                                  if (_foundCards.isEmpty)
-                                                    const EmptyVolunteeringCard()
+                                                  if (_foundCards.isEmpty &&
+                                                      _allCards.isEmpty)
+                                                    const EmptyVolunteeringCard(
+                                                        msg:
+                                                            'Actualmente no hay voluntariados vigentes. Pronto se iran incorporando nuevos')
+                                                  else if (_foundCards.isEmpty)
+                                                    const EmptyVolunteeringCard(
+                                                      msg:
+                                                          'No hay voluntariados vigentes para tu búsqueda.',
+                                                    )
                                                 ],
                                               );
                                             }
@@ -181,8 +201,10 @@ class HomeState extends State<Home> {
                                               children: [
                                                 GestureDetector(
                                                   child: VolunteeringCard(
-                                                      volunteering: volunteering,
-                                                      onFavoritePressed: onFavoritePressed,
+                                                      volunteering:
+                                                          volunteering,
+                                                      onFavoritePressed:
+                                                          onFavoritePressed,
                                                       currentUser: currentUser),
                                                   onTap: () => context.goNamed(
                                                       'selected-card',
@@ -198,10 +220,11 @@ class HomeState extends State<Home> {
                               ))),
 
                     // MI PERFIL
-                    const ProfileTab(isEmpty: false),
+                    ProfileTab(user: Provider.of<UserService>(context).user!),
                     // NOVEDADES
                     Padding(
-                      padding: const EdgeInsets.only(top: 32.0),
+                      padding: const EdgeInsets.only(
+                          top: 32.0, right: 16.0, left: 16.0),
                       child: ListView.builder(
                         itemCount: newsProvider.news.length,
                         itemBuilder: (BuildContext context, int index) {
@@ -232,7 +255,7 @@ class HomeState extends State<Home> {
           indicator: BoxDecoration(color: selectedTab),
           indicatorColor: Colors.white,
           tabs: [
-            Tab(text: 'Postulaciones'),
+            Tab(text: 'Postularse'),
             Tab(text: 'Mi Perfil'),
             Tab(text: 'Novedades'),
           ]);
@@ -264,17 +287,22 @@ Widget _buildCarousel(BuildContext context, int carouselIndex) {
 Widget _buildCarouselItem(
     BuildContext context, int carouselIndex, int itemIndex, provider) {
   final volunteering = provider.volunteering[itemIndex];
-  UserModel? currentUser = Provider.of<UserService>(context, listen: false).user;
+  UserModel? currentUser =
+      Provider.of<UserService>(context, listen: false).user;
   void onFavoritePressed(Volunteering vol) {
-      if (currentUser != null) {
-        Provider.of<VolunteeringList>(context).updateFavorites(vol, currentUser.email);
-      }
+    if (currentUser != null) {
+      Provider.of<VolunteeringList>(context)
+          .updateFavorites(vol, currentUser.email);
     }
+  }
+
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 0.0),
     child: GestureDetector(
       child: VolunteeringCard(
-          volunteering: volunteering, onFavoritePressed: onFavoritePressed, currentUser: currentUser),
+          volunteering: volunteering,
+          onFavoritePressed: onFavoritePressed,
+          currentUser: currentUser),
       onTap: () => context
           .goNamed('selected-card', params: {'id': itemIndex.toString()}),
     ),

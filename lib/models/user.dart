@@ -1,31 +1,52 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserModel {
   final String? id;
   final String email;
   final String name;
   final String lastName;
   int? volunteeringId;
+  final String? birthDay;
+  final String? phoneNumber;
+  final String? encodedPicture;
+  final String? gender;
 
   UserModel(
       {this.id,
       required this.email,
       required this.name,
       required this.lastName,
-      this.volunteeringId});
+      this.volunteeringId,
+      this.birthDay,
+      this.phoneNumber,
+      this.encodedPicture,
+      this.gender});
 
-  factory UserModel.fromJson(Map<String, dynamic> json ){
+  factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      email: json['email'], 
-      name: json['name'], 
-      lastName: json['lastName'],
-      volunteeringId: json['volunteeringId']
-    );
+        email: json['email'],
+        name: json['name'],
+        lastName: json['lastName'],
+        volunteeringId: json['volunteeringId'],
+        birthDay: json['birthDay'],
+        phoneNumber: json['phoneNumber'],
+        encodedPicture: json['encodedPicture'],
+        gender: json['gender']);
   }
 
-
-  factory UserModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> document) {
+  factory UserModel.fromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> document) {
     final data = document.data()!;
-    return UserModel(id: document.id, email: data['email'], name: data['name'], lastName: data['lastName'], volunteeringId: data['volunteeringId']);
+    return UserModel(
+        id: document.id,
+        email: data['email'],
+        name: data['name'],
+        lastName: data['lastName'],
+        volunteeringId: data['volunteeringId'],
+        birthDay: data['birthDay'],
+        phoneNumber: data['phoneNumber'],
+        encodedPicture: data['encodedPicture'],
+        gender: data['gender']);
   }
 
   static List<UserModel> fromJsonArray(List<dynamic> jsonArray) {
@@ -41,7 +62,11 @@ class UserModel {
       'email': user.email,
       'name': user.name,
       'lastName': user.lastName,
-      'volunteeringId': user.volunteeringId
+      'volunteeringId': user.volunteeringId,
+      'birthDay': user.birthDay,
+      'phoneNumber': user.phoneNumber,
+      'encodedPicture': user.encodedPicture,
+      'gender': user.gender,
     };
   }
 }
