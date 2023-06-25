@@ -106,33 +106,54 @@ class SelectedCardPage extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 56),
                   child:
-                  info.appliersEmail.contains(Provider.of<UserService>(context, listen: false).user?.email) ?
-                  Align(
-                    alignment: Alignment.center,
-                    child: Column(
-                      children: [
-                        const Align(
-                          alignment: Alignment.center,
-                          child: Padding(padding: EdgeInsets.only(bottom: 8),
-                          child: Text("Te has postulado", style: headLine02))
+                      info.participantsEmail.contains(Provider.of<UserService>(context, listen: false).user?.email) ?
+                      Align(
+                        alignment: Alignment.center,
+                        child: Column(
+                          children: [
+                            const Align(
+                                alignment: Alignment.center,
+                                child: Padding(padding: EdgeInsets.only(bottom: 8),
+                                    child: Text("Estas participando", style: headLine02))
+                            ),
+                            const Align(
+                              alignment: Alignment.center,
+                              child: Padding(padding: EdgeInsets.only(bottom: 8),
+                                  child: Text("La organización ya confirmó que ya estas participando del voluntariado",
+                                    textAlign: TextAlign.center,)
+                              ),
+                            ),
+                            CtaButton(text: "Abandonar voluntariado", handlePress: () { _removeDialog(context, info); }, enabledState: true)
+                          ],
                         ),
-                        const Align(
-                          alignment: Alignment.center,
-                          child: Padding(padding: EdgeInsets.only(bottom: 8),
-                          child: Text("Pronto la organización se pondrá en contacto contigo y te inscribirá como participante",
-                          textAlign: TextAlign.center,)
-                          ),
+                      ) :
+                      info.appliersEmail.contains(Provider.of<UserService>(context, listen: false).user?.email) ?
+                      Align(
+                        alignment: Alignment.center,
+                        child: Column(
+                          children: [
+                            const Align(
+                              alignment: Alignment.center,
+                              child: Padding(padding: EdgeInsets.only(bottom: 8),
+                              child: Text("Te has postulado", style: headLine02))
+                            ),
+                            const Align(
+                              alignment: Alignment.center,
+                              child: Padding(padding: EdgeInsets.only(bottom: 8),
+                              child: Text("Pronto la organización se pondrá en contacto contigo y te inscribirá como participante",
+                              textAlign: TextAlign.center,)
+                              ),
+                            ),
+                            CtaButton(text: "Retirar postulación", handlePress: () { _removeDialog(context, info); }, enabledState: true)
+                          ],
                         ),
-                        CtaButton(text: "Retirar postulación", handlePress: () { _removeDialog(context, info); }, enabledState: true)
-                      ],
-                    ),
-                  ) :
-                  CtaButton(
-                      text: "Postularme",
-                      enabledState: true,
-                      handlePress: () {
-                        _showCustomDialog(context, info);
-                      }),
+                      ) :
+                      CtaButton(
+                          text: "Postularme",
+                          enabledState: true,
+                          handlePress: () {
+                            _showCustomDialog(context, info);
+                          }),
                 ),
               ),
             )
@@ -261,7 +282,7 @@ Future<void> removeAsParticipant(BuildContext context, Volunteering vol) async {
       await FirebaseCloudstoreITBA().db
           .collection('ser_manos_data')
           .doc('voluntariados')
-          .update({'values': FieldValue.arrayUnion(updatedList)})
+          .update({'values': updatedList})
           .then((value) {
             final userService = Provider.of<UserService>(context, listen: false);
             userService.updateVolunteeringId(null);

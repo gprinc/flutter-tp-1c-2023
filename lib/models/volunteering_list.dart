@@ -100,7 +100,7 @@ class VolunteeringList extends ChangeNotifier {
 
   List<Volunteering> searchVolunteerings(String query) {
     final lowercaseQuery = query.toLowerCase();
-    return _volunteering.where((volunteering) {
+    return _firebaseVolunteerings.where((volunteering) {
       final lowercaseTitle = volunteering.title.toLowerCase();
       return lowercaseTitle.contains(lowercaseQuery);
     }).toList();
