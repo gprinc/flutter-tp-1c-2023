@@ -77,6 +77,7 @@ class VolunteeringList extends ChangeNotifier {
           .get();
       Map<String, dynamic>? data = aux.data();
       if (data != null) {
+        _firebaseVolunteerings.clear(); // Clear the list before adding volunteerings
         var volunteersData = data['values'] as List<dynamic>;
         volunteersData.forEach((element) {
           print(element);
@@ -91,6 +92,7 @@ class VolunteeringList extends ChangeNotifier {
       loading = false;
     }
   }
+
 
 
   void addVolunteering(Volunteering volunteering) {

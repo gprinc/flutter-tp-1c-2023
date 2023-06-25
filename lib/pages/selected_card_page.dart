@@ -185,13 +185,11 @@ Future<void> addAsParticipant(BuildContext context, Volunteering vol) async {
   final volunteerings = Provider.of<VolunteeringList>(context, listen: false).volunteering;
   final currentUser = Provider.of<UserService>(context, listen: false).user;
   if (currentUser != null) {
-    List<Map<String, dynamic>> updatedList = [];
 
     volunteerings.forEach((element) {
       if (element.id == vol.id) {
         element.appliersEmail.add(currentUser.email);
       }
-      updatedList.add(Volunteering.toJson(element));
     });
 
     final userQuery = FirebaseCloudstoreITBA().db.collection('users').where('email', isEqualTo: currentUser.email);
@@ -212,7 +210,7 @@ Future<void> addAsParticipant(BuildContext context, Volunteering vol) async {
       await FirebaseCloudstoreITBA().db
           .collection('ser_manos_data')
           .doc('voluntariados')
-          .update({'values': updatedList})
+          .set({'values': volunteerings.map(Volunteering.toJson).toList()})
           .then((value) {
             final userService = Provider.of<UserService>(context, listen: false);
             userService.updateVolunteeringId(vol.id);
@@ -248,14 +246,11 @@ Future<void> removeAsParticipant(BuildContext context, Volunteering vol) async {
 
   if (currentUser != null) {
 
-    List<Map<String, dynamic>> updatedList = [];
-
     volunteerings.forEach((element) {
       if (element.id == vol.id) {
         element.appliersEmail.remove(currentUser.email);
         element.participantsEmail.remove(currentUser.email);
       }
-      updatedList.add(Volunteering.toJson(element));
     });
 
     final userQuery = FirebaseCloudstoreITBA().db.collection('users').where('email', isEqualTo: currentUser.email);
@@ -282,7 +277,7 @@ Future<void> removeAsParticipant(BuildContext context, Volunteering vol) async {
       await FirebaseCloudstoreITBA().db
           .collection('ser_manos_data')
           .doc('voluntariados')
-          .update({'values': updatedList})
+          .set({'values': volunteerings.map(Volunteering.toJson).toList()})
           .then((value) {
             final userService = Provider.of<UserService>(context, listen: false);
             userService.updateVolunteeringId(null);
