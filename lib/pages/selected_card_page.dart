@@ -19,6 +19,11 @@ class SelectedCardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    int? userVolunteeringId = Provider.of<UserService>(context, listen: false).user?.volunteeringId;
+    Volunteering currentUserVolunteering = info;
+    if(userVolunteeringId != null && userVolunteeringId != info.id){
+      currentUserVolunteering = Provider.of<VolunteeringList>(context, listen: false).volunteering[userVolunteeringId];
+    }
     return Scaffold(
       body: SingleChildScrollView(
         child:       Column(
@@ -106,54 +111,70 @@ class SelectedCardPage extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 56),
                   child:
-                      info.participantsEmail.contains(Provider.of<UserService>(context, listen: false).user?.email) ?
+                      userVolunteeringId != null && userVolunteeringId != info.id ?
                       Align(
                         alignment: Alignment.center,
                         child: Column(
                           children: [
                             const Align(
-                                alignment: Alignment.center,
-                                child: Padding(padding: EdgeInsets.only(bottom: 8),
-                                    child: Text("Estas participando", style: headLine02))
-                            ),
-                            const Align(
                               alignment: Alignment.center,
                               child: Padding(padding: EdgeInsets.only(bottom: 8),
-                                  child: Text("La organización ya confirmó que ya estas participando del voluntariado",
+                                  child: Text("Ya estas participando en otro voluntariado, debes abandonarlo primero para postularte a este.",
                                     textAlign: TextAlign.center,)
                               ),
                             ),
-                            CtaButton(text: "Abandonar voluntariado", handlePress: () { _removeDialog(context, info); }, enabledState: true)
+                            CtaButton(text: "Abandonar voluntariado actual", handlePress: () { _removeDialog(context, currentUserVolunteering); }, enabledState: true)
                           ],
                         ),
                       ) :
-                      info.appliersEmail.contains(Provider.of<UserService>(context, listen: false).user?.email) ?
-                      Align(
-                        alignment: Alignment.center,
-                        child: Column(
-                          children: [
-                            const Align(
-                              alignment: Alignment.center,
-                              child: Padding(padding: EdgeInsets.only(bottom: 8),
-                              child: Text("Te has postulado", style: headLine02))
-                            ),
-                            const Align(
-                              alignment: Alignment.center,
-                              child: Padding(padding: EdgeInsets.only(bottom: 8),
-                              child: Text("Pronto la organización se pondrá en contacto contigo y te inscribirá como participante",
-                              textAlign: TextAlign.center,)
+                        info.participantsEmail.contains(Provider.of<UserService>(context, listen: false).user?.email) ?
+                        Align(
+                          alignment: Alignment.center,
+                          child: Column(
+                            children: [
+                              const Align(
+                                  alignment: Alignment.center,
+                                  child: Padding(padding: EdgeInsets.only(bottom: 8),
+                                      child: Text("Estas participando", style: headLine02))
                               ),
-                            ),
-                            CtaButton(text: "Retirar postulación", handlePress: () { _removeDialog(context, info); }, enabledState: true)
-                          ],
-                        ),
-                      ) :
-                      CtaButton(
-                          text: "Postularme",
-                          enabledState: true,
-                          handlePress: () {
-                            _showCustomDialog(context, info);
-                          }),
+                              const Align(
+                                alignment: Alignment.center,
+                                child: Padding(padding: EdgeInsets.only(bottom: 8),
+                                    child: Text("La organización ya confirmó que ya estas participando del voluntariado",
+                                      textAlign: TextAlign.center,)
+                                ),
+                              ),
+                              CtaButton(text: "Abandonar voluntariado", handlePress: () { _removeDialog(context, info); }, enabledState: true)
+                            ],
+                          ),
+                        ) :
+                        info.appliersEmail.contains(Provider.of<UserService>(context, listen: false).user?.email) ?
+                        Align(
+                          alignment: Alignment.center,
+                          child: Column(
+                            children: [
+                              const Align(
+                                alignment: Alignment.center,
+                                child: Padding(padding: EdgeInsets.only(bottom: 8),
+                                child: Text("Te has postulado", style: headLine02))
+                              ),
+                              const Align(
+                                alignment: Alignment.center,
+                                child: Padding(padding: EdgeInsets.only(bottom: 8),
+                                child: Text("Pronto la organización se pondrá en contacto contigo y te inscribirá como participante",
+                                textAlign: TextAlign.center,)
+                                ),
+                              ),
+                              CtaButton(text: "Retirar postulación", handlePress: () { _removeDialog(context, info); }, enabledState: true)
+                            ],
+                          ),
+                        ) :
+                        CtaButton(
+                            text: "Postularme",
+                            enabledState: true,
+                            handlePress: () {
+                              _showCustomDialog(context, info);
+                            }),
                 ),
               ),
             )
