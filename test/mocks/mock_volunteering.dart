@@ -37,7 +37,7 @@ class MockVolunteeringList extends ChangeNotifier implements VolunteeringList {
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
         availability: ['Lunes a viernes de 7 a 10hs'],
         id: 0,
-        participantsEmail: [], about: ''),
+        participantsEmail: []),
     Volunteering(
         title: 'Manos caritativas',
         about: 'Manos caritativas',
@@ -47,7 +47,7 @@ class MockVolunteeringList extends ChangeNotifier implements VolunteeringList {
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
         availability: ['Lunes a viernes de 7 a 10hs'],
         id: 1,
-        participantsEmail: [], about: ''),
+        participantsEmail: []),
     Volunteering(
         title: 'Iglesia',
         about: 'Manos caritativas',
@@ -57,7 +57,7 @@ class MockVolunteeringList extends ChangeNotifier implements VolunteeringList {
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
         availability: ['Lunes a viernes de 7 a 10hs'],
         id: 2,
-        participantsEmail: [], about: ''),
+        participantsEmail: []),
     Volunteering(
         title: 'Un techo para mi país',
         about: 'Un techo para mi país',
@@ -67,7 +67,7 @@ class MockVolunteeringList extends ChangeNotifier implements VolunteeringList {
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
         availability: ['Lunes a viernes de 7 a 10hs'],
         id: 3,
-        participantsEmail: [], about: ''),
+        participantsEmail: []),
     // Add more volunteerings here...
   ];
 
