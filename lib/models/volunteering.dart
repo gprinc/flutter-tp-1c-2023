@@ -9,7 +9,8 @@ class Volunteering {
   List<String> requisites = [];
   List<String> availability = [];
   final int id;
-  List<String> participants;
+  List<String> appliersEmail;
+  List<String> participantsEmail;
   List<String> favoritos;
 
   Volunteering(
@@ -20,7 +21,8 @@ class Volunteering {
       required this.requisites,
       required this.availability,
       required this.id,
-      this.participants = const [],
+      this.appliersEmail = const [],
+        this.participantsEmail = const [],
       this.favoritos = const []});
 
       factory Volunteering.fromJson(Map<String, dynamic> json ){
@@ -32,7 +34,8 @@ class Volunteering {
           requisites: List.from(['requisites']), 
           availability: List.from(json['availability']),
           id: json['id'],
-          participants: List.from(json['participantsEmail']),
+          appliersEmail: List.from(json['appliersEmail']),
+          participantsEmail: List.from(json['participantsEmail']),
           favoritos: List.from(json['favoritos'])
         );
       }
@@ -46,7 +49,8 @@ class Volunteering {
         'requisites': requisites,
         'availability': availability,
         'id': id,
-        'participantsEmail': participants,
+        'appliersEmail': appliersEmail,
+        'participantsEmail': participantsEmail,
         'favoritos': favoritos
       };
     }
@@ -59,7 +63,8 @@ class Volunteering {
         'requisites': vol.requisites,
         'availability': vol.availability,
         'id': vol.id,
-        'participantsEmail': vol.participants,
+        'appliersEmail': vol.appliersEmail,
+        'participantsEmail': vol.participantsEmail,
         'favoritos': vol.favoritos
       };
   }

@@ -15,7 +15,9 @@ class VolunteeringList extends ChangeNotifier {
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
         availability: ['Lunes a viernes de 7 a 10hs'],
         id: 0,
-        participants: []),
+        appliersEmail: [],
+        participantsEmail: []
+    ),
     Volunteering(
         title: 'Manos caritativas',
         description: 'Description for Manos Caritativas',
@@ -24,7 +26,8 @@ class VolunteeringList extends ChangeNotifier {
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
         availability: ['Lunes a viernes de 7 a 10hs'],
         id: 1,
-        participants: []),
+        appliersEmail: [],
+        participantsEmail: []),
     Volunteering(
         title: 'Iglesia',
         description: 'Description for Otro título',
@@ -33,7 +36,8 @@ class VolunteeringList extends ChangeNotifier {
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
         availability: ['Lunes a viernes de 7 a 10hs'],
         id: 2,
-        participants: []),
+        appliersEmail: [],
+        participantsEmail: []),
     Volunteering(
         title: 'Un techo para mi país',
         description: 'Description for Un techo para mi país',
@@ -42,7 +46,8 @@ class VolunteeringList extends ChangeNotifier {
         requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
         availability: ['Lunes a viernes de 7 a 10hs'],
         id: 3,
-        participants: []),
+        appliersEmail: [],
+        participantsEmail: []),
     // Add more volunteerings here...
   ];
 
@@ -86,6 +91,7 @@ class VolunteeringList extends ChangeNotifier {
       loading = false;
     }
   }
+
 
   void addVolunteering(Volunteering volunteering) {
     _volunteering.add(volunteering);

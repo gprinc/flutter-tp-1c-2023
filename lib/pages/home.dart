@@ -63,7 +63,7 @@ class HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final newsProvider = Provider.of<NewsList>(context);
-    UserITBA? currentUser = Provider.of<UserService>(context, listen: false).user;
+    UserModel? currentUser = Provider.of<UserService>(context, listen: false).user;
 
     void onFavoritePressed(Volunteering vol) {
       if (currentUser != null) {
@@ -286,7 +286,7 @@ Widget _buildCarousel(BuildContext context, int carouselIndex) {
 Widget _buildCarouselItem(
     BuildContext context, int carouselIndex, int itemIndex, provider) {
   final volunteering = provider.volunteering[itemIndex];
-  UserITBA? currentUser = Provider.of<UserService>(context, listen: false).user;
+  UserModel? currentUser = Provider.of<UserService>(context, listen: false).user;
   void onFavoritePressed(Volunteering vol) {
       if (currentUser != null) {
         Provider.of<VolunteeringList>(context).updateFavorites(vol, currentUser.email);

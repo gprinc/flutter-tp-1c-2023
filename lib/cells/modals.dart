@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ApplyDialog extends StatelessWidget {
+  final String header;
   final String title;
   final String cancelButtonText;
   final String confirmButtonText;
@@ -9,6 +10,7 @@ class ApplyDialog extends StatelessWidget {
 
   const ApplyDialog({
     Key? key,
+    required this.header,
     required this.title,
     required this.cancelButtonText,
     required this.confirmButtonText,
@@ -22,9 +24,9 @@ class ApplyDialog extends StatelessWidget {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Te estas por postular a',
-            style: TextStyle(
+          Text(
+            header,
+            style: const TextStyle(
               fontFamily: 'Roboto',
               fontWeight: FontWeight.w400,
               fontSize: 16,

@@ -291,7 +291,7 @@ class _InputCardState extends State<InputCard> {
 class VolunteeringCard extends StatelessWidget {
   final Volunteering volunteering;
   final void Function(Volunteering) onFavoritePressed;
-  final UserITBA? currentUser;
+  final UserModel? currentUser;
 
   const VolunteeringCard({
     Key? key,
@@ -337,8 +337,7 @@ class VolunteeringCard extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(right: 115),
-                        child: Vacancies(
-                            counter: 10 - volunteering.participants.length),
+                        child: Vacancies(counter: 10 - volunteering.participantsEmail.length),
                       ),
                       IconButton(
                         onPressed: () => onFavoritePressed(volunteering),
