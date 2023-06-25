@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dam_1c_2023/atoms/logos.dart';
 import 'package:dam_1c_2023/cells/modals.dart';
 import 'package:dam_1c_2023/firebase/firebase_cloudstore.dart';
-import 'package:dam_1c_2023/models/participant.dart';
-import 'package:dam_1c_2023/models/user.dart';
 import 'package:dam_1c_2023/models/userService.dart';
 import 'package:dam_1c_2023/models/volunteering.dart';
 import 'package:dam_1c_2023/models/volunteering_list.dart';
@@ -176,7 +173,7 @@ Future<void> addAsParticipant(BuildContext context, Volunteering vol) async {
       updatedList.add(Volunteering.toJson(element));
     });
 
-    final userQuery = FirebaseFirestore.instance.collection('users').where('email', isEqualTo: currentUser.email);
+    final userQuery = FirebaseCloudstoreITBA().db.collection('users').where('email', isEqualTo: currentUser.email);
     final userSnapshot = await userQuery.get();
 
     if (userSnapshot.docs.isNotEmpty) {
@@ -191,10 +188,10 @@ Future<void> addAsParticipant(BuildContext context, Volunteering vol) async {
         transaction.set(userDoc, userData);
       });
 
-      await FirebaseFirestore.instance
+      await FirebaseCloudstoreITBA().db
           .collection('ser_manos_data')
           .doc('voluntariados')
-          .update({'values': FieldValue.arrayUnion(updatedList)})
+          .update({'values': updatedList})
           .then((value) => Navigator.of(context).pop());
     }
   }
@@ -228,8 +225,8 @@ Future<void> removeAsParticipant(BuildContext context, Volunteering vol) async {
 
     volunteerings.forEach((element) {
       if (element.id == vol.id) {
-        element.appliersEmail.removeWhere((email) => email == currentUser.email);
-        element.participantsEmail.removeWhere((email) => email == currentUser.email);
+        element.appliersEmail.remove(currentUser.email);
+        element.participantsEmail.remove(currentUser.email);
       }
       updatedList.add(Volunteering.toJson(element));
     });
@@ -255,7 +252,6 @@ Future<void> removeAsParticipant(BuildContext context, Volunteering vol) async {
         print('Stack trace:\n$stackTrace');
       }
 
-      print('hi there');
       await FirebaseFirestore.instance
           .collection('ser_manos_data')
           .doc('voluntariados')
@@ -265,6 +261,5 @@ Future<void> removeAsParticipant(BuildContext context, Volunteering vol) async {
         print('Error updating Firestore document: $error');
         print('Stack trace:\n$stackTrace');
       });
-
   }
 }}

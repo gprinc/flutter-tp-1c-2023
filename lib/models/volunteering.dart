@@ -9,8 +9,8 @@ class Volunteering {
   List<String> requisites = [];
   List<String> availability = [];
   final int id;
-  List<dynamic> appliersEmail;
-  List<dynamic> participantsEmail;
+  List<String> appliersEmail;
+  List<String> participantsEmail;
   List<String> favoritos;
 
   Volunteering(
@@ -34,8 +34,8 @@ class Volunteering {
           requisites: List.from(['requisites']), 
           availability: List.from(json['availability']),
           id: json['id'],
-          appliersEmail: json['appliersEmail'],
-          participantsEmail: json['participantsEmail'],
+          appliersEmail: List.from(json['appliersEmail']),
+          participantsEmail: List.from(json['participantsEmail']),
           favoritos: List.from(json['favoritos'])
         );
       }

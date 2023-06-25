@@ -52,12 +52,18 @@ class HomeState extends State<Home> {
   }
 
   @override
+  void initState() {
+    Future.delayed(Duration.zero, () {
+      Provider.of<VolunteeringList>(context, listen: false).getFromFirebase();
+      Provider.of<NewsList>(context, listen: false).getFromFirebase();
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final newsProvider = Provider.of<NewsList>(context);
     UserModel? currentUser = Provider.of<UserService>(context, listen: false).user;
-
-    Provider.of<VolunteeringList>(context, listen: false).getFromFirebase();
-    Provider.of<NewsList>(context, listen: false).getFromFirebase();
 
     void onFavoritePressed(Volunteering vol) {
       if (currentUser != null) {
@@ -189,12 +195,12 @@ class HomeState extends State<Home> {
                                                             ),
                                                           ),
                                                         ),
-                                                        if (currentUser?.volunteeringId != null)
+                                                        if (currentUser?.volunteeringId != null && _allCards.isNotEmpty)
                                                           Padding(
                                                             padding: const EdgeInsets.only(bottom: 24),
                                                             child: GestureDetector(
                                                               child: CurrentVolunteeringCard(
-                                                                volunteering: _foundCards[currentUser!.volunteeringId!],
+                                                                volunteering: _allCards[currentUser!.volunteeringId!],
                                                               ),
                                                               onTap: () => context.goNamed(
                                                                 'selected-card',
@@ -203,7 +209,9 @@ class HomeState extends State<Home> {
                                                                 },
                                                               ),
                                                             ),
-                                                          ),
+                                                          )
+                                                        else
+                                                          Text('hELLO')
                                                       ],
                                                     ),
                                                   ),
