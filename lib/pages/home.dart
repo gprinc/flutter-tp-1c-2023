@@ -53,10 +53,10 @@ class HomeState extends State<Home> {
 
   @override
   void initState() {
-    Future.delayed(Duration.zero, () {
+    //Future.delayed(Duration.zero, () {
       Provider.of<VolunteeringList>(context, listen: false).getFromFirebase();
       Provider.of<NewsList>(context, listen: false).getFromFirebase();
-    });
+    //});
     super.initState();
   }
 
@@ -210,8 +210,6 @@ class HomeState extends State<Home> {
                                                               ),
                                                             ),
                                                           )
-                                                        else
-                                                          Text('hELLO')
                                                       ],
                                                     ),
                                                   ),

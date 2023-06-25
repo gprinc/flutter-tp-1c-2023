@@ -4,7 +4,7 @@ class UserModel {
   final String email;
   final String name;
   final String lastName;
-  final int? volunteeringId;
+  int? volunteeringId;
 
   UserModel(
       {this.id,

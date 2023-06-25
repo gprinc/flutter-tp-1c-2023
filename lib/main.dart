@@ -61,7 +61,6 @@ GoRouter _router(FirebaseAnalyticsObserver obs) {
               // handle the case where index is null (e.g. invalid input)
               return Container();
             }
-            print("IDENTIFIER IS " + index.toString());
             final volunteering = volunteeringProvider.volunteering[index];
             return SelectedCardPage(
               info: volunteering,

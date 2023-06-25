@@ -192,7 +192,13 @@ Future<void> addAsParticipant(BuildContext context, Volunteering vol) async {
           .collection('ser_manos_data')
           .doc('voluntariados')
           .update({'values': updatedList})
-          .then((value) => Navigator.of(context).pop());
+          .then((value) {
+            final userService = Provider.of<UserService>(context, listen: false);
+            userService.updateVolunteeringId(vol.id);
+            userService.notifyListeners();
+            Navigator.of(context).pop();
+          }
+          );
     }
   }
 }

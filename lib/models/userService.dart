@@ -59,4 +59,8 @@ class UserService extends ChangeNotifier {
   Future<void> updateUser(UserModel newUser) async{
     await FirebaseCloudstoreITBA().db.collection('users').doc(_firebaseUser!.id).update(UserModel.toJson(newUser));
   }
+
+  Future<void> updateVolunteeringId(int? volunteeringId) async {
+      _firebaseUser!.volunteeringId = volunteeringId;
+  }
 }
