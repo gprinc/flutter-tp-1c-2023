@@ -29,6 +29,7 @@ class MockVolunteeringList extends ChangeNotifier implements VolunteeringList {
   final List<Volunteering> _volunteering = [
     Volunteering(
         title: 'Un techo para mi país',
+        about: 'Un techo para mi país',
         description:
             'El propósito principal de "Un techo para mi país" es reducir el déficit habitacional y mejorar las condiciones de vida de las personas que no tienen acceso a una vivienda adecuada.',
         imageName: 'assets/voluntariado.png',
@@ -39,6 +40,7 @@ class MockVolunteeringList extends ChangeNotifier implements VolunteeringList {
         participantsEmail: [], about: ''),
     Volunteering(
         title: 'Manos caritativas',
+        about: 'Manos caritativas',
         description: 'Description for Manos Caritativas',
         imageName: 'assets/manos.png',
         address: 'Santa Fe 1432',
@@ -48,6 +50,7 @@ class MockVolunteeringList extends ChangeNotifier implements VolunteeringList {
         participantsEmail: [], about: ''),
     Volunteering(
         title: 'Iglesia',
+        about: 'Manos caritativas',
         description: 'Description for Otro título',
         imageName: 'assets/iglesia.png',
         address: 'Av 9 de julio 2000',
@@ -57,6 +60,7 @@ class MockVolunteeringList extends ChangeNotifier implements VolunteeringList {
         participantsEmail: [], about: ''),
     Volunteering(
         title: 'Un techo para mi país',
+        about: 'Un techo para mi país',
         description: 'Description for Un techo para mi país',
         imageName: 'assets/voluntariado.png',
         address: 'Corrientes 343',
