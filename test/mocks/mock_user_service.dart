@@ -32,4 +32,21 @@ class MockUserService extends ChangeNotifier implements UserService {
 
   @override
   String? error;
+
+  @override
+  void logoutUser() {
+    // TODO: implement logoutUser
+  }
+
+  @override
+  Future<void> updateUser(UserModel newUser) {
+    // TODO: implement updateUser
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> updateVolunteeringId(int? volunteeringId) {
+    // TODO: implement updateVolunteeringId
+    throw UnimplementedError();
+  }
 }
