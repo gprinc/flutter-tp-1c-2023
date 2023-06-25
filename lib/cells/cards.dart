@@ -288,6 +288,68 @@ class _InputCardState extends State<InputCard> {
   }
 }
 
+class CurrentVolunteeringCard extends StatelessWidget {
+  final Volunteering volunteering;
+
+  const CurrentVolunteeringCard({
+    Key? key,
+    required this.volunteering,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 72,
+      width: 328,
+      decoration: cardShadow,
+      child: Card(
+        color: primaryLight,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(6),
+          side: const BorderSide(
+            color: primary
+          )
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Acción social",
+                      style: overline,
+                    ),
+                    Text(
+                      volunteering.title,
+                      style: subtitle01,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  VolLocation(() {
+                    openMap(volunteering.address);
+                  }),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
 class VolunteeringCard extends StatelessWidget {
   final Volunteering volunteering;
   final void Function(Volunteering) onFavoritePressed;
