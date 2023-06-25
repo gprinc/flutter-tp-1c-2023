@@ -184,7 +184,11 @@ class _RegisterFormState extends State<RegisterForm> {
         const SnackBar(content: Text('Validando')),
       );
       // context.goNamed('welcome');
-      Provider.of<UserService>(context, listen: false).registerUser(_emailController.text, _firstNameController.text, _lastNameController.text, _passController.text).then((value) => context.goNamed('welcome'));    }
+      Provider.of<UserService>(context, listen: false)
+          .registerUser(_emailController.text, _firstNameController.text,
+              _lastNameController.text, _passController.text)
+          .then((value) => context.goNamed('welcome'));
+    }
   }
 
   bool _isComplete() {
@@ -196,73 +200,84 @@ class _RegisterFormState extends State<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      autovalidateMode: AutovalidateMode.disabled,
-      onChanged: () {
-        setState(() {
-          _enabled = _isComplete();
-          _isFresh = false;
-        });
-      },
-      child: Column(
-        children: <Widget>[
-          const SizedBox(
-            height: 176,
+    double width = MediaQuery.of(context).size.width;
+    return Column(
+      children: [
+        Image.asset(
+          'assets/logo.png',
+          height: width * 0.45,
+          width: width * 0.45,
+        ),
+        const SizedBox(
+          height: 30,
+        ),
+        Form(
+          key: _formKey,
+          autovalidateMode: AutovalidateMode.disabled,
+          onChanged: () {
+            setState(() {
+              _enabled = _isComplete();
+              _isFresh = false;
+            });
+          },
+          child: Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  LabelTextInput(
+                    placeHolder: 'Ej: Juan ',
+                    controller: _firstNameController,
+                    validator: nameValidator,
+                    label: 'Nombre',
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  LabelTextInput(
+                    placeHolder: 'Ej: Barcena',
+                    controller: _lastNameController,
+                    validator: nameValidator,
+                    label: 'Apellido',
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  LabelTextInput(
+                    placeHolder: 'Ej: juanbarcena@mail.com',
+                    controller: _emailController,
+                    validator: emailValidator,
+                    label: 'Email',
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  LabelTextInput(
+                    placeHolder: 'Ej: ABCD1234',
+                    controller: _passController,
+                    validator: passwordValidator,
+                    obscureInput: true,
+                    label: 'Contraseña',
+                  ),
+                ],
+              ),
+            ),
           ),
-          LabelTextInput(
-            placeHolder: 'Ej: Juan ',
-            controller: _firstNameController,
-            validator: nameValidator,
-            label: 'Nombre',
-          ),
-          const SizedBox(
-            height: 63,
-          ),
-          LabelTextInput(
-            placeHolder: 'Ej: Barcena',
-            controller: _lastNameController,
-            validator: nameValidator,
-            label: 'Apellido',
-          ),
-          const SizedBox(
-            height: 63,
-          ),
-          LabelTextInput(
-            placeHolder: 'Ej: juanbarcena@mail.com',
-            controller: _emailController,
-            validator: emailValidator,
-            label: 'Email',
-            keyboardType: TextInputType.emailAddress,
-          ),
-          const SizedBox(
-            height: 63,
-          ),
-          LabelTextInput(
-            placeHolder: 'Ej: ABCD1234',
-            controller: _passController,
-            validator: passwordValidator,
-            obscureInput: true,
-            label: 'Contraseña',
-          ),
-          const SizedBox(
-            height: 49,
-          ),
-          CtaButton(
-            text: 'Registrarme',
-            handlePress: _validate,
-            enabledState: _isFresh ? false : _enabled,
-            disableAfterPress: true,
-          ),
-          const SizedBox(
-            height: 29,
-          ),
-          TextButton(
-            onPressed: () => context.goNamed('login'),
-            child: Text('Ya tengo cuenta', style: btnModif(textBtn)),
-          )
-        ],
-      ),
+        ),
+        const SizedBox(height: 16),
+        CtaButton(
+          text: 'Registrarme',
+          handlePress: _validate,
+          enabledState: _isFresh ? false : _enabled,
+          disableAfterPress: true,
+        ),
+        const SizedBox(height: 16),
+        TextButton(
+          onPressed: () => context.goNamed('login'),
+          child: Text('Ya tengo cuenta', style: btnModif(primary)),
+        ),
+      ],
     );
   }
 }

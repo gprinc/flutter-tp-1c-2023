@@ -7,7 +7,9 @@ class SignupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: SingleChildScrollView(
+      resizeToAvoidBottomInset: false,
+      body: Padding(
+        padding: EdgeInsets.only(left: 16, right: 16, top: 31, bottom: 32),
         child: RegisterForm(),
       ),
     );

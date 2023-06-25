@@ -6,11 +6,12 @@ class Volunteering {
   final String description;
   final String imageName;
   final String address;
-  var requisites = [];
-  var availability = [];
+  List<String> requisites = [];
+  List<String> availability = [];
   final int id;
   List<dynamic> appliersEmail;
   List<dynamic> participantsEmail;
+  List<String> favoritos;
 
   Volunteering(
       {required this.title,
@@ -22,7 +23,7 @@ class Volunteering {
       required this.id,
       this.appliersEmail = const [],
         this.participantsEmail = const [],
-      });
+      this.favoritos = const []});
 
       factory Volunteering.fromJson(Map<String, dynamic> json ){
         return Volunteering(
@@ -30,11 +31,12 @@ class Volunteering {
           description: json['description'], 
           imageName: json['imageName'],
           address: json['address'],
-          requisites: json['requisites'], 
-          availability: json['availability'],
+          requisites: List.from(['requisites']), 
+          availability: List.from(json['availability']),
           id: json['id'],
           appliersEmail: json['appliersEmail'],
-          participantsEmail: json['participantsEmail']
+          participantsEmail: json['participantsEmail'],
+          favoritos: List.from(json['favoritos'])
         );
       }
 
@@ -48,7 +50,8 @@ class Volunteering {
         'availability': availability,
         'id': id,
         'appliersEmail': appliersEmail,
-        'participantsEmail': participantsEmail
+        'participantsEmail': participantsEmail,
+        'favoritos': favoritos
       };
     }
 
@@ -61,7 +64,8 @@ class Volunteering {
         'availability': vol.availability,
         'id': vol.id,
         'appliersEmail': vol.appliersEmail,
-        'participantsEmail': vol.participantsEmail
+        'participantsEmail': vol.participantsEmail,
+        'favoritos': vol.favoritos
       };
   }
 }

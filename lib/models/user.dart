@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 class UserModel {
-
+  final String? id;
   final String email;
   final String name;
   final String lastName;
   final int? volunteeringId;
 
   UserModel(
-      {required this.email,
+      {this.id,
+      required this.email,
       required this.name,
       required this.lastName,
       this.volunteeringId});
@@ -24,7 +25,7 @@ class UserModel {
 
   factory UserModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> document) {
     final data = document.data()!;
-    return UserModel(email: data['email'], name: data['name'], lastName: data['lastName'], volunteeringId: data['volunteeringId']);
+    return UserModel(id: document.id, email: data['email'], name: data['name'], lastName: data['lastName'], volunteeringId: data['volunteeringId']);
   }
 
   static List<UserModel> fromJsonArray(List<dynamic> jsonArray) {
