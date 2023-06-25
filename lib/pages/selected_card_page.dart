@@ -237,7 +237,7 @@ Future<void> removeAsParticipant(BuildContext context, Volunteering vol) async {
       updatedList.add(Volunteering.toJson(element));
     });
 
-    final userQuery = FirebaseFirestore.instance.collection('users').where('email', isEqualTo: currentUser.email);
+    final userQuery = FirebaseCloudstoreITBA().db.collection('users').where('email', isEqualTo: currentUser.email);
     final userSnapshot = await userQuery.get();
 
     if (userSnapshot.docs.isNotEmpty) {
@@ -258,14 +258,15 @@ Future<void> removeAsParticipant(BuildContext context, Volunteering vol) async {
         print('Stack trace:\n$stackTrace');
       }
 
-      await FirebaseFirestore.instance
+      await FirebaseCloudstoreITBA().db
           .collection('ser_manos_data')
           .doc('voluntariados')
           .update({'values': FieldValue.arrayUnion(updatedList)})
-          .then((value) => Navigator.of(context).pop())
-          .catchError((error, stackTrace) {
-        print('Error updating Firestore document: $error');
-        print('Stack trace:\n$stackTrace');
-      });
+          .then((value) {
+            final userService = Provider.of<UserService>(context, listen: false);
+            userService.updateVolunteeringId(null);
+            userService.notifyListeners();
+            Navigator.of(context).pop();
+          });
   }
 }}
