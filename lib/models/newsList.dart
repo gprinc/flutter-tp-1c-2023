@@ -46,13 +46,19 @@ class NewsList extends ChangeNotifier {
 
   List<News> get news => _firebaseNews;
 
-  Future<void> getFromFirebase() async{
-    var aux = await FirebaseCloudstoreITBA().db.collection('ser_manos_data').doc('noticias').get();
+  Future<void> getFromFirebase() async {
+    var aux = await FirebaseCloudstoreITBA()
+        .db
+        .collection('ser_manos_data')
+        .doc('noticias')
+        .get();
     Map<String, dynamic>? data = aux.data();
-    var volunteersData = data?['values'] as List<dynamic>;
-    volunteersData.forEach((element) {
-      _firebaseNews.add(News.fromJson(element));
-    });
+    if (data != null) {
+      var volunteersData = data['values'] as List<dynamic>;
+      volunteersData.forEach((element) {
+        _firebaseNews.add(News.fromJson(element));
+      });
+    }
   }
 
   void addVolunteering(News news) {

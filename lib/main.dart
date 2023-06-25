@@ -192,10 +192,11 @@ class _MyAppState extends State<MyApp> {
       ],
       child: MaterialApp.router(
         routerConfig: _router(observer),
-        title: 'Flutter App',
-        theme: ThemeData(
+        title: 'Ser Manos',
+        /*theme: ThemeData(
           primarySwatch: Colors.blue,
-        ),
+        ),*/
+        debugShowCheckedModeBanner: false,
       ),
     );
   }

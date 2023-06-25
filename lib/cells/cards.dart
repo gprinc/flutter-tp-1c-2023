@@ -142,11 +142,11 @@ class InformationCard extends StatelessWidget {
               children: [
                 Text(
                   label,
-                  style: body01,
+                  style: overline,
                 ),
                 Text(
                   content,
-                  style: overline,
+                  style: body01,
                 )
               ]),
         ),
@@ -368,19 +368,24 @@ Future<void> openMap(String location) async {
 }
 
 class EmptyVolunteeringCard extends StatelessWidget {
-  const EmptyVolunteeringCard({super.key});
+  final String msg;
+
+  const EmptyVolunteeringCard({super.key, required this.msg});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: neutralBg,
       height: 108,
-      child: const Align(
-        alignment: Alignment.center,
-        child: Text(
-          'No hay voluntariados vigentes para tu búsqueda.',
-          style: subtitle01,
-          textAlign: TextAlign.center,
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Align(
+          alignment: Alignment.center,
+          child: Text(
+            msg,
+            style: subtitle01,
+            textAlign: TextAlign.center,
+          ),
         ),
       ),
     );

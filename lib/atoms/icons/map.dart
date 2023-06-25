@@ -11,7 +11,7 @@ class MapIcon extends StatefulWidget {
 }
 
 class _MapIconState extends State<MapIcon> {
-  final IconData _icon = Icons.map;
+  final IconData _icon = Icons.map_outlined;
   final Color _color = primary;
 
   @override

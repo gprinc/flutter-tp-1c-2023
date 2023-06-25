@@ -31,44 +31,55 @@ class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                squareLogo,
-                const Padding(
-                  padding: EdgeInsets.only(
-                    top: 70,
-                    bottom: 20,
-                  ),
-                  child: Text(
-                    '¡Bienvenido!',
-                    textAlign: TextAlign.center,
-                    style: headLine01,
-                  ),
-                ),
-                const Padding(
-                    padding: EdgeInsets.only(
-                      bottom: 80,
+      body: Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16, bottom: 32),
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                  child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    squareLogo,
+                    const SizedBox(
+                      height: 30,
                     ),
-                    child: Text(
+                    const Text(
+                      '¡Bienvenido!',
+                      textAlign: TextAlign.center,
+                      style: headLine01,
+                    ),
+                    const SizedBox(
+                      height: 48,
+                    ),
+                    const Text(
                       'Nunca subestimes tu habilidad para mejorar la vida de alguien',
                       style: subtitle01,
                       textAlign: TextAlign.center,
-                    )),
-                FractionallySizedBox(
-                  widthFactor: 1,
-                  child: CtaButton(
-                      text: 'COMENZAR',
-                      handlePress: () => context.go("/home"),
-                      enabledState: true,
-                      disableAfterPress: true),
-                )
-              ],
-            )),
-      ),
+                    )
+                  ],
+                ),
+              )),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CtaButton(
+                    text: 'Comenzar',
+                    handlePress: () => context.go("/home"),
+                    enabledState: true,
+                    disableAfterPress: true,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: Text(' ', style: btnModif(Colors.white)),
+                  )
+                ],
+              ),
+            ],
+          )),
     );
   }
 }

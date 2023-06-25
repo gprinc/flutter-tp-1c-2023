@@ -157,7 +157,7 @@ class LabelTextInput extends StatefulWidget {
 class _LabelTextInputState extends State<LabelTextInput> {
   bool _hasError = false;
   bool _hasFocus = false;
-  bool _isObscured = true;
+  late bool _isObscured;
   final FocusNode _focus = FocusNode();
   late TextEditingController _controller;
 
@@ -194,6 +194,7 @@ class _LabelTextInputState extends State<LabelTextInput> {
     _focus.addListener(_onFocusChange);
     _controller = widget.controller;
     _controller.text = widget.value ?? '';
+    _isObscured = widget.obscureInput;
   }
 
   @override

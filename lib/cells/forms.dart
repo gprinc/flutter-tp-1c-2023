@@ -55,59 +55,60 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      autovalidateMode: AutovalidateMode.disabled,
-      key: _formKey,
-      onChanged: () {
-        setState(() {
-          _enabled = _isComplete();
-          _isFresh = false;
-        });
-      },
-      child: Column(
-        children: <Widget>[
-          const SizedBox(
-            height: 149,
-          ),
-          squareLogo,
-          const SizedBox(
-            height: 43.5,
-          ),
-          LabelTextInput(
-            placeHolder: 'Email',
-            controller: _emailController,
-            validator: Validator.emailValidator,
-            label: 'Email',
-            keyboardType: TextInputType.emailAddress,
-          ),
-          const SizedBox(
-            height: 64,
-          ),
-          LabelTextInput(
-            placeHolder: 'Contraseña',
-            controller: _passController,
-            validator: Validator.passwordValidator,
-            obscureInput: true,
-            label: 'Contraseña',
-          ),
-          const SizedBox(
-            height: 63,
-          ),
-          CtaButton(
-            text: 'Ingresar',
-            handlePress: _validate,
-            enabledState: _isFresh ? false : _enabled,
-            disableAfterPress: true,
-          ),
-          const SizedBox(
-            height: 28,
-          ),
-          TextButton(
-            onPressed: () => context.goNamed('signup'),
-            child: Text('No tengo cuenta', style: btnModif(textBtn)),
-          )
-        ],
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Form(
+            autovalidateMode: AutovalidateMode.disabled,
+            key: _formKey,
+            onChanged: () {
+              setState(() {
+                _enabled = _isComplete();
+                _isFresh = false;
+              });
+            },
+            child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+              squareLogo,
+              const SizedBox(
+                height: 32,
+              ),
+              LabelTextInput(
+                placeHolder: 'Email',
+                controller: _emailController,
+                validator: Validator.emailValidator,
+                label: 'Email',
+                keyboardType: TextInputType.emailAddress,
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              LabelTextInput(
+                placeHolder: 'Contraseña',
+                controller: _passController,
+                validator: Validator.passwordValidator,
+                obscureInput: true,
+                label: 'Contraseña',
+              ),
+            ])),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CtaButton(
+              text: 'Iniciar Sesión',
+              handlePress: _validate,
+              enabledState: _isFresh ? false : _enabled,
+              disableAfterPress: true,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            TextButton(
+              onPressed: () => context.goNamed('signup'),
+              child: Text('No tengo cuenta', style: btnModif(primary)),
+            )
+          ],
+        )
+      ],
     );
   }
 }

@@ -16,13 +16,13 @@ class InitialApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(statusBarColor: Colors.blue));
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyInitialPage(),
+        const SystemUiOverlayStyle(statusBarColor: secondaryBlue));
+    return const MaterialApp(
+      title: 'Ser Manos',
+      /*theme: ThemeData(
+        primarySwatch: primary,
+      ),*/
+      home: MyInitialPage(),
     );
   }
 }
