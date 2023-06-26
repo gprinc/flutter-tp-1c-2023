@@ -1,10 +1,12 @@
 import 'dart:ui';
+import 'package:dam_1c_2023/firebase/firebase_notification_service.dart';
 import 'package:dam_1c_2023/models/userService.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'firebase/firebase_notification_provider.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:dam_1c_2023/pages/home.dart';
@@ -70,67 +72,13 @@ GoRouter _router(FirebaseAnalyticsObserver obs) {
   );
 }
 
-Future<void> _firebaseMessagingBackgroundHandler(message) async {
-  await Firebase.initializeApp();
-  print('Handling a background message ${message.messageId}');
-}
-
-Future<void> setupInteractMessage(BuildContext context) async {
-  RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
-  if (initialMessage != null) {
-    handleMessage(context, initialMessage);
-  }
-
-  FirebaseMessaging.onMessageOpenedApp.listen((event) {
-    handleMessage(context, event);
-  });
-}
-
-void handleMessage(BuildContext context, RemoteMessage remoteMessage) {
-  if (remoteMessage.data['id'] != null) {
-    if(remoteMessage.data['type'] == 'noticias') {
-      context.goNamed('selected-card', params: {'id': remoteMessage.data['id']}); // cambiar por la ruta de la noticia
-    } else if(remoteMessage.data['type'] == 'voluntariados') {
-      context.goNamed('selected-card', params: {'id': remoteMessage.data['id']});
-    }
-  }
-}
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-  flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.requestPermission();
-  await UserService().loginUser('fluter@itba.com', 'prueba123');
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-  NotificationSettings settings = await messaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
-
-  String? token = await messaging.getToken();
-  print(token);
-
-  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-    print('User granted permission');
-  } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
-    print('User granted provisional permission');
-  } else {
-    print('User declined or has not accepted permission');
-  }
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await FirebaseNotificationService.initializeFirebase();
+  // final RemoteMessage? _message = await FirebaseNotificationService.firebaseMessaging.getInitialMessage();
 
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
@@ -145,7 +93,9 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key, RemoteMessage? message}) : super(key: key);
+  
+  get message => null;
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -154,47 +104,11 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    Future.delayed(Duration.zero, () async {
-      setupInteractMessage(context);
-      FirebaseMessaging.onMessage.listen(
-        (RemoteMessage message) async {
-          // showSimpleNotification(
-          //   Text(message.notification?.title ?? ""),
-          //   background: Colors.blue, // Customize the background color
-          //   duration: Duration(seconds: 2), //the duration for which the notification will be displayed
-          // );
-            FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-                FlutterLocalNotificationsPlugin();
-            const AndroidInitializationSettings initializationSettingsAndroid =
-                AndroidInitializationSettings('app_icon');
-            await flutterLocalNotificationsPlugin.initialize(
-                const InitializationSettings(
-                  android: initializationSettingsAndroid),
-                  onDidReceiveNotificationResponse: (payload) {
-                    handleMessage(context, message);
-                  }
-                );
-            const AndroidNotificationDetails androidNotificationDetails =
-                AndroidNotificationDetails(
-              'your channel id',
-              'your channel name',
-              channelDescription: 'your channel description',
-              importance: Importance.max,
-              priority: Priority.max,
-              fullScreenIntent: true,
-            );
-            const NotificationDetails notificationDetails =
-                NotificationDetails(android: androidNotificationDetails);
-            await flutterLocalNotificationsPlugin.show(
-                0,
-                message.notification?.title,
-                message.notification?.body,
-                notificationDetails,
-                payload: 'item x');
-        },
-      );
-    });
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FCMProvider.setContext(context);
+      
+    });
   }
 
   static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
@@ -203,7 +117,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    setupInteractMessage(context);
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.blue));
     return MultiProvider(
