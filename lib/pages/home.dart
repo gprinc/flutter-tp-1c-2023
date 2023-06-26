@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import '../atoms/logos.dart';
 import '../models/userService.dart';
 import '../tokens/token_colors.dart';
+import 'news_tab.dart';
 
 class Home extends StatefulWidget {
   const Home({required Key key}) : super(key: key);
