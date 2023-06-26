@@ -43,14 +43,27 @@ class NewsList extends ChangeNotifier {
     // Add more volunteerings here...
   ];
 
+  NewsList.withFirebaseCloudstore(
+      FirebaseCloudstoreITBA firebaseCloudstoreITBA) {
+    _firebaseCloudstore = firebaseCloudstoreITBA;
+  }
+
+  NewsList() {
+    _firebaseCloudstore = FirebaseCloudstoreITBA();
+  }
+
   final List<News> _firebaseNews = [];
+  late FirebaseCloudstoreITBA _firebaseCloudstore;
+  void setFirebaseCloudstore(FirebaseCloudstoreITBA firebaseCloudstore) {
+    _firebaseCloudstore = firebaseCloudstore;
+  }
 
   List<News> get news => _firebaseNews;
 
   Future<void> getFromFirebase() async {
     loading = true;
     try {
-      var aux = await FirebaseCloudstoreITBA()
+      var aux = await _firebaseCloudstore
           .db
           .collection('ser_manos_data')
           .doc('novedades')
@@ -76,17 +89,4 @@ class NewsList extends ChangeNotifier {
     notifyListeners();
   }
 
-  NewsList.withFirebaseCloudstore(
-      FirebaseCloudstoreITBA firebaseCloudstoreITBA) {
-    _firebaseCloudstore = firebaseCloudstoreITBA;
-  }
-
-  NewsList() {
-    _firebaseCloudstore = FirebaseCloudstoreITBA();
-  }
-
-  late FirebaseCloudstoreITBA _firebaseCloudstore;
-  void setFirebaseCloudstore(FirebaseCloudstoreITBA firebaseCloudstore) {
-    _firebaseCloudstore = firebaseCloudstore;
-  }
 }

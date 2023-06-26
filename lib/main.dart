@@ -47,10 +47,16 @@ GoRouter _router(FirebaseAnalyticsObserver obs) {
       ),
       GoRoute(
         name: 'home',
-        path: "/home",
-        builder: (context, state) => const Home(
-          key: Key("Home"),
-        ),
+        path: "/home/:index",
+        builder: (context, state) {
+          final int initialTabIndex = state.params['index'] != null
+              ? int.tryParse(state.params['index']!) ?? 0
+              : 0;
+          return Home(
+            key: const Key("Home"),
+            initialTabIndex: initialTabIndex,
+          );
+        },
       ),
       GoRoute(
           name: 'selected-card',
@@ -97,27 +103,39 @@ Future<void> _firebaseMessagingBackgroundHandler(message) async {
   print('Handling a background message ${message.messageId}');
 }
 
-Future<void> setupInteractMessage(BuildContext context) async {
-  RemoteMessage? initialMessage =
-      await FirebaseMessaging.instance.getInitialMessage();
-  if (initialMessage != null) {
-    handleMessage(context, initialMessage);
-  }
+// Future<void> setupInteractMessage(BuildContext context) async {
+//   //RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+//   // if (initialMessage != null) {
+//   //   handleMessage(context, initialMessage);
+//   // }
+//
+//   FirebaseMessaging.onMessageOpenedApp.listen((event) {
+//     handleMessage(, event);
+//   });
+// }
 
-  FirebaseMessaging.onMessageOpenedApp.listen((event) {
-    handleMessage(context, event);
-  });
-}
-
-void handleMessage(BuildContext context, RemoteMessage remoteMessage) {
+void handleMessage(GoRouter router, RemoteMessage remoteMessage) {
   if (remoteMessage.data['id'] != null) {
     if (remoteMessage.data['type'] == 'noticias') {
-      context.goNamed('selected-card', params: {
-        'id': remoteMessage.data['id']
-      }); // cambiar por la ruta de la noticia
+      print("Reached handler message of type NEWS and ID: " +
+          remoteMessage.data['id']);
+      try {
+        // Attempt navigation
+        router.goNamed('welcome');
+      } catch (error) {
+        // Log the error
+        print('Navigation error: $error');
+      }
     } else if (remoteMessage.data['type'] == 'voluntariados') {
-      context
-          .goNamed('selected-card', params: {'id': remoteMessage.data['id']});
+      print("VOLUNTEERING RECOGNIZED!");
+      try {
+        // Attempt navigation
+        router
+            .goNamed('selected-card', params: {'id': remoteMessage.data['id']});
+      } catch (error) {
+        // Log the error
+        print('Navigation error: $error');
+      }
     }
   }
 }
@@ -180,7 +198,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     Future.delayed(Duration.zero, () async {
-      setupInteractMessage(context);
+      //setupInteractMessage(context);
       FirebaseMessaging.onMessage.listen(
         (RemoteMessage message) async {
           // showSimpleNotification(
@@ -196,7 +214,7 @@ class _MyAppState extends State<MyApp> {
               const InitializationSettings(
                   android: initializationSettingsAndroid),
               onDidReceiveNotificationResponse: (payload) {
-            handleMessage(context, message);
+            handleMessage(_router(observer), message);
           });
           const AndroidNotificationDetails androidNotificationDetails =
               AndroidNotificationDetails(
@@ -227,7 +245,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    setupInteractMessage(context);
+    //setupInteractMessage(context);
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.blue));
     return MultiProvider(
