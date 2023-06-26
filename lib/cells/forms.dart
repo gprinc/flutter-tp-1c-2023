@@ -62,7 +62,6 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Form(
             autovalidateMode: AutovalidateMode.disabled,
@@ -73,29 +72,36 @@ class _LoginFormState extends State<LoginForm> {
                 _isFresh = false;
               });
             },
-            child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-              squareLogo,
-              const SizedBox(
-                height: 32,
+            child: Expanded(
+              child: Center(
+                child: SingleChildScrollView(
+                  child:
+                      Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                    squareLogo,
+                    const SizedBox(
+                      height: 32,
+                    ),
+                    LabelTextInput(
+                      placeHolder: 'Email',
+                      controller: _emailController,
+                      validator: Validator.emailValidator,
+                      label: 'Email',
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    LabelTextInput(
+                      placeHolder: 'Contraseña',
+                      controller: _passController,
+                      validator: Validator.passwordValidator,
+                      obscureInput: true,
+                      label: 'Contraseña',
+                    ),
+                  ]),
+                ),
               ),
-              LabelTextInput(
-                placeHolder: 'Email',
-                controller: _emailController,
-                validator: Validator.emailValidator,
-                label: 'Email',
-                keyboardType: TextInputType.emailAddress,
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              LabelTextInput(
-                placeHolder: 'Contraseña',
-                controller: _passController,
-                validator: Validator.passwordValidator,
-                obscureInput: true,
-                label: 'Contraseña',
-              ),
-            ])),
+            )),
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -201,17 +207,8 @@ class _RegisterFormState extends State<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     return Column(
       children: [
-        Image.asset(
-          'assets/logo.png',
-          height: width * 0.45,
-          width: width * 0.45,
-        ),
-        const SizedBox(
-          height: 30,
-        ),
         Form(
           key: _formKey,
           autovalidateMode: AutovalidateMode.disabled,
@@ -222,51 +219,62 @@ class _RegisterFormState extends State<RegisterForm> {
             });
           },
           child: Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  LabelTextInput(
-                    placeHolder: 'Ej: Juan ',
-                    controller: _firstNameController,
-                    validator: nameValidator,
-                    label: 'Nombre',
-                  ),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  LabelTextInput(
-                    placeHolder: 'Ej: Barcena',
-                    controller: _lastNameController,
-                    validator: nameValidator,
-                    label: 'Apellido',
-                  ),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  LabelTextInput(
-                    placeHolder: 'Ej: juanbarcena@mail.com',
-                    controller: _emailController,
-                    validator: emailValidator,
-                    label: 'Email',
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  LabelTextInput(
-                    placeHolder: 'Ej: ABCD1234',
-                    controller: _passController,
-                    validator: passwordValidator,
-                    obscureInput: true,
-                    label: 'Contraseña',
-                  ),
-                ],
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/logo.png',
+                      height: 150,
+                      width: 150,
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    LabelTextInput(
+                      placeHolder: 'Ej: Juan ',
+                      controller: _firstNameController,
+                      validator: nameValidator,
+                      label: 'Nombre',
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    LabelTextInput(
+                      placeHolder: 'Ej: Barcena',
+                      controller: _lastNameController,
+                      validator: nameValidator,
+                      label: 'Apellido',
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    LabelTextInput(
+                      placeHolder: 'Ej: juanbarcena@mail.com',
+                      controller: _emailController,
+                      validator: emailValidator,
+                      label: 'Email',
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    LabelTextInput(
+                      placeHolder: 'Ej: ABCD1234',
+                      controller: _passController,
+                      validator: passwordValidator,
+                      obscureInput: true,
+                      label: 'Contraseña',
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
         ),
-        const SizedBox(height: 16),
+        //const SizedBox(height: 16),
         CtaButton(
           text: 'Registrarme',
           handlePress: _validate,

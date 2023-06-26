@@ -36,29 +36,37 @@ class MyInitialPage extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Padding(
-            padding: const EdgeInsets.only(
-                left: 16, right: 16, top: 177, bottom: 32),
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 32),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.asset(
-                      'assets/logo.png',
-                      height: width * 0.45,
-                      width: width * 0.45,
+                Expanded(
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        /*Image.asset(
+                          'assets/logo.png',
+                          height: width * 0.45,
+                          width: width * 0.45,
+                        ),*/
+                        Image.asset(
+                          'assets/logo.png',
+                          height: 150,
+                          width: 150,
+                        ),
+                        const SizedBox(
+                          height: 32,
+                        ),
+                        const Text(
+                          '“El esfuerzo desinteresado para llevar alegría a los demás será el comienzo de una vida más feliz para nosotros”',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w400),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
-                    const SizedBox(
-                      height: 32,
-                    ),
-                    const Text(
-                      '“El esfuerzo desinteresado para llevar alegría a los demás será el comienzo de una vida más feliz para nosotros”',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+                  ),
                 ),
                 Column(
                   mainAxisSize: MainAxisSize.min,

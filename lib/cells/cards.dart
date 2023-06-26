@@ -46,12 +46,13 @@ class _ProfilePictureState extends State<ProfilePicture> {
     FilePickerResult? result;
 
     result = await FilePicker.platform.pickFiles(type: FileType.image);
-    setState(() {
-      _isImageSelected = true;
-    });
+
     if (result != null) {
       Uint8List? selectedBytes = result.files.single.bytes;
       if (selectedBytes != null) {
+        setState(() {
+          _isImageSelected = true;
+        });
         widget.handleImageSelect(base64Encode(selectedBytes));
       }
     } else {
