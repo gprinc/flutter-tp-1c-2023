@@ -62,11 +62,36 @@ Actualmente la aplicación soporta tanto background notifications como foregroun
 Por un lado se integró con Firebase Messaging para agregar el manejo general de notificaciones y se la complementó con flutter-local-notifications para poder emitir cuando la app se encuentra en foreground, ya que por default firebase no muestra las notificaciones si la app se encuentra en foreground (solo recibe el mensaje). Además de mostrar la notificación al usuario, la aplicación posee un handler para cuando el usuario interacciona con la notificación, parseando el payload del mismo (en caso de novedades, por ejemplo, el payload contiene el tipo de notificación y el identificaor de la novedad) para el correcto ruteo en la aplicación.
 
 #### Testing de notificaciones
-Para probar el correcto funcionamiento de las notificaciones, se utilizó la herramienta [Postman](https://www.postman.com/) con. la siguiente configuración: 
-<img width="1079" alt="Captura de pantalla 2023-06-26 a la(s) 19 26 23" src="https://github.com/gprinc/flutter-tp-1c-2023/assets/37815318/b2cec0e6-dcca-4692-932b-d98833b0d592">
+Para probar el correcto funcionamiento de las notificaciones, se utilizó la herramienta [Postman](https://www.postman.com/). Para el request, debe hacerse un POST a https://fcm.googleapis.com/fcm/send utilizando el siguiente formato en el body:  <br />
+```
+{
+    "to": "<DEVICE_TOKEN>",
+    "notification": {
+        "title": "Novedades",
+        "body": "Nueva noticia cargada!"
+    },
+    "data": {
+        "id": "1",
+        "type": "noticias"
+    }
+}
+```
+Como último requisito, debemos habilitar el servicio Firebase Cloud Messaging en Firebase para obtener un SERVER_KEY y utilizarlo en el header Authorization.
 
-De esta manera, las notificaciones se muestran en foreground: 
-![Captura de pantalla 2023-06-26 a la(s) 19 34 21](https://github.com/gprinc/flutter-tp-1c-2023/assets/37815318/abe8cfcd-c91c-46b0-af75-31fed1f84ac9)
+De esta manera, las notificaciones se muestran en foreground: <br />
+<br />
+![Captura de pantalla 2023-06-26 a la(s) 19 42 37](https://github.com/gprinc/flutter-tp-1c-2023/assets/37815318/3adc8aad-76b2-486e-9092-4faa4ae14ba2)
+
+
 
 #### Dificultades
 Si bien las funcionalidades mencionadas anteriormente con respecto a las notificaciones estan funcionando y estan probadas, hubo una dificultad que no se pudo sortear. Cuando el usuario presiona. la notificación, la misma reacciona ante evento, extrae la información relevante del payload, pero no llega a rutear correctamente a la página deseada. Esto no se debe a ninguna falta de configuración o mal funcionamiento de la implementación de notifiaciones, sino a un inconveniente con el BuildContext y el la configuración de GoRouter. Probamos muchas opciones distintas para solucionar esto (una de ellas, utilizar el widget Builder para utilizar el contexto del parent widget al configurar el router) sin embargo, no pudimos terminar de solucionarlo. 
+
+
+## Authors
+
+- [@maanuluque](https://github.com/maanuluque)
+- [@gprinc](https://github.com/gprinc)
+- [@agbossi](https://github.com/agbossi)
+
+
