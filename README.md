@@ -24,9 +24,9 @@ La aplicación consta de una aplicación frontend desarrollada en dart mediante 
 ### Firebase
 
 La base modela los datos mediante las siguientes colecciones:
-- users: contiene toda la información relevante del usuario (email, id, nombre, apellido, etc.)
-- novedades (Los campos de la novedad son: )
-- voluntariados (Los campos del voluntariado son: )
+- users
+- novedades
+- voluntariados
 
 ### State management
 Se utilizó la librería Provider para el manejo de estado de la aplicación. Esta librería nos permite obtener información tanto de los voluntariados como de las novedades y el manejo de la información del usuario de una manera eficiente y sencilla. 
