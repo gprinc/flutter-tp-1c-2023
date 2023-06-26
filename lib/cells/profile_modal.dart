@@ -9,8 +9,9 @@ import '../validation.dart';
 
 class ProfileModal extends StatefulWidget {
   final UserModel user;
+  final Function callback;
 
-  const ProfileModal({super.key, required this.user});
+  const ProfileModal({super.key, required this.user, required this.callback});
 
   @override
   State<ProfileModal> createState() => _ProfileModalState();
@@ -21,7 +22,9 @@ class _ProfileModalState extends State<ProfileModal> {
   late TextEditingController dateController;
   late TextEditingController _emailController;
   late TextEditingController _phoneController;
-  late String? gender;
+  late String? gender = widget.user.gender;
+  late String? bday;
+  late String? phoneNumber;
   String? _image = null;
   bool _enabled = true;
   late bool _isFresh;
@@ -35,12 +38,14 @@ class _ProfileModalState extends State<ProfileModal> {
   @override
   void initState() {
     super.initState();
+    bday = widget.user.birthDay;
+    phoneNumber = widget.user.phoneNumber;
     dateController = TextEditingController();
     _emailController = TextEditingController();
     _phoneController = TextEditingController();
-    dateController.text = widget.user.birthDay ?? '';
+    dateController.text = bday ?? '';
     _emailController.text = widget.user.email;
-    _phoneController.text = widget.user.phoneNumber ?? '';
+    _phoneController.text = phoneNumber ?? '';
     _isFresh = true;
   }
 
@@ -56,7 +61,9 @@ class _ProfileModalState extends State<ProfileModal> {
           phoneNumber: _phoneController.text,
           encodedPicture: '',
           gender: gender);
-      UserService().updateUser(u);
+      UserService().updateUser(u).then((value) {
+        widget.callback(dateController.text, _phoneController.text, gender);
+      });
       Navigator.pop(context);
       //context.goNamed('home');
     }

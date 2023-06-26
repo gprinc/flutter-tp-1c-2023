@@ -8,16 +8,35 @@ import '../models/user.dart';
 import '../molecules/buttons.dart';
 import '../tokens/token_fonts.dart';
 
-class ProfileTab extends StatelessWidget {
+class ProfileTab extends StatefulWidget {
   final UserModel user;
+
   const ProfileTab({super.key, required this.user});
 
-  showProfileModal(BuildContext context) {
+  @override
+  _ProfileTabState createState() => _ProfileTabState();
+}
+
+class _ProfileTabState extends State<ProfileTab>{
+
+  showProfileModal(BuildContext context, Function(String, String, String) updateProfile) {
     buildModal(
         context,
         ProfileModal(
-          user: user,
+          user: widget.user,
+          callback: updateProfile
         ));
+  }
+
+  void updateProfile(String birthday, String phoneNumber, String gender) {
+    // Update the state in the ProfileTab using the received values
+    // You can use setState or any other state management approach here
+    // For example:
+    setState(() {
+      widget.user.birthDay = birthday;
+      widget.user.phoneNumber = phoneNumber;
+      widget.user.gender = gender;
+    });
   }
 
   Widget filledProfile(BuildContext context) {
@@ -41,10 +60,10 @@ class ProfileTab extends StatelessWidget {
                       const SizedBox(height: 16),
                       const Text('Voluntario', style: overline),
                       const SizedBox(height: 2),
-                      Text('${user.name} ${user.lastName}', style: subtitle01),
+                      Text('${widget.user.name} ${widget.user.lastName}', style: subtitle01),
                       const SizedBox(height: 2),
                       Text(
-                        user.email,
+                        widget.user.email,
                         style: body01Modif(const Color(0xff0D47A1)),
                         textAlign: TextAlign.center,
                       ),
@@ -53,16 +72,16 @@ class ProfileTab extends StatelessWidget {
                   InformationCard(
                     title: 'Información personal',
                     label1: 'FECHA DE NACIMIENTO',
-                    content1: user.birthDay!,
+                    content1: widget.user.birthDay!,
                     label2: 'Género',
-                    content2: user.gender!,
+                    content2: widget.user.gender!,
                   ),
                   InformationCard(
                     title: 'Datos de contacto',
                     label1: 'Teléfono',
-                    content1: user.phoneNumber!,
+                    content1: widget.user.phoneNumber!,
                     label2: 'E-MAIL',
-                    content2: user.email,
+                    content2: widget.user.email,
                   ),
                   SizedBox(
                     child: Column(
@@ -72,7 +91,7 @@ class ProfileTab extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: CtaButton(
                               text: 'Editar perfil',
-                              handlePress: () => showProfileModal(context),
+                              handlePress: () => showProfileModal(context, updateProfile),
                               enabledState: true),
                         ),
                         const SizedBox(
@@ -116,7 +135,7 @@ class ProfileTab extends StatelessWidget {
                   const SizedBox(height: 16),
                   const Text('Voluntario', style: overline),
                   const SizedBox(height: 8),
-                  Text('${user.name} ${user.lastName}', style: subtitle01),
+                  Text('${widget.user.name} ${widget.user.lastName}', style: subtitle01),
                   const SizedBox(height: 8),
                   const Center(
                     child: Text(
@@ -136,7 +155,7 @@ class ProfileTab extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(bottom: 80),
           child: ShortButton(
-            handlePress: () => showProfileModal(context),
+            handlePress: () => showProfileModal(context, updateProfile),
             text: 'Completar',
             enabledState: true,
           ),
@@ -148,7 +167,7 @@ class ProfileTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return user.phoneNumber == null || user.phoneNumber == ''
+    return widget.user.phoneNumber == null || widget.user.phoneNumber == ''
         ? emptyProfile(context)
         : filledProfile(context);
   }

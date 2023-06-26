@@ -6,10 +6,10 @@ class UserModel {
   final String name;
   final String lastName;
   int? volunteeringId;
-  final String? birthDay;
-  final String? phoneNumber;
+  String? birthDay;
+  String? phoneNumber;
   final String? encodedPicture;
-  final String? gender;
+  String? gender;
 
   UserModel(
       {this.id,
