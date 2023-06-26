@@ -15,7 +15,6 @@ import 'package:provider/provider.dart';
 import '../atoms/logos.dart';
 import '../models/userService.dart';
 import '../tokens/token_colors.dart';
-import 'news_tab.dart';
 
 class Home extends StatefulWidget {
   const Home({required Key key}) : super(key: key);
@@ -65,16 +64,7 @@ class HomeState extends State<Home> {
     UserModel? currentUser =
         Provider.of<UserService>(context, listen: false).user;
 
-    void onFavoritePressed(Volunteering vol) {
-      if (currentUser != null) {
-        Provider.of<VolunteeringList>(context)
-            .updateFavorites(vol, currentUser.email);
-      }
-    }
-
     return DefaultTabController(
-      // --> Puedo manejar el estado del TabBar de forma automatica.
-      // Es una clase "Inherited" que no convenia a veces.
       length: 3,
       child: Scaffold(
           appBar: AppBar(
@@ -90,19 +80,6 @@ class HomeState extends State<Home> {
                 ),
               ],
             ),
-            /*leading: SizedBox(
-                width: 16, // Adjust this value as needed
-                child: rectangularLogo
-                Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 14),
-                    child: rectangularLogo,
-                  ),
-                ],
-              ),
-                ),*/
             bottom: PreferredSize(
               preferredSize: _tabBar.preferredSize,
               child: Container(color: inactiveTab, child: _tabBar),
@@ -220,14 +197,12 @@ class HomeState extends State<Home> {
                                               GestureDetector(
                                                 child: VolunteeringCard(
                                                     volunteering: volunteering,
-                                                    onFavoritePressed:
-                                                        onFavoritePressed,
                                                     currentUser: currentUser),
                                                 onTap: () => context.goNamed(
                                                     'selected-card',
                                                     params: {
-                                                      'id':
-                                                          (index - 1).toString()
+                                                      'id': volunteering.id
+                                                          .toString()
                                                     }),
                                               ),
                                               const SizedBox(height: 24),
@@ -256,52 +231,4 @@ class HomeState extends State<Home> {
             Tab(text: 'Mi Perfil'),
             Tab(text: 'Novedades'),
           ]);
-}
-
-Widget _buildCarousel(BuildContext context, int carouselIndex) {
-  final volunteeringProvider =
-      Provider.of<VolunteeringList>(context, listen: false);
-  return Column(
-    mainAxisSize: MainAxisSize.min,
-    children: <Widget>[
-      SizedBox(
-        // you may want to use an aspect ratio here for tablet support
-        height: 234.0,
-        child: PageView.builder(
-          itemCount: volunteeringProvider.volunteering.length,
-          // store this controller in a State to save the carousel scroll position
-          controller: PageController(viewportFraction: 0.8),
-          itemBuilder: (BuildContext context, int itemIndex) {
-            return _buildCarouselItem(
-                context, carouselIndex, itemIndex, volunteeringProvider);
-          },
-        ),
-      )
-    ],
-  );
-}
-
-Widget _buildCarouselItem(
-    BuildContext context, int carouselIndex, int itemIndex, provider) {
-  final volunteering = provider.volunteering[itemIndex];
-  UserModel? currentUser =
-      Provider.of<UserService>(context, listen: false).user;
-  void onFavoritePressed(Volunteering vol) {
-    if (currentUser != null) {
-      Provider.of<VolunteeringList>(context)
-          .updateFavorites(vol, currentUser.email);
-    }
-  }
-
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 0.0),
-    child: GestureDetector(
-      child: VolunteeringCard(
-          volunteering: volunteering,
-          onFavoritePressed: onFavoritePressed,
-          currentUser: currentUser),
-      onTap: () => context
-          .goNamed('selected-card', params: {'id': itemIndex.toString()}),
-    ),
-  );
 }
