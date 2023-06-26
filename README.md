@@ -36,11 +36,15 @@ Para el manejo de deep links se utilizó la librería GoRouter, siendo esta la m
 También, se configuraron los archivos correspondientes con el siguiente esquema:
 sermanos://pages/[page]
 
+Si fuese que también se estuviese trabajando en una aplicación web, se configuraría el deep link con el schema y el server de esa aplicación web, con el fin de que al abrir en el navegador la versión web de la aplicación, el mismo SO del dispositivo pueda redirigir al usuario a la versión móvil. Como solo contamos con una aplicación móvil, se optó por configurar. el esquema anteriormente mencionado. 
+
 ### Testing
 
 Se implementaron los siguientes tipos de test:
 #### Unit testing
-En este caso se testearon los distintos servicios que nos permiten interactuar con los voluntariados, las novedades y los usuarios. Para ello, se mockearon los sericios y la base de firebase utilizando la librería [fake_cloud_firestore](https://pub.dev/packages/fake_cloud_firestore/example)
+En este caso se testearon los distintos servicios que nos permiten interactuar con los voluntariados, las novedades y los usuarios. Para ello, se mockearon los sericios y la base de firebase utilizando la librería [fake_cloud_firestore](https://pub.dev/packages/fake_cloud_firestore/example)<br />
+Para correr los unit tests, se debe correr el comando:
+`flutter test`
 
 #### Golden tests
 Se realizan en distintos dispositivos de diferentes tamaños con el fin de testear los widgets de la UI con snapshots, siendo exitoso el test si lucieran de la misma manera. 
