@@ -69,4 +69,8 @@ class UserModel {
       'gender': user.gender,
     };
   }
+
+  hasCompleteProfile() {
+    return phoneNumber != null && birthDay != null;
+  }
 }

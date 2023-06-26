@@ -17,7 +17,9 @@ import '../models/userService.dart';
 import '../tokens/token_colors.dart';
 
 class Home extends StatefulWidget {
-  const Home({required Key key}) : super(key: key);
+  final int initialTabIndex;
+
+  const Home({required Key key, this.initialTabIndex = 0}) : super(key: key);
 
   @override
   HomeState createState() => HomeState();
@@ -53,7 +55,7 @@ class HomeState extends State<Home> {
   void initState() {
       Provider.of<VolunteeringList>(context, listen: false).getFromFirebase();
       Provider.of<NewsList>(context, listen: false).getFromFirebase();
-    super.initState();
+      super.initState();
   }
 
   @override
@@ -63,6 +65,7 @@ class HomeState extends State<Home> {
         Provider.of<UserService>(context, listen: false).user;
 
     return DefaultTabController(
+      initialIndex: widget.initialTabIndex,
       length: 3,
       child: Scaffold(
           appBar: AppBar(

@@ -65,7 +65,6 @@ class _ProfileModalState extends State<ProfileModal> {
         widget.callback(dateController.text, _phoneController.text, gender);
       });
       Navigator.pop(context);
-      //context.goNamed('home');
     }
   }
 

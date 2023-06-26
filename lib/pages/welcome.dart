@@ -69,7 +69,7 @@ class WelcomePage extends StatelessWidget {
                 children: [
                   CtaButton(
                     text: 'Comenzar',
-                    handlePress: () => context.go("/home"),
+                    handlePress: () => context.goNamed('home', params: {'index': '0'}),
                     enabledState: true,
                     disableAfterPress: true,
                   ),

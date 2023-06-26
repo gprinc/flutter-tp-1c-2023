@@ -23,6 +23,6 @@ class _ArrowBackIconState extends State<ArrowBackIcon> {
         ),
         onPressed: () => widget.route != null
             ? context.go(widget.route!)
-            : context.go("/home"));
+            : context.goNamed('home', params: {'index': '0'}));
   }
 }
