@@ -1,3 +1,4 @@
+import 'package:dam_1c_2023/firebase/firebase_cloudstore.dart';
 import 'package:dam_1c_2023/models/user.dart';
 import 'package:dam_1c_2023/models/userService.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,7 +12,7 @@ class MockUserService extends ChangeNotifier implements UserService {
   @override
   Future<void> getUserFromFirebase(String email) async {
     firebaseUser =
-        UserModel(email: "user@itba.edu.ar", name: 'User', lastName: 'Model');
+        UserModel(email: "gprinc@itba.edu.ar", name: 'Guido', lastName: 'Princ');
   }
 
   @override
@@ -35,18 +36,35 @@ class MockUserService extends ChangeNotifier implements UserService {
 
   @override
   void logoutUser() {
-    // TODO: implement logoutUser
+    return;
   }
 
   @override
-  Future<void> updateUser(UserModel newUser) {
-    // TODO: implement updateUser
-    throw UnimplementedError();
+  Future<void> updateUser(UserModel newUser) async {
+    firebaseUser =
+        UserModel(
+          email: newUser.email,
+          name: newUser.name,
+          lastName: newUser.lastName,
+          birthDay: newUser.birthDay,
+          gender: newUser.gender,
+          phoneNumber: newUser.phoneNumber);
+    // throw UnimplementedError();
   }
 
   @override
   Future<void> updateVolunteeringId(int? volunteeringId) {
     // TODO: implement updateVolunteeringId
     throw UnimplementedError();
+  }
+
+  void resetUser(UserModel newUser) {
+    firebaseUser =
+        UserModel(email: "gprinc@itba.edu.ar", name: 'Guido', lastName: 'Princ');
+  }
+
+  @override
+  void setFirebaseCloudstore(FirebaseCloudstoreITBA firebaseCloudstore) {
+    return;
   }
 }

@@ -84,7 +84,6 @@ class VolunteeringList extends ChangeNotifier {
             .clear(); // Clear the list before adding volunteerings
         var volunteersData = data['values'] as List<dynamic>;
         volunteersData.forEach((element) {
-          print(element);
           _firebaseVolunteerings.add(Volunteering.fromJson(element));
         });
       }

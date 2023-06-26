@@ -1,3 +1,4 @@
+import 'package:dam_1c_2023/firebase/firebase_cloudstore.dart';
 import 'package:dam_1c_2023/models/news.dart';
 import 'package:dam_1c_2023/models/newsList.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,7 @@ class MockNewsProvider extends ChangeNotifier implements NewsList {
   ];
   
   @override
-  void addVolunteering(News news) {
+  void addNews(News news) {
     _news.add(news);
      Future.value();
   }
@@ -57,5 +58,10 @@ class MockNewsProvider extends ChangeNotifier implements NewsList {
   @override
   Future<void> getFromFirebase() {
      return Future.value();
+  }
+
+  @override
+  void setFirebaseCloudstore(FirebaseCloudstoreITBA firebaseCloudstore) {
+    return;
   }
 }

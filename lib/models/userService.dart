@@ -89,4 +89,18 @@ class UserService extends ChangeNotifier {
   Future<void> updateVolunteeringId(int? volunteeringId) async {
       _firebaseUser!.volunteeringId = volunteeringId;
   }
+
+  UserService.withFirebaseCloudstore(
+      FirebaseCloudstoreITBA firebaseCloudstoreITBA) {
+    _firebaseCloudstore = firebaseCloudstoreITBA;
+  }
+
+  UserService() {
+    _firebaseCloudstore = FirebaseCloudstoreITBA();
+  }
+
+  late FirebaseCloudstoreITBA _firebaseCloudstore;
+  void setFirebaseCloudstore(FirebaseCloudstoreITBA firebaseCloudstore) {
+    _firebaseCloudstore = firebaseCloudstore;
+  }
 }

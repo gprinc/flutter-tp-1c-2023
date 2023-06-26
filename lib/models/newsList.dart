@@ -57,8 +57,8 @@ class NewsList extends ChangeNotifier {
           .get();
       Map<String, dynamic>? data = aux.data();
       if (data != null) {
-        var volunteersData = data['values'] as List<dynamic>;
-        volunteersData.forEach((element) {
+        var newsData = data['values'] as List<dynamic>;
+        newsData.forEach((element) {
           _firebaseNews.add(News.fromJson(element));
         });
       }
@@ -71,8 +71,22 @@ class NewsList extends ChangeNotifier {
     }
   }
 
-  void addVolunteering(News news) {
+  void addNews(News news) {
     _news.add(news);
     notifyListeners();
+  }
+
+  NewsList.withFirebaseCloudstore(
+      FirebaseCloudstoreITBA firebaseCloudstoreITBA) {
+    _firebaseCloudstore = firebaseCloudstoreITBA;
+  }
+
+  NewsList() {
+    _firebaseCloudstore = FirebaseCloudstoreITBA();
+  }
+
+  late FirebaseCloudstoreITBA _firebaseCloudstore;
+  void setFirebaseCloudstore(FirebaseCloudstoreITBA firebaseCloudstore) {
+    _firebaseCloudstore = firebaseCloudstore;
   }
 }

@@ -73,4 +73,17 @@ class UserModel {
   hasCompleteProfile() {
     return phoneNumber != null && birthDay != null;
   }
+
+  Map<String, dynamic> toJsonReduced() {
+    return {
+      'email': email,
+      'name': name,
+      'lastName': lastName,
+      'volunteeringId': volunteeringId,
+      'birthDay': birthDay,
+      'phoneNumber': phoneNumber,
+      'encodedPicture': encodedPicture,
+      'gender': gender,
+    };
+  }
 }
