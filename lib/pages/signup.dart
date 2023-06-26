@@ -9,7 +9,7 @@ class SignupPage extends StatelessWidget {
     return const Scaffold(
       resizeToAvoidBottomInset: false,
       body: Padding(
-        padding: EdgeInsets.only(left: 16, right: 16, top: 31, bottom: 32),
+        padding: EdgeInsets.only(left: 16, right: 16, bottom: 32),
         child: RegisterForm(),
       ),
     );
