@@ -20,4 +20,14 @@ class News {
         imageName: json['imageName'],
         body: json['body']);
   }
+
+  Map<String, dynamic> toJsonReduced() {
+    return {
+      'title': title,
+      'description': description,
+      'imageName': imageName,
+      'header': header,
+      'body': body,
+    };
+  }
 }

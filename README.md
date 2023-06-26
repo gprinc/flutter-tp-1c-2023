@@ -23,9 +23,9 @@ La aplicación consta de una aplicación frontend desarrollada en dart mediante 
 ### Firebase
 
 La base modela los datos mediante las siguientes colecciones:
-- users: contiene toda la información relevante del usuario (email, id, )
-- novedades
-- voluntariados
+- users: contiene toda la información relevante del usuario (email, id, nombre, apellido, etc.)
+- novedades (Los campos de la novedad son: )
+- voluntariados (Los campos del voluntariado son: )
 
 ### State management
 Se utilizó la librería Provider para el manejo de estado de la aplicación. Esta librería nos permite obtener información tanto de los voluntariados como de las novedades y el manejo de la información del usuario de una manera eficiente y sencilla. 
@@ -49,5 +49,14 @@ Para correr los golden tests, se debe correr el comando:
 ### Monitoreo
 Para el monitoreo de la aplicación utilizamos Crashlytics de Firebase (para errores y bugs de la aplicación) y Analytics (para observar la navegación del usuario y el comportamiento del mismo durante la UX).
 
+### Autenticación
+Para el logueo o registración de la app se utilizo Firebase Auth, con únicamente disponible el ingreso usando un email y contraseña.
+
 ### Notificaciones
+Por un lado se integró con Firebase Messaging para agregar el manejo general de notificaciones y se la complementó con flutter-local-notifications para poder emitir cuando la app se encuentra en foreground, ya que por default firebase no muestra las notificaciones si la app se encuentra en foreground (solo recibe el mensaje).
+
 ### Dificultades
+
+- No se pudo agregar deep linking dentro de la notificación por un problema con el ruteo a la pantalla indicada. Se recibe la información para saber a donde redirigir pero no se tiene un context válido que visualice el router para navegar a dicha pantalla.
+
+- 
