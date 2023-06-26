@@ -12,19 +12,168 @@ import 'package:dam_1c_2023/molecules/buttons.dart';
 import 'package:dam_1c_2023/atoms/icons/arrow_back.dart';
 import 'package:provider/provider.dart';
 
-class SelectedCardPage extends StatelessWidget {
+class SelectedCardPage extends StatefulWidget {
   final Volunteering info;
 
   const SelectedCardPage({Key? key, required this.info}) : super(key: key);
 
   @override
+  _SelectedCardPageState createState() => _SelectedCardPageState();
+}
+
+class _SelectedCardPageState extends State<SelectedCardPage> {
+  int? userVolunteeringId; // Add this variable declaration
+
+  Future<void> _showCustomDialog(BuildContext context, Volunteering vol) async {
+    await showDialog<void>(
+      context: context,
+      builder: (_) {
+        return StatefulBuilder(builder: (stfContext, stfSetState) {
+          return ApplyDialog(
+              header: 'Te estas por postular a',
+              title: vol.title,
+              cancelButtonText: 'Cancelar',
+              confirmButtonText: 'Confirmar',
+              onCancelPressed: () => Navigator.of(context).pop(),
+              onConfirmPressed: () => addAsParticipant(context, vol).then((value) {})
+          );
+        });
+      },
+    );
+  }
+
+  Future<void> addAsParticipant(BuildContext context, Volunteering vol) async {
+    final volunteerings =
+        Provider.of<VolunteeringList>(context, listen: false).volunteering;
+    final currentUser = Provider.of<UserService>(context, listen: false).user;
+    if (currentUser != null) {
+      volunteerings.forEach((element) {
+        if (element.id == vol.id) {
+          element.appliersEmail.add(currentUser.email);
+        }
+      });
+
+      final userQuery = FirebaseCloudstoreITBA()
+          .db
+          .collection('users')
+          .where('email', isEqualTo: currentUser.email);
+      final userSnapshot = await userQuery.get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        final userDoc = userSnapshot.docs.first.reference;
+
+        await FirebaseFirestore.instance.runTransaction((transaction) async {
+          final userData = userSnapshot.docs.first.data();
+
+          // Update or add the 'volunteeringId' field
+          userData['volunteeringId'] = vol.id;
+
+          transaction.set(userDoc, userData);
+        });
+
+        await FirebaseCloudstoreITBA()
+            .db
+            .collection('ser_manos_data')
+            .doc('voluntariados')
+            .set({
+          'values': volunteerings.map(Volunteering.toJson).toList()
+        }).then((value) {
+          final userService = Provider.of<UserService>(context, listen: false);
+          userService.updateVolunteeringId(vol.id);
+          userService.notifyListeners();
+          setState(() {
+            userVolunteeringId = vol.id;
+          });
+          Navigator.of(context).pop();
+        });
+      }
+    }
+  }
+
+  Future<void> _removeDialog(BuildContext context, Volunteering vol) async {
+    await showDialog<void>(
+      context: context,
+      builder: (_) {
+        return ApplyDialog(
+          header: '¿Estas seguro que querés retirar tu postulación?',
+          title: vol.title,
+          cancelButtonText: 'Cancelar',
+          confirmButtonText: 'Confirmar',
+          onCancelPressed: () => Navigator.of(context).pop(),
+          onConfirmPressed: () => removeAsParticipant(context, vol),
+        );
+      },
+    );
+  }
+
+  Future<void> removeAsParticipant(BuildContext context, Volunteering vol) async {
+    final volunteerings =
+        Provider.of<VolunteeringList>(context, listen: false).volunteering;
+    final currentUser = Provider.of<UserService>(context, listen: false).user;
+
+    if (currentUser != null) {
+      volunteerings.forEach((element) {
+        if (element.id == vol.id) {
+          element.appliersEmail.remove(currentUser.email);
+          element.participantsEmail.remove(currentUser.email);
+        }
+      });
+
+      final userQuery = FirebaseCloudstoreITBA()
+          .db
+          .collection('users')
+          .where('email', isEqualTo: currentUser.email);
+      final userSnapshot = await userQuery.get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        final userDoc = userSnapshot.docs.first.reference;
+
+        try {
+          await FirebaseFirestore.instance.runTransaction((transaction) async {
+            final userData = userSnapshot.docs.first.data();
+
+            // Update or add the 'volunteeringId' field
+            if (userData.containsKey('volunteeringId')) {
+              userData.remove('volunteeringId');
+              transaction.set(userDoc, userData);
+            }
+          });
+        } catch (error, stackTrace) {
+          print('Error running Firestore transaction: $error');
+          print('Stack trace:\n$stackTrace');
+        }
+
+        await FirebaseCloudstoreITBA()
+            .db
+            .collection('ser_manos_data')
+            .doc('voluntariados')
+            .set({
+          'values': volunteerings.map(Volunteering.toJson).toList()
+        }).then((value) {
+          final userService = Provider.of<UserService>(context, listen: false);
+          userService.updateVolunteeringId(null);
+          userService.notifyListeners();
+          setState(() {
+            userVolunteeringId = null;
+          });
+          Navigator.of(context).pop();
+        });
+      }
+    }
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    int? userVolunteeringId = Provider.of<UserService>(context, listen: false).user?.volunteeringId;
-    Volunteering currentUserVolunteering = info;
-    if(userVolunteeringId != null && userVolunteeringId != info.id){
-      currentUserVolunteering = Provider.of<VolunteeringList>(context, listen: false).volunteering[userVolunteeringId];
+    userVolunteeringId = Provider.of<UserService>(context, listen: false).user?.volunteeringId;
+    Volunteering currentUserVolunteering = widget.info;
+    if(userVolunteeringId != null && userVolunteeringId != widget.info.id){
+      currentUserVolunteering = Provider.of<VolunteeringList>(context, listen: false).volunteering[userVolunteeringId!];
     }
+    bool hasNotApplied = userVolunteeringId == null;
+    bool hasAppliedForOther = userVolunteeringId != widget.info.id;
+    bool hasAlreadyApplied = userVolunteeringId == widget.info.id;
     return Scaffold(
         body: SingleChildScrollView(
       child: Column(
@@ -47,7 +196,7 @@ class SelectedCardPage extends StatelessWidget {
               ),
               height: 243, // set the height here
               child: Image.asset(
-                info.imageName,
+                widget.info.imageName,
                 fit: BoxFit.fill,
               ),
             ),
@@ -68,12 +217,12 @@ class SelectedCardPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   const Text('ACCIÓN SOCIAL', style: overline),
-                  Text(info.title, style: headLine01),
+                  Text(widget.info.title, style: headLine01),
                   const SizedBox(
                     height: 16,
                   ),
                   Text(
-                    info.description,
+                    widget.info.description,
                     style: body01Modif(selectedTab),
                   ),
                   const SizedBox(
@@ -83,7 +232,7 @@ class SelectedCardPage extends StatelessWidget {
                   const SizedBox(
                     height: 6,
                   ),
-                  Text(info.about, style: body01),
+                  Text(widget.info.about, style: body01),
                   const SizedBox(
                     height: 24,
                   ),
@@ -97,7 +246,7 @@ class SelectedCardPage extends StatelessWidget {
                   ),
                   Column(
                     children: [
-                      for (var req in info.requisites)
+                      for (var req in widget.info.requisites)
                         Row(
                           children: [
                             const Text("\u2022", style: body01),
@@ -116,7 +265,7 @@ class SelectedCardPage extends StatelessWidget {
                   ),
                   Column(
                     children: [
-                      for (var req in info.availability)
+                      for (var req in widget.info.availability)
                         Row(
                           children: [
                             const Text("\u2022", style: body01),
@@ -129,7 +278,7 @@ class SelectedCardPage extends StatelessWidget {
                   const SizedBox(
                     height: 6,
                   ),
-                  Vacancies(counter: 10 - info.participantsEmail.length),
+                  Vacancies(counter: 10 - widget.info.participantsEmail.length),
                 ],
               ),
             ),
@@ -141,7 +290,7 @@ class SelectedCardPage extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 56),
                 child:
-                  userVolunteeringId != null && userVolunteeringId != info.id ?
+                  userVolunteeringId != null && userVolunteeringId != widget.info.id ?
                   Align(
                     alignment: Alignment.center,
                     child: Column(
@@ -157,7 +306,7 @@ class SelectedCardPage extends StatelessWidget {
                     ],
                     ),
                   ) :
-                  info.participantsEmail.contains(Provider.of<UserService>(context, listen: false).user?.email) ?
+                  widget.info.participantsEmail.contains(Provider.of<UserService>(context, listen: false).user?.email) ?
                     Align(
                     alignment: Alignment.center,
                     child: Column(
@@ -174,12 +323,12 @@ class SelectedCardPage extends StatelessWidget {
                           textAlign: TextAlign.center,)
                           ),
                           ),
-                          CtaButton(text: "Abandonar voluntariado", handlePress: () { _removeDialog(context, info); }, enabledState: true)
+                          CtaButton(text: "Abandonar voluntariado", handlePress: () { _removeDialog(context, widget.info); }, enabledState: true)
                       ],
                     ),
                     )
                     :
-                    info.appliersEmail.contains(Provider.of<UserService>(context, listen: false).user?.email) ?
+                  widget.info.appliersEmail.contains(Provider.of<UserService>(context, listen: false).user?.email) ?
                         Align(
                           alignment: Alignment.center,
                           child: Column(
@@ -196,14 +345,14 @@ class SelectedCardPage extends StatelessWidget {
                                 textAlign: TextAlign.center,)
                                 ),
                               ),
-                              CtaButton(text: "Retirar postulación", handlePress: () { _removeDialog(context, info); }, enabledState: true)
+                              CtaButton(text: "Retirar postulación", handlePress: () { _removeDialog(context, widget.info); }, enabledState: true)
                             ],
                           ),
                         ) : CtaButton(
                             text: "Postularme",
                             enabledState: true,
                             handlePress: () {
-                              _showCustomDialog(context, info);
+                              _showCustomDialog(context, widget.info);
                             }),
                 ),
               ),
@@ -211,135 +360,5 @@ class SelectedCardPage extends StatelessWidget {
         ],
       ),
     ));
-  }
-}
-
-Future<void> _showCustomDialog(BuildContext context, Volunteering vol) async {
-  await showDialog<void>(
-    context: context,
-    builder: (_) {
-      return ApplyDialog(
-        header: 'Te estas por postular a',
-        title: vol.title,
-        cancelButtonText: 'Cancelar',
-        confirmButtonText: 'Confirmar',
-        onCancelPressed: () => Navigator.of(context).pop(),
-        onConfirmPressed: () => addAsParticipant(context, vol),
-      );
-    },
-  );
-}
-
-Future<void> addAsParticipant(BuildContext context, Volunteering vol) async {
-  final volunteerings =
-      Provider.of<VolunteeringList>(context, listen: false).volunteering;
-  final currentUser = Provider.of<UserService>(context, listen: false).user;
-  if (currentUser != null) {
-    volunteerings.forEach((element) {
-      if (element.id == vol.id) {
-        element.appliersEmail.add(currentUser.email);
-      }
-    });
-
-    final userQuery = FirebaseCloudstoreITBA()
-        .db
-        .collection('users')
-        .where('email', isEqualTo: currentUser.email);
-    final userSnapshot = await userQuery.get();
-
-    if (userSnapshot.docs.isNotEmpty) {
-      final userDoc = userSnapshot.docs.first.reference;
-
-      await FirebaseFirestore.instance.runTransaction((transaction) async {
-        final userData = userSnapshot.docs.first.data();
-
-        // Update or add the 'volunteeringId' field
-        userData['volunteeringId'] = vol.id;
-
-        transaction.set(userDoc, userData);
-      });
-
-      await FirebaseCloudstoreITBA()
-          .db
-          .collection('ser_manos_data')
-          .doc('voluntariados')
-          .set({
-        'values': volunteerings.map(Volunteering.toJson).toList()
-      }).then((value) {
-        final userService = Provider.of<UserService>(context, listen: false);
-        userService.updateVolunteeringId(vol.id);
-        userService.notifyListeners();
-        Navigator.of(context).pop();
-      });
-    }
-  }
-}
-
-Future<void> _removeDialog(BuildContext context, Volunteering vol) async {
-  await showDialog<void>(
-    context: context,
-    builder: (_) {
-      return ApplyDialog(
-        header: '¿Estas seguro que querés retirar tu postulación?',
-        title: vol.title,
-        cancelButtonText: 'Cancelar',
-        confirmButtonText: 'Confirmar',
-        onCancelPressed: () => Navigator.of(context).pop(),
-        onConfirmPressed: () => removeAsParticipant(context, vol),
-      );
-    },
-  );
-}
-
-Future<void> removeAsParticipant(BuildContext context, Volunteering vol) async {
-  final volunteerings =
-      Provider.of<VolunteeringList>(context, listen: false).volunteering;
-  final currentUser = Provider.of<UserService>(context, listen: false).user;
-
-  if (currentUser != null) {
-    volunteerings.forEach((element) {
-      if (element.id == vol.id) {
-        element.appliersEmail.remove(currentUser.email);
-        element.participantsEmail.remove(currentUser.email);
-      }
-    });
-
-    final userQuery = FirebaseCloudstoreITBA()
-        .db
-        .collection('users')
-        .where('email', isEqualTo: currentUser.email);
-    final userSnapshot = await userQuery.get();
-
-    if (userSnapshot.docs.isNotEmpty) {
-      final userDoc = userSnapshot.docs.first.reference;
-
-      try {
-        await FirebaseFirestore.instance.runTransaction((transaction) async {
-          final userData = userSnapshot.docs.first.data();
-
-          // Update or add the 'volunteeringId' field
-          if (userData.containsKey('volunteeringId')) {
-            userData.remove('volunteeringId');
-            transaction.set(userDoc, userData);
-          }
-        });
-      } catch (error, stackTrace) {
-        print('Error running Firestore transaction: $error');
-        print('Stack trace:\n$stackTrace');
-      }
-
-      await FirebaseCloudstoreITBA()
-          .db
-          .collection('ser_manos_data')
-          .doc('voluntariados')
-          .set({
-        'values': volunteerings.map(Volunteering.toJson).toList()
-      }).then((value) {
-        final userService = Provider.of<UserService>(context, listen: false);
-        userService.updateVolunteeringId(null);
-        userService.notifyListeners();
-        Navigator.of(context).pop();
-      });
-    }
   }
 }
