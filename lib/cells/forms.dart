@@ -49,7 +49,7 @@ class _LoginFormState extends State<LoginForm> {
 
       if (isValid) {
         // Navigate to home screen
-        context.goNamed('home');
+        context.goNamed('home', params: {'index': '0'});
       } else {
         // Display an error message
         ScaffoldMessenger.of(context).showSnackBar(
