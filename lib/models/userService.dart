@@ -68,13 +68,22 @@ class UserService extends ChangeNotifier {
   }
 
   Future<void> updateUser(UserModel newUser) async {
-    await FirebaseCloudstoreITBA()
+    final userQuery = FirebaseCloudstoreITBA()
         .db
         .collection('users')
-        .doc(newUser.id)
-        .update(UserModel.toJson(newUser));
-    //final userQuery = await FirebaseCloudstoreITBA().db.collection('users').where('id', isEqualTo: newUser.id);
-    //  userQuery.docs.map()
+        .where('email', isEqualTo: _firebaseUser);
+    final userSnapshot = await userQuery.get();
+    if (userSnapshot.docs.isNotEmpty) {
+      final userDoc = userSnapshot.docs.first.reference;
+      await FirebaseCloudstoreITBA().db.runTransaction((transaction) async {
+        final userData = userSnapshot.docs.first.data();
+        // Update or add the 'volunteeringId' field
+        userData['birthDay'] = newUser.birthDay;
+        userData['gender'] = newUser.gender;
+        userData['phoneNumber'] = newUser.phoneNumber;
+        transaction.set(userDoc, userData);
+      });
+    }
   }
 
   Future<void> updateVolunteeringId(int? volunteeringId) async {
