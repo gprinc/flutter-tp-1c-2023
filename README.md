@@ -9,6 +9,7 @@
 - [Descripción](#descripción)
 - [Arquitectura](#arquitectura)
 - [Monitoreo](#monitoreo)
+- [Autenticación](#autenticación)
 - [Notificaciones](#notificaciones)
 - [Autores](#autores)
 
