@@ -53,10 +53,17 @@ Para el monitoreo de la aplicación utilizamos Crashlytics de Firebase (para err
 Para el logueo o registración de la app se utilizo Firebase Auth, con únicamente disponible el ingreso usando un email y contraseña.
 
 ### Notificaciones
-Por un lado se integró con Firebase Messaging para agregar el manejo general de notificaciones y se la complementó con flutter-local-notifications para poder emitir cuando la app se encuentra en foreground, ya que por default firebase no muestra las notificaciones si la app se encuentra en foreground (solo recibe el mensaje).
 
-### Dificultades
+Las push notifications fueron implementadas utilizando las siguientes librerías:
+[flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications)
+[Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging?hl=es-419)
 
-- No se pudo agregar deep linking dentro de la notificación por un problema con el ruteo a la pantalla indicada. Se recibe la información para saber a donde redirigir pero no se tiene un context válido que visualice el router para navegar a dicha pantalla.
+Actualmente la aplicación soporta tanto background notifications como foreground notifications. 
+Por un lado se integró con Firebase Messaging para agregar el manejo general de notificaciones y se la complementó con flutter-local-notifications para poder emitir cuando la app se encuentra en foreground, ya que por default firebase no muestra las notificaciones si la app se encuentra en foreground (solo recibe el mensaje). Además de mostrar la notificación al usuario, la aplicación posee un handler para cuando el usuario interacciona con la notificación, parseando el payload del mismo (en caso de novedades, por ejemplo, el payload contiene el tipo de notificación y el identificaor de la novedad) para el correcto ruteo en la aplicación.
 
-- 
+#### Testing de notificaciones
+Para probar el correcto funcionamiento de las notificaciones, se utilizó la herramienta [Postman](https://www.postman.com/) con. la siguiente configuración: 
+
+
+#### Dificultades
+Si bien las funcionalidades mencionadas anteriormente con respecto a las notificaciones estan funcionando y estan probadas, hubo una dificultad que no se pudo sortear. Cuando el usuario presiona. la notificación, la misma reacciona ante evento, extrae la información relevante del payload, pero no llega a rutear correctamente a la página deseada. Esto no se debe a ninguna falta de configuración o mal funcionamiento de la implementación de notifiaciones, sino a un inconveniente con el BuildContext y el la configuración de GoRouter. Probamos muchas opciones distintas para solucionar esto (una de ellas, utilizar el widget Builder para utilizar el contexto del parent widget al configurar el router) sin embargo, no pudimos terminar de solucionarlo. 
