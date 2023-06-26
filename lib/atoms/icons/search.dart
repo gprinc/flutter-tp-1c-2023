@@ -20,6 +20,6 @@ class _SearchIconState extends State<SearchIcon> {
           _icon,
           color: _color,
         ),
-        onPressed: () => context.go("/home"));
+        onPressed: () => context.goNamed('home', params: {'index': '0'}));
   }
 }

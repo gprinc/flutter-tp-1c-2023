@@ -10,6 +10,7 @@ import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:dam_1c_2023/molecules/buttons.dart';
 import 'package:dam_1c_2023/atoms/icons/arrow_back.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class SelectedCardPage extends StatefulWidget {
@@ -25,21 +26,41 @@ class _SelectedCardPageState extends State<SelectedCardPage> {
   int? userVolunteeringId; // Add this variable declaration
 
   Future<void> _showCustomDialog(BuildContext context, Volunteering vol) async {
-    await showDialog<void>(
-      context: context,
-      builder: (_) {
-        return StatefulBuilder(builder: (stfContext, stfSetState) {
-          return ApplyDialog(
-              header: 'Te estas por postular a',
-              title: vol.title,
-              cancelButtonText: 'Cancelar',
-              confirmButtonText: 'Confirmar',
-              onCancelPressed: () => Navigator.of(context).pop(),
-              onConfirmPressed: () => addAsParticipant(context, vol).then((value) {})
-          );
-        });
-      },
-    );
+    final currentUser = Provider.of<UserService>(context, listen: false).user;
+    if(currentUser?.hasCompleteProfile()){
+      await showDialog<void>(
+        context: context,
+        builder: (_) {
+          return StatefulBuilder(builder: (stfContext, stfSetState) {
+            return ApplyDialog(
+                header: 'Te estas por postular a',
+                title: vol.title,
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Confirmar',
+                onCancelPressed: () => Navigator.of(context).pop(),
+                onConfirmPressed: () => addAsParticipant(context, vol).then((value) {})
+            );
+          });
+        },
+      );
+    }
+    else {
+      await showDialog<void>(
+        context: context,
+        builder: (_) {
+          return StatefulBuilder(builder: (stfContext, stfSetState) {
+            return ApplyDialog(
+                header: 'Para postularte primero necesitas completar tus datos.',
+                title: vol.title,
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Completar datos',
+                onCancelPressed: () => Navigator.of(context).pop(),
+                onConfirmPressed: () => context.goNamed('home', params: {'index': '1'})
+            );
+          });
+        },
+      );
+    }
   }
 
   Future<void> addAsParticipant(BuildContext context, Volunteering vol) async {
@@ -352,6 +373,7 @@ class _SelectedCardPageState extends State<SelectedCardPage> {
                             text: "Postularme",
                             enabledState: true,
                             handlePress: () {
+
                               _showCustomDialog(context, widget.info);
                             }),
                 ),
