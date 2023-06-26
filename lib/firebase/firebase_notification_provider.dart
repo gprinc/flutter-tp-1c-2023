@@ -33,12 +33,21 @@ class FCMProvider with ChangeNotifier {
   }
 
   static Future<void> backgroundHandler(RemoteMessage? message) async {
-    if (message != null && _context != null && message.data['id'] != null) {
-      if(message.data['type'] == 'noticias') {
-        _context?.goNamed('selected-card', params: {'id': message.data['id']}); // cambiar por la ruta de la noticia
-      } else if(message.data['type'] == 'voluntariados') {
-        _context?.goNamed('selected-card', params: {'id': message.data['id']});
+    try {
+      print(message);
+      if (FCMProvider.contextProvider != null) {
+          GoRouter.of(FCMProvider.contextProvider!).namedLocation('selected-card', params: {'id': '0'}, queryParams: {'id': '0'});
       }
+      if (message != null && FCMProvider.contextProvider != null && message.data['id'] != null) {
+        if(message.data['type'] == 'noticias') {
+          // FCMProvider.contextProvider?.goNamed('selected-card', params: {'id': message.data['id']}); // cambiar por la ruta de la noticia
+        } else if(message.data['type'] == 'voluntariados') {
+          GoRouter.of(FCMProvider.contextProvider!).namedLocation('selected-card', params: {'id': message.data['id']}, queryParams: {'id': message.data['id']});
+          // FCMProvider.contextProvider?.goNamed('selected-card', params: {'id': message.data['id']});
+        }
+      }
+    } catch (e) {
+      print(e);
     }
   }
 }
