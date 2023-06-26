@@ -4,12 +4,14 @@ import 'package:dam_1c_2023/models/news.dart';
 import 'package:dam_1c_2023/models/newsList.dart';
 import 'package:dam_1c_2023/models/user.dart';
 import 'package:dam_1c_2023/models/userService.dart';
+import 'package:dam_1c_2023/models/volunteering.dart';
 import 'package:dam_1c_2023/models/volunteering_list.dart';
 import 'package:dam_1c_2023/pages/home.dart';
 import 'package:dam_1c_2023/pages/login.dart';
 import 'package:dam_1c_2023/pages/news_tab.dart';
 import 'package:dam_1c_2023/pages/novedades.dart';
 import 'package:dam_1c_2023/pages/profile_tab.dart';
+import 'package:dam_1c_2023/pages/selected_card_page.dart';
 import 'package:dam_1c_2023/pages/signup.dart';
 import 'package:dam_1c_2023/pages/welcome.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +31,11 @@ Future<void> goldenTest(WidgetTester tester, Widget widget, String name,
       Device.phone,
       Device.iphone11,
       Device.tabletPortrait,
+      const Device(name: 'mobile_resolution_1', size: Size(360, 800)),
+      const Device(name: 'mobile_resolution_2', size: Size(390, 844)),
+      const Device(name: 'mobile_resolution_3', size: Size(412, 915)),
+      const Device(name: 'mobile_resolution_4', size: Size(360, 640)),
+      const Device(name: 'mobile_resolution_5', size: Size(393, 847))
     ])
     ..addScenario(
         widget: MultiProvider(
@@ -143,6 +150,28 @@ void main() {
   testGoldens('Golden test tab novedades', (WidgetTester tester) async {
     await goldenTest(tester, const NewsTab(), 'tab_novedades',
         [userMockedProvider, newsMockedProvider]);
+  });
+
+  testGoldens('Golden test postulacion', (WidgetTester tester) async {
+    Volunteering v = Volunteering(
+        title: 'Un techo para mi país',
+        about: 'Sobre un techo',
+        description:
+            'El propósito principal de "Un techo para mi país" es reducir el déficit habitacional y mejorar las condiciones de vida de las personas que no tienen acceso a una vivienda adecuada.',
+        imageName: 'assets/voluntariado.png',
+        address: 'Corrientes 343',
+        requisites: ['Mayor de edad', 'Poder levantar cosas pesadas'],
+        availability: ['Lunes a viernes de 7 a 10hs'],
+        id: 0,
+        appliersEmail: [],
+        participantsEmail: []);
+    await goldenTest(
+        tester,
+        SelectedCardPage(
+          info: v,
+        ),
+        'volunteering_page',
+        [userMockedProvider, volunteeringMockedProvider]);
   });
 
   /*testGoldens('Golden test home home page', (WidgetTester tester) async {

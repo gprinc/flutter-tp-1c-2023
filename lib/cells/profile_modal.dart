@@ -93,102 +93,104 @@ class _ProfileModalState extends State<ProfileModal> {
         });
       },
       key: _formKey,
-      child: Padding(
-        padding:
-            const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 33),
-        child: Column(children: [
-          Row(
-            children: [
-              IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () => Navigator.pop(context))
-              /*IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close, color: btnSecondary)),*/
-            ],
-          ),
-          const SizedBox(
-            height: 36,
-          ),
-          Row(
-            children: const [
-              Text(
-                'Datos de perfil',
-                style: headLine01,
-              )
-            ],
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          LabelDateInput(
-              validator: Validator.dateValidator,
-              controller: dateController,
-              placeHolder: 'DD/MM/YYYY',
-              value: dateController.text,
-              label: 'Fecha de nacimiento'),
-          const SizedBox(
-            height: 24,
-          ),
-          InputCard(handlePick: _setGender),
-          const SizedBox(
-            height: 24,
-          ),
-          ProfilePicture(
-            handleImageSelect: _onImageSelected,
-            encodedImage: _image,
-          ),
-          const SizedBox(
-            height: 32,
-          ),
-          Row(
-            children: const [
-              Text(
-                'DATOS DE CONTACTO',
-                style: headLine01,
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          const Text(
-            'Estos datos serán compartidos con la organización para ponerse en contacto contigo',
-            textAlign: TextAlign.start,
-            style: subtitle01,
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          LabelTextInput(
-            placeHolder: 'Ej: +541178445459',
-            controller: _phoneController,
-            value: _phoneController.text,
-            validator: Validator.phoneNumberValidator,
-            label: 'Telefono',
-            keyboardType: TextInputType.phone,
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          LabelTextInput(
-            placeHolder: 'Ej: mimail@mail.com',
-            controller: _emailController,
-            value: _emailController.text,
-            validator: Validator.emailValidator,
-            label: 'Mail',
-            keyboardType: TextInputType.emailAddress,
-          ),
-          const SizedBox(
-            height: 32,
-          ),
-          CtaButton(
-            text: 'Guardar datos',
-            handlePress: _validate,
-            enabledState: _isFresh ? false : _enabled,
-            disableAfterPress: true,
-          ),
-        ]),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding:
+              const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 33),
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            Row(
+              children: [
+                IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => Navigator.pop(context))
+                /*IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(Icons.close, color: btnSecondary)),*/
+              ],
+            ),
+            const SizedBox(
+              height: 36,
+            ),
+            Row(
+              children: const [
+                Text(
+                  'Datos de perfil',
+                  style: headLine01,
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            LabelDateInput(
+                validator: Validator.dateValidator,
+                controller: dateController,
+                placeHolder: 'DD/MM/YYYY',
+                value: dateController.text,
+                label: 'Fecha de nacimiento'),
+            const SizedBox(
+              height: 24,
+            ),
+            InputCard(handlePick: _setGender),
+            const SizedBox(
+              height: 24,
+            ),
+            ProfilePicture(
+              handleImageSelect: _onImageSelected,
+              encodedImage: _image,
+            ),
+            const SizedBox(
+              height: 32,
+            ),
+            Row(
+              children: const [
+                Text(
+                  'DATOS DE CONTACTO',
+                  style: headLine01,
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            const Text(
+              'Estos datos serán compartidos con la organización para ponerse en contacto contigo',
+              textAlign: TextAlign.start,
+              style: subtitle01,
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            LabelTextInput(
+              placeHolder: 'Ej: +541178445459',
+              controller: _phoneController,
+              value: _phoneController.text,
+              validator: Validator.phoneNumberValidator,
+              label: 'Telefono',
+              keyboardType: TextInputType.phone,
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            LabelTextInput(
+              placeHolder: 'Ej: mimail@mail.com',
+              controller: _emailController,
+              value: _emailController.text,
+              validator: Validator.emailValidator,
+              label: 'Mail',
+              keyboardType: TextInputType.emailAddress,
+            ),
+            const SizedBox(
+              height: 32,
+            ),
+            CtaButton(
+              text: 'Guardar datos',
+              handlePress: _validate,
+              enabledState: _isFresh ? false : _enabled,
+              disableAfterPress: true,
+            ),
+          ]),
+        ),
       ),
     );
   }

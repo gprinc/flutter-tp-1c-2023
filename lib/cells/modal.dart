@@ -16,7 +16,9 @@ buildModal(BuildContext context, Widget body) {
               decoration: const BoxDecoration(
                 color: neutralBg,
               ),
-              child: SingleChildScrollView(child: body)),
+              child: Column(
+                children: [body],
+              )),
         );
       });
 }
