@@ -1,10 +1,7 @@
-import 'package:dam_1c_2023/atoms/icons/list.dart';
 import 'package:dam_1c_2023/tokens/token_shadows.dart';
 import 'package:flutter/material.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:intl/intl.dart';
-
-import '../atoms/icons/map.dart';
 import '../tokens/token_colors.dart';
 
 class Input extends StatefulWidget {
@@ -278,20 +275,20 @@ class _SearchInputState extends State<SearchInput> {
   Widget? _getSuffixStateIcon() {
     // If no focus, and no text => Map Icon
     return _hasFocus && _controller.text.isNotEmpty
-            // If focus and text => return Clear Icon
-            ? IconButton(
-                icon: const Icon(
-                  Icons.clear,
-                  color: btnSecondary,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _controller.clear();
-                  });
-                  widget.search(''); // Call _runFilter with an empty string
-                },
-              )
-            : null;
+        // If focus and text => return Clear Icon
+        ? IconButton(
+            icon: const Icon(
+              Icons.clear,
+              color: btnSecondary,
+            ),
+            onPressed: () {
+              setState(() {
+                _controller.clear();
+              });
+              widget.search(''); // Call _runFilter with an empty string
+            },
+          )
+        : null;
   }
 
   @override

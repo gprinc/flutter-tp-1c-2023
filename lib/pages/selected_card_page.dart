@@ -19,7 +19,7 @@ class SelectedCardPage extends StatefulWidget {
   const SelectedCardPage({Key? key, required this.info}) : super(key: key);
 
   @override
-  _SelectedCardPageState createState() => _SelectedCardPageState();
+  State<SelectedCardPage> createState() => _SelectedCardPageState();
 }
 
 class _SelectedCardPageState extends State<SelectedCardPage> {
@@ -27,7 +27,7 @@ class _SelectedCardPageState extends State<SelectedCardPage> {
 
   Future<void> _showCustomDialog(BuildContext context, Volunteering vol) async {
     final currentUser = Provider.of<UserService>(context, listen: false).user;
-    if(currentUser?.hasCompleteProfile()){
+    if (currentUser?.hasCompleteProfile()) {
       await showDialog<void>(
         context: context,
         builder: (_) {
@@ -38,25 +38,25 @@ class _SelectedCardPageState extends State<SelectedCardPage> {
                 cancelButtonText: 'Cancelar',
                 confirmButtonText: 'Confirmar',
                 onCancelPressed: () => Navigator.of(context).pop(),
-                onConfirmPressed: () => addAsParticipant(context, vol).then((value) {})
-            );
+                onConfirmPressed: () =>
+                    addAsParticipant(context, vol).then((value) {}));
           });
         },
       );
-    }
-    else {
+    } else {
       await showDialog<void>(
         context: context,
         builder: (_) {
           return StatefulBuilder(builder: (stfContext, stfSetState) {
             return ApplyDialog(
-                header: 'Para postularte primero necesitas completar tus datos.',
+                header:
+                    'Para postularte primero necesitas completar tus datos.',
                 title: vol.title,
                 cancelButtonText: 'Cancelar',
                 confirmButtonText: 'Completar datos',
                 onCancelPressed: () => Navigator.of(context).pop(),
-                onConfirmPressed: () => context.goNamed('home', params: {'index': '1'})
-            );
+                onConfirmPressed: () =>
+                    context.goNamed('home', params: {'index': '1'}));
           });
         },
       );
@@ -127,7 +127,8 @@ class _SelectedCardPageState extends State<SelectedCardPage> {
     );
   }
 
-  Future<void> removeAsParticipant(BuildContext context, Volunteering vol) async {
+  Future<void> removeAsParticipant(
+      BuildContext context, Volunteering vol) async {
     final volunteerings =
         Provider.of<VolunteeringList>(context, listen: false).volunteering;
     final currentUser = Provider.of<UserService>(context, listen: false).user;
@@ -183,18 +184,16 @@ class _SelectedCardPageState extends State<SelectedCardPage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    userVolunteeringId = Provider.of<UserService>(context, listen: false).user?.volunteeringId;
+    userVolunteeringId =
+        Provider.of<UserService>(context, listen: false).user?.volunteeringId;
     Volunteering currentUserVolunteering = widget.info;
-    if(userVolunteeringId != null && userVolunteeringId != widget.info.id){
-      currentUserVolunteering = Provider.of<VolunteeringList>(context, listen: false).volunteering[userVolunteeringId!];
+    if (userVolunteeringId != null && userVolunteeringId != widget.info.id) {
+      currentUserVolunteering =
+          Provider.of<VolunteeringList>(context, listen: false)
+              .volunteering[userVolunteeringId!];
     }
-    bool hasNotApplied = userVolunteeringId == null;
-    bool hasAppliedForOther = userVolunteeringId != widget.info.id;
-    bool hasAlreadyApplied = userVolunteeringId == widget.info.id;
     return Scaffold(
         body: SingleChildScrollView(
       child: Column(
@@ -310,75 +309,104 @@ class _SelectedCardPageState extends State<SelectedCardPage> {
               alignment: Alignment.center,
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 56),
-                child:
-                  userVolunteeringId != null && userVolunteeringId != widget.info.id ?
-                  Align(
-                    alignment: Alignment.center,
-                    child: Column(
-                    children: [
-                      const Align(
+                child: userVolunteeringId != null &&
+                        userVolunteeringId != widget.info.id
+                    ? Align(
                         alignment: Alignment.center,
-                        child: Padding(padding: EdgeInsets.only(bottom: 8),
-                        child: Text("Ya estas participando en otro voluntariado, debes abandonarlo primero para postularte a este.",
-                        textAlign: TextAlign.center,)
+                        child: Column(
+                          children: [
+                            const Align(
+                              alignment: Alignment.center,
+                              child: Padding(
+                                  padding: EdgeInsets.only(bottom: 8),
+                                  child: Text(
+                                    "Ya estas participando en otro voluntariado, debes abandonarlo primero para postularte a este.",
+                                    textAlign: TextAlign.center,
+                                  )),
+                            ),
+                            CtaButton(
+                                text: "Abandonar voluntariado actual",
+                                handlePress: () {
+                                  _removeDialog(
+                                      context, currentUserVolunteering);
+                                },
+                                enabledState: true)
+                          ],
                         ),
-                      ),
-                      CtaButton(text: "Abandonar voluntariado actual", handlePress: () { _removeDialog(context, currentUserVolunteering); }, enabledState: true)
-                    ],
-                    ),
-                  ) :
-                  widget.info.participantsEmail.contains(Provider.of<UserService>(context, listen: false).user?.email) ?
-                    Align(
-                    alignment: Alignment.center,
-                    child: Column(
-                        children: [
-                          const Align(
-                          alignment: Alignment.center,
-                          child: Padding(padding: EdgeInsets.only(bottom: 8),
-                          child: Text("Estas participando", style: headLine02))
-                          ),
-                          const Align(
-                          alignment: Alignment.center,
-                          child: Padding(padding: EdgeInsets.only(bottom: 8),
-                          child: Text("La organización ya confirmó que ya estas participando del voluntariado",
-                          textAlign: TextAlign.center,)
-                          ),
-                          ),
-                          CtaButton(text: "Abandonar voluntariado", handlePress: () { _removeDialog(context, widget.info); }, enabledState: true)
-                      ],
-                    ),
-                    )
-                    :
-                  widget.info.appliersEmail.contains(Provider.of<UserService>(context, listen: false).user?.email) ?
-                        Align(
-                          alignment: Alignment.center,
-                          child: Column(
-                            children: [
-                              const Align(
-                                alignment: Alignment.center,
-                                child: Padding(padding: EdgeInsets.only(bottom: 8),
-                                child: Text("Te has postulado", style: headLine02))
-                              ),
-                              const Align(
-                                alignment: Alignment.center,
-                                child: Padding(padding: EdgeInsets.only(bottom: 8),
-                                child: Text("Pronto la organización se pondrá en contacto contigo y te inscribirá como participante",
-                                textAlign: TextAlign.center,)
+                      )
+                    : widget.info.participantsEmail.contains(
+                            Provider.of<UserService>(context, listen: false)
+                                .user
+                                ?.email)
+                        ? Align(
+                            alignment: Alignment.center,
+                            child: Column(
+                              children: [
+                                const Align(
+                                    alignment: Alignment.center,
+                                    child: Padding(
+                                        padding: EdgeInsets.only(bottom: 8),
+                                        child: Text("Estas participando",
+                                            style: headLine02))),
+                                const Align(
+                                  alignment: Alignment.center,
+                                  child: Padding(
+                                      padding: EdgeInsets.only(bottom: 8),
+                                      child: Text(
+                                        "La organización ya confirmó que ya estas participando del voluntariado",
+                                        textAlign: TextAlign.center,
+                                      )),
                                 ),
-                              ),
-                              CtaButton(text: "Retirar postulación", handlePress: () { _removeDialog(context, widget.info); }, enabledState: true)
-                            ],
-                          ),
-                        ) : CtaButton(
-                            text: "Postularme",
-                            enabledState: true,
-                            handlePress: () {
-
-                              _showCustomDialog(context, widget.info);
-                            }),
-                ),
+                                CtaButton(
+                                    text: "Abandonar voluntariado",
+                                    handlePress: () {
+                                      _removeDialog(context, widget.info);
+                                    },
+                                    enabledState: true)
+                              ],
+                            ),
+                          )
+                        : widget.info.appliersEmail.contains(
+                                Provider.of<UserService>(context, listen: false)
+                                    .user
+                                    ?.email)
+                            ? Align(
+                                alignment: Alignment.center,
+                                child: Column(
+                                  children: [
+                                    const Align(
+                                        alignment: Alignment.center,
+                                        child: Padding(
+                                            padding: EdgeInsets.only(bottom: 8),
+                                            child: Text("Te has postulado",
+                                                style: headLine02))),
+                                    const Align(
+                                      alignment: Alignment.center,
+                                      child: Padding(
+                                          padding: EdgeInsets.only(bottom: 8),
+                                          child: Text(
+                                            "Pronto la organización se pondrá en contacto contigo y te inscribirá como participante",
+                                            textAlign: TextAlign.center,
+                                          )),
+                                    ),
+                                    CtaButton(
+                                        text: "Retirar postulación",
+                                        handlePress: () {
+                                          _removeDialog(context, widget.info);
+                                        },
+                                        enabledState: true)
+                                  ],
+                                ),
+                              )
+                            : CtaButton(
+                                text: "Postularme",
+                                enabledState: true,
+                                handlePress: () {
+                                  _showCustomDialog(context, widget.info);
+                                }),
               ),
             ),
+          ),
         ],
       ),
     ));

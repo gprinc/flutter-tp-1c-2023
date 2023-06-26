@@ -14,18 +14,14 @@ class ProfileTab extends StatefulWidget {
   const ProfileTab({super.key, required this.user});
 
   @override
-  _ProfileTabState createState() => _ProfileTabState();
+  State<ProfileTab> createState() => _ProfileTabState();
 }
 
-class _ProfileTabState extends State<ProfileTab>{
-
-  showProfileModal(BuildContext context, Function(String, String, String) updateProfile) {
+class _ProfileTabState extends State<ProfileTab> {
+  showProfileModal(
+      BuildContext context, Function(String, String, String) updateProfile) {
     buildModal(
-        context,
-        ProfileModal(
-          user: widget.user,
-          callback: updateProfile
-        ));
+        context, ProfileModal(user: widget.user, callback: updateProfile));
   }
 
   void updateProfile(String birthday, String phoneNumber, String gender) {
@@ -60,7 +56,8 @@ class _ProfileTabState extends State<ProfileTab>{
                       const SizedBox(height: 16),
                       const Text('Voluntario', style: overline),
                       const SizedBox(height: 2),
-                      Text('${widget.user.name} ${widget.user.lastName}', style: subtitle01),
+                      Text('${widget.user.name} ${widget.user.lastName}',
+                          style: subtitle01),
                       const SizedBox(height: 2),
                       Text(
                         widget.user.email,
@@ -91,7 +88,8 @@ class _ProfileTabState extends State<ProfileTab>{
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: CtaButton(
                               text: 'Editar perfil',
-                              handlePress: () => showProfileModal(context, updateProfile),
+                              handlePress: () =>
+                                  showProfileModal(context, updateProfile),
                               enabledState: true),
                         ),
                         const SizedBox(
@@ -107,7 +105,7 @@ class _ProfileTabState extends State<ProfileTab>{
                   )
                 ]),
           ),
-          SizedBox(
+          const SizedBox(
             height: 32,
           )
         ],
@@ -121,7 +119,7 @@ class _ProfileTabState extends State<ProfileTab>{
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Container(
-            decoration: BoxDecoration(),
+            decoration: const BoxDecoration(),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -135,7 +133,8 @@ class _ProfileTabState extends State<ProfileTab>{
                   const SizedBox(height: 16),
                   const Text('Voluntario', style: overline),
                   const SizedBox(height: 8),
-                  Text('${widget.user.name} ${widget.user.lastName}', style: subtitle01),
+                  Text('${widget.user.name} ${widget.user.lastName}',
+                      style: subtitle01),
                   const SizedBox(height: 8),
                   const Center(
                     child: Text(

@@ -6,13 +6,15 @@ import 'package:flutter/cupertino.dart';
 class MockUserService extends ChangeNotifier implements UserService {
   UserModel? firebaseUser;
 
+  @override
   UserModel? get user => firebaseUser;
+  @override
   String? get geterror => error;
 
   @override
   Future<void> getUserFromFirebase(String email) async {
-    firebaseUser =
-        UserModel(email: "gprinc@itba.edu.ar", name: 'Guido', lastName: 'Princ');
+    firebaseUser = UserModel(
+        email: "gprinc@itba.edu.ar", name: 'Guido', lastName: 'Princ');
   }
 
   @override
@@ -41,14 +43,13 @@ class MockUserService extends ChangeNotifier implements UserService {
 
   @override
   Future<void> updateUser(UserModel newUser) async {
-    firebaseUser =
-        UserModel(
-          email: newUser.email,
-          name: newUser.name,
-          lastName: newUser.lastName,
-          birthDay: newUser.birthDay,
-          gender: newUser.gender,
-          phoneNumber: newUser.phoneNumber);
+    firebaseUser = UserModel(
+        email: newUser.email,
+        name: newUser.name,
+        lastName: newUser.lastName,
+        birthDay: newUser.birthDay,
+        gender: newUser.gender,
+        phoneNumber: newUser.phoneNumber);
     // throw UnimplementedError();
   }
 
@@ -59,8 +60,8 @@ class MockUserService extends ChangeNotifier implements UserService {
   }
 
   void resetUser(UserModel newUser) {
-    firebaseUser =
-        UserModel(email: "gprinc@itba.edu.ar", name: 'Guido', lastName: 'Princ');
+    firebaseUser = UserModel(
+        email: "gprinc@itba.edu.ar", name: 'Guido', lastName: 'Princ');
   }
 
   @override

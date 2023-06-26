@@ -1,11 +1,9 @@
-import 'package:dam_1c_2023/atoms/icons/location.dart';
 import 'package:dam_1c_2023/cells/cards.dart';
 import 'package:dam_1c_2023/models/newsList.dart';
 import 'package:dam_1c_2023/models/user.dart';
 import 'package:dam_1c_2023/models/userService.dart';
 import 'package:dam_1c_2023/models/volunteering.dart';
 import 'package:dam_1c_2023/models/volunteering_list.dart';
-import 'package:dam_1c_2023/molecules/buttons.dart';
 import 'package:dam_1c_2023/molecules/inputs.dart';
 import 'package:dam_1c_2023/pages/profile_tab.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
@@ -13,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../atoms/logos.dart';
-import '../models/userService.dart';
 import '../tokens/token_colors.dart';
 import 'news_tab.dart';
 
@@ -61,7 +58,6 @@ class HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    final newsProvider = Provider.of<NewsList>(context);
     UserModel? currentUser =
         Provider.of<UserService>(context, listen: false).user;
 

@@ -1,6 +1,3 @@
-import 'package:dam_1c_2023/models/participant.dart';
-import 'package:dam_1c_2023/models/user.dart';
-
 class Volunteering {
   final String title;
   final String description;

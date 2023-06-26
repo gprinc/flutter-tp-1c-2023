@@ -6,7 +6,6 @@ import 'package:dam_1c_2023/models/user.dart';
 import 'package:dam_1c_2023/models/userService.dart';
 import 'package:dam_1c_2023/models/volunteering.dart';
 import 'package:dam_1c_2023/models/volunteering_list.dart';
-import 'package:dam_1c_2023/pages/home.dart';
 import 'package:dam_1c_2023/pages/login.dart';
 import 'package:dam_1c_2023/pages/news_tab.dart';
 import 'package:dam_1c_2023/pages/novedades.dart';

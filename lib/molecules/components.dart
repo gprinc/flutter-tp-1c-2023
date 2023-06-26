@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class Vacancies extends StatelessWidget {
   final int counter;
 
-  Vacancies({required this.counter});
+  const Vacancies({super.key, required this.counter});
 
   @override
   Widget build(BuildContext context) {

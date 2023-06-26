@@ -32,12 +32,6 @@ class _ProfilePictureState extends State<ProfilePicture> {
 
   String get btnText => _isImageSelected ? 'Cambiar foto' : 'Subir foto';
 
-  void _selectImage() {
-    setState(() {
-      _isImageSelected = true;
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -138,22 +132,20 @@ class InformationCard extends StatelessWidget {
   Widget _tile(String label, String content) {
     return Row(
       children: [
-        Container(
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              //crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: overline,
-                ),
-                Text(
-                  content,
-                  style: body01,
-                )
-              ]),
-        ),
+        Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            //crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: overline,
+              ),
+              Text(
+                content,
+                style: body01,
+              )
+            ]),
       ],
     );
   }
@@ -343,13 +335,12 @@ class VolunteeringCard extends StatefulWidget {
   final Volunteering volunteering;
   final UserModel? currentUser;
 
-  const VolunteeringCard({Key? key,
-    required this.volunteering,
-    this.currentUser})
+  const VolunteeringCard(
+      {Key? key, required this.volunteering, this.currentUser})
       : super(key: key);
 
   @override
-  _VolunteeringCardState createState() => _VolunteeringCardState();
+  State<VolunteeringCard> createState() => _VolunteeringCardState();
 }
 
 class _VolunteeringCardState extends State<VolunteeringCard> {
@@ -358,18 +349,18 @@ class _VolunteeringCardState extends State<VolunteeringCard> {
   void onFavoritePressed(Volunteering vol) {
     if (widget.currentUser != null) {
       Provider.of<VolunteeringList>(context, listen: false)
-          .updateFavorites(vol, widget.currentUser!.email).then((value) => {
-            setState(() {
-              showFav = true;
-            })
-      });
+          .updateFavorites(vol, widget.currentUser!.email)
+          .then((value) => {
+                setState(() {
+                  showFav = true;
+                })
+              });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    showFav = widget.volunteering.favoritos
-        .contains(widget.currentUser?.email);
+    showFav = widget.volunteering.favoritos.contains(widget.currentUser?.email);
     return Container(
       //height: 234,
       decoration: cardShadow,
@@ -415,14 +406,16 @@ class _VolunteeringCardState extends State<VolunteeringCard> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       VacanciesNoConstrains(
-                        counter: 10 - widget.volunteering.participantsEmail.length,
+                        counter:
+                            10 - widget.volunteering.participantsEmail.length,
                       ),
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           FavoriteIcon(
-                            callback: () => onFavoritePressed(widget.volunteering),
+                            callback: () =>
+                                onFavoritePressed(widget.volunteering),
                             icon: showFav == null || !showFav!
                                 ? Icons.favorite_border
                                 : Icons.favorite,

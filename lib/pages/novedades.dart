@@ -3,7 +3,6 @@ import 'package:dam_1c_2023/molecules/buttons.dart';
 import 'package:dam_1c_2023/tokens/token_colors.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 
 class NewsPage extends StatelessWidget {

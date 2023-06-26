@@ -98,7 +98,8 @@ Future<void> _firebaseMessagingBackgroundHandler(message) async {
 }
 
 Future<void> setupInteractMessage(BuildContext context) async {
-  RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+  RemoteMessage? initialMessage =
+      await FirebaseMessaging.instance.getInitialMessage();
   if (initialMessage != null) {
     handleMessage(context, initialMessage);
   }
@@ -110,10 +111,13 @@ Future<void> setupInteractMessage(BuildContext context) async {
 
 void handleMessage(BuildContext context, RemoteMessage remoteMessage) {
   if (remoteMessage.data['id'] != null) {
-    if(remoteMessage.data['type'] == 'noticias') {
-      context.goNamed('selected-card', params: {'id': remoteMessage.data['id']}); // cambiar por la ruta de la noticia
-    } else if(remoteMessage.data['type'] == 'voluntariados') {
-      context.goNamed('selected-card', params: {'id': remoteMessage.data['id']});
+    if (remoteMessage.data['type'] == 'noticias') {
+      context.goNamed('selected-card', params: {
+        'id': remoteMessage.data['id']
+      }); // cambiar por la ruta de la noticia
+    } else if (remoteMessage.data['type'] == 'voluntariados') {
+      context
+          .goNamed('selected-card', params: {'id': remoteMessage.data['id']});
     }
   }
 }
@@ -142,8 +146,7 @@ void main() async {
     sound: true,
   );
 
-  String? token = await messaging.getToken();
-  print(token);
+  await messaging.getToken();
 
   if (settings.authorizationStatus == AuthorizationStatus.authorized) {
     print('User granted permission');
@@ -185,34 +188,33 @@ class _MyAppState extends State<MyApp> {
           //   background: Colors.blue, // Customize the background color
           //   duration: Duration(seconds: 2), //the duration for which the notification will be displayed
           // );
-            FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-                FlutterLocalNotificationsPlugin();
-            const AndroidInitializationSettings initializationSettingsAndroid =
-                AndroidInitializationSettings('app_icon');
-            await flutterLocalNotificationsPlugin.initialize(
-                const InitializationSettings(
+          FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+              FlutterLocalNotificationsPlugin();
+          const AndroidInitializationSettings initializationSettingsAndroid =
+              AndroidInitializationSettings('app_icon');
+          await flutterLocalNotificationsPlugin.initialize(
+              const InitializationSettings(
                   android: initializationSettingsAndroid),
-                  onDidReceiveNotificationResponse: (payload) {
-                    handleMessage(context, message);
-                  }
-                );
-            const AndroidNotificationDetails androidNotificationDetails =
-                AndroidNotificationDetails(
-              'your channel id',
-              'your channel name',
-              channelDescription: 'your channel description',
-              importance: Importance.max,
-              priority: Priority.max,
-              fullScreenIntent: true,
-            );
-            const NotificationDetails notificationDetails =
-                NotificationDetails(android: androidNotificationDetails);
-            await flutterLocalNotificationsPlugin.show(
-                0,
-                message.notification?.title,
-                message.notification?.body,
-                notificationDetails,
-                payload: 'item x');
+              onDidReceiveNotificationResponse: (payload) {
+            handleMessage(context, message);
+          });
+          const AndroidNotificationDetails androidNotificationDetails =
+              AndroidNotificationDetails(
+            'your channel id',
+            'your channel name',
+            channelDescription: 'your channel description',
+            importance: Importance.max,
+            priority: Priority.max,
+            fullScreenIntent: true,
+          );
+          const NotificationDetails notificationDetails =
+              NotificationDetails(android: androidNotificationDetails);
+          await flutterLocalNotificationsPlugin.show(
+              0,
+              message.notification?.title,
+              message.notification?.body,
+              notificationDetails,
+              payload: 'item x');
         },
       );
     });

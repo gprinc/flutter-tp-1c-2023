@@ -25,7 +25,7 @@ class _ProfileModalState extends State<ProfileModal> {
   late String? gender = widget.user.gender;
   late String? bday;
   late String? phoneNumber;
-  String? _image = null;
+  String? _image;
   bool _enabled = true;
   late bool _isFresh;
 

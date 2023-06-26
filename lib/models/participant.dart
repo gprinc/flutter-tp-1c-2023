@@ -1,5 +1,3 @@
-import 'package:dam_1c_2023/models/user.dart';
-
 enum StatusITBA {
   aceptado,
   rechazado,
@@ -13,13 +11,11 @@ class Participant {
   StatusITBA status;
   String email;
 
-  Participant(
-      {this.status = StatusITBA.esperando,
-      required this.email});
-  
-  factory Participant.fromJson(Map<String, dynamic> json ){
+  Participant({this.status = StatusITBA.esperando, required this.email});
+
+  factory Participant.fromJson(Map<String, dynamic> json) {
     return Participant(
-      status: StatusITBA.fromJson(json['status']),  
+      status: StatusITBA.fromJson(json['status']),
       email: json['email'],
     );
   }
@@ -27,7 +23,7 @@ class Participant {
   static List<Participant> fromJsonArray(List<dynamic> jsonArray) {
     if (jsonArray.isEmpty) return [];
     List<Participant> participantsArray = [];
-    jsonArray.forEach((element) { 
+    jsonArray.forEach((element) {
       participantsArray.add(Participant.fromJson(element));
     });
     return participantsArray;

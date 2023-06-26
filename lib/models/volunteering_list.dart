@@ -113,10 +113,11 @@ class VolunteeringList extends ChangeNotifier {
     List<Map<String, dynamic>> updatedList = [];
     _firebaseVolunteerings.forEach((element) {
       if (element.id == vol.id) {
-        if (element.favoritos.contains(email))
+        if (element.favoritos.contains(email)) {
           element.favoritos.remove(email);
-        else
+        } else {
           element.favoritos.add(email);
+        }
       }
       updatedList.add(Volunteering.toJson(element));
     });

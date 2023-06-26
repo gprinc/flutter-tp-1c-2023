@@ -17,6 +17,7 @@ class MockVolunteeringList extends ChangeNotifier implements VolunteeringList {
     return Future.value();
   }
 
+  @override
   List<Volunteering> searchVolunteerings(String query) {
     return _volunteering;
   }

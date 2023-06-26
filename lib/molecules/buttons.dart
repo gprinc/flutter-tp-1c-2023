@@ -173,11 +173,11 @@ class _IconSplashButtonState extends State<IconSplashButton> {
       width: 24,
       child: InkWell(
           borderRadius: BorderRadius.circular(100),
+          onTap: widget.enabledState ? () => widget.onPress() : null,
           child: Icon(
             widget.icon,
             color: widget.color,
-          ),
-          onTap: widget.enabledState ? () => widget.onPress() : null),
+          )),
     );
   }
 }
