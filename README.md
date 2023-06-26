@@ -6,11 +6,11 @@
 
 ### Contenido
 
-- Descripción
-- Arquitectura
-- Monitoreo
-- Notificaciones
-- Autores
+- [Descripción](#descripción)
+- [Arquitectura](#arquitectura)
+- [Monitoreo](#monitoreo)
+- [Notificaciones](#notificaciones)
+- [Autores](#autores)
 
 ## Descripción
 
@@ -88,7 +88,7 @@ De esta manera, las notificaciones se muestran en foreground: <br />
 Si bien las funcionalidades mencionadas anteriormente con respecto a las notificaciones estan funcionando y estan probadas, hubo una dificultad que no se pudo sortear. Cuando el usuario presiona. la notificación, la misma reacciona ante evento, extrae la información relevante del payload, pero no llega a rutear correctamente a la página deseada. Esto no se debe a ninguna falta de configuración o mal funcionamiento de la implementación de notifiaciones, sino a un inconveniente con el BuildContext y el la configuración de GoRouter. Probamos muchas opciones distintas para solucionar esto (una de ellas, utilizar el widget Builder para utilizar el contexto del parent widget al configurar el router) sin embargo, no pudimos terminar de solucionarlo. 
 
 
-## Authors
+## Autores
 
 - [@maanuluque](https://github.com/maanuluque)
 - [@gprinc](https://github.com/gprinc)
