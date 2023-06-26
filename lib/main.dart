@@ -130,6 +130,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider<UserService>(
           create: (_) => UserService(),
         ),
+        ChangeNotifierProvider<FCMProvider>(
+          create: (_) => FCMProvider(),
+        ),
       ],
       child: MaterialApp.router(
         routerConfig: _router(observer),
