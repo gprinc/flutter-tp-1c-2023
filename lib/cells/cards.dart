@@ -9,7 +9,9 @@ import 'package:dam_1c_2023/tokens/token_shadows.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import '../atoms/icons/vol_location.dart';
+import '../models/volunteering_list.dart';
 import '../molecules/components.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../molecules/buttons.dart';
@@ -221,12 +223,6 @@ class _InputCardState extends State<InputCard> {
         const SizedBox(
           width: 10,
         ),
-        /*TextButton(
-            onPressed: () {
-              widget.handlePick(text);
-              genero = text;
-            },
-            child: */
         GestureDetector(
           onTap: () {
             widget.handlePick(text);
@@ -335,17 +331,6 @@ class CurrentVolunteeringCard extends StatelessWidget {
                   openMap(volunteering.address);
                 }),
               )
-              /*Align(
-                alignment: Alignment.centerRight,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    VolLocation(() {
-                      openMap(volunteering.address);
-                    }),
-                  ],
-                ),
-              ),*/
             ],
           ),
         ),
@@ -354,20 +339,37 @@ class CurrentVolunteeringCard extends StatelessWidget {
   }
 }
 
-class VolunteeringCard extends StatelessWidget {
+class VolunteeringCard extends StatefulWidget {
   final Volunteering volunteering;
-  final void Function(Volunteering) onFavoritePressed;
   final UserModel? currentUser;
 
-  const VolunteeringCard(
-      {Key? key,
-      required this.volunteering,
-      required this.onFavoritePressed,
-      this.currentUser})
+  const VolunteeringCard({Key? key,
+    required this.volunteering,
+    this.currentUser})
       : super(key: key);
 
   @override
+  _VolunteeringCardState createState() => _VolunteeringCardState();
+}
+
+class _VolunteeringCardState extends State<VolunteeringCard> {
+  bool? showFav;
+
+  void onFavoritePressed(Volunteering vol) {
+    if (widget.currentUser != null) {
+      Provider.of<VolunteeringList>(context, listen: false)
+          .updateFavorites(vol, widget.currentUser!.email).then((value) => {
+            setState(() {
+              showFav = true;
+            })
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    showFav = widget.volunteering.favoritos
+        .contains(widget.currentUser?.email);
     return Container(
       //height: 234,
       decoration: cardShadow,
@@ -383,7 +385,7 @@ class VolunteeringCard extends StatelessWidget {
                   child: SizedBox(
                     height: 138,
                     child: Image.asset(
-                      volunteering.imageName,
+                      widget.volunteering.imageName,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -402,7 +404,7 @@ class VolunteeringCard extends StatelessWidget {
                     style: overline,
                   ),
                   Text(
-                    volunteering.title,
+                    widget.volunteering.title,
                     style: subtitle01,
                   ),
                   const SizedBox(
@@ -413,18 +415,17 @@ class VolunteeringCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       VacanciesNoConstrains(
-                        counter: 10 - volunteering.participantsEmail.length,
+                        counter: 10 - widget.volunteering.participantsEmail.length,
                       ),
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           FavoriteIcon(
-                            callback: () => onFavoritePressed(volunteering),
-                            icon: volunteering.favoritos
-                                    .contains(currentUser?.email)
-                                ? Icons.favorite
-                                : Icons.favorite_border,
+                            callback: () => onFavoritePressed(widget.volunteering),
+                            icon: showFav == null || !showFav!
+                                ? Icons.favorite_border
+                                : Icons.favorite,
                             color: primary,
                           ),
                           const SizedBox(
@@ -434,7 +435,7 @@ class VolunteeringCard extends StatelessWidget {
                             padding:
                                 const EdgeInsets.only(right: 4.0, left: 4.0),
                             child: VolLocationNoPadding(() {
-                              openMap(volunteering.address);
+                              openMap(widget.volunteering.address);
                             }),
                           )
                         ],
@@ -444,52 +445,6 @@ class VolunteeringCard extends StatelessWidget {
                 ],
               ),
             )
-            /*Padding(
-              padding: const EdgeInsets.only(
-                  top: 8, left: 16, right: 16, bottom: 16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'ACCIÓN SOCIAL',
-                    style: overline,
-                  ),
-                  Text(
-                    volunteering.title,
-                    style: subtitle01,
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 115),
-                        child: Vacancies(
-                            counter:
-                                10 - volunteering.participantsEmail.length),
-                      ),
-                      IconButton(
-                          onPressed: () => onFavoritePressed(volunteering),
-                          padding: EdgeInsets.zero,
-                          constraints: BoxConstraints(),
-                          icon: Icon(
-                            volunteering.favoritos.contains(currentUser?.email)
-                                ? Icons.favorite
-                                : Icons.favorite_border,
-                            color: primary,
-                          )),
-                      VolLocation(() {
-                        openMap(volunteering.address);
-                      })
-                    ],
-                  ),
-                ],
-              ),
-            ),*/
           ],
         ),
       ),

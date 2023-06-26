@@ -51,10 +51,8 @@ class HomeState extends State<Home> {
 
   @override
   void initState() {
-    //Future.delayed(Duration.zero, () {
       Provider.of<VolunteeringList>(context, listen: false).getFromFirebase();
       Provider.of<NewsList>(context, listen: false).getFromFirebase();
-    //});
     super.initState();
   }
 
@@ -64,16 +62,7 @@ class HomeState extends State<Home> {
     UserModel? currentUser =
         Provider.of<UserService>(context, listen: false).user;
 
-    void onFavoritePressed(Volunteering vol) {
-      if (currentUser != null) {
-        Provider.of<VolunteeringList>(context)
-            .updateFavorites(vol, currentUser.email);
-      }
-    }
-
     return DefaultTabController(
-      // --> Puedo manejar el estado del TabBar de forma automatica.
-      // Es una clase "Inherited" que no convenia a veces.
       length: 3,
       child: Scaffold(
           appBar: AppBar(
@@ -89,19 +78,6 @@ class HomeState extends State<Home> {
                 ),
               ],
             ),
-            /*leading: SizedBox(
-                width: 16, // Adjust this value as needed
-                child: rectangularLogo
-                Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 14),
-                    child: rectangularLogo,
-                  ),
-                ],
-              ),
-                ),*/
             bottom: PreferredSize(
               preferredSize: _tabBar.preferredSize,
               child: Container(color: inactiveTab, child: _tabBar),
@@ -203,8 +179,6 @@ class HomeState extends State<Home> {
                                                   child: VolunteeringCard(
                                                       volunteering:
                                                           volunteering,
-                                                      onFavoritePressed:
-                                                          onFavoritePressed,
                                                       currentUser: currentUser),
                                                   onTap: () => context.goNamed(
                                                       'selected-card',
