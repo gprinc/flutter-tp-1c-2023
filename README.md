@@ -56,8 +56,8 @@ Para el logueo o registración de la app se utilizo Firebase Auth, con únicamen
 ### Notificaciones
 
 Las push notifications fueron implementadas utilizando las siguientes librerías:
-[flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications)
-[Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging?hl=es-419)
+- [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications)
+- [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging?hl=es-419)
 
 Actualmente la aplicación soporta tanto background notifications como foreground notifications. 
 Por un lado se integró con Firebase Messaging para agregar el manejo general de notificaciones y se la complementó con flutter-local-notifications para poder emitir cuando la app se encuentra en foreground, ya que por default firebase no muestra las notificaciones si la app se encuentra en foreground (solo recibe el mensaje). Además de mostrar la notificación al usuario, la aplicación posee un handler para cuando el usuario interacciona con la notificación, parseando el payload del mismo (en caso de novedades, por ejemplo, el payload contiene el tipo de notificación y el identificaor de la novedad) para el correcto ruteo en la aplicación.
