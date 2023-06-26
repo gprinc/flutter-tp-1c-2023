@@ -63,7 +63,10 @@ Por un lado se integró con Firebase Messaging para agregar el manejo general de
 
 #### Testing de notificaciones
 Para probar el correcto funcionamiento de las notificaciones, se utilizó la herramienta [Postman](https://www.postman.com/) con. la siguiente configuración: 
+<img width="1079" alt="Captura de pantalla 2023-06-26 a la(s) 19 26 23" src="https://github.com/gprinc/flutter-tp-1c-2023/assets/37815318/b2cec0e6-dcca-4692-932b-d98833b0d592">
 
+De esta manera, las notificaciones se muestran en foreground: 
+![Captura de pantalla 2023-06-26 a la(s) 19 34 21](https://github.com/gprinc/flutter-tp-1c-2023/assets/37815318/abe8cfcd-c91c-46b0-af75-31fed1f84ac9)
 
 #### Dificultades
 Si bien las funcionalidades mencionadas anteriormente con respecto a las notificaciones estan funcionando y estan probadas, hubo una dificultad que no se pudo sortear. Cuando el usuario presiona. la notificación, la misma reacciona ante evento, extrae la información relevante del payload, pero no llega a rutear correctamente a la página deseada. Esto no se debe a ninguna falta de configuración o mal funcionamiento de la implementación de notifiaciones, sino a un inconveniente con el BuildContext y el la configuración de GoRouter. Probamos muchas opciones distintas para solucionar esto (una de ellas, utilizar el widget Builder para utilizar el contexto del parent widget al configurar el router) sin embargo, no pudimos terminar de solucionarlo. 
