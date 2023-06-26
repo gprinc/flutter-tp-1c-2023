@@ -6,11 +6,12 @@
 
 ### Contenido
 
-- Descripción
-- Arquitectura
-- Monitoreo
-- Notificaciones
-- Autores
+- [Descripción](#descripción)
+- [Arquitectura](#arquitectura)
+- [Monitoreo](#monitoreo)
+- [Autenticación](#autenticación)
+- [Notificaciones](#notificaciones)
+- [Autores](#autores)
 
 ## Descripción
 
@@ -23,9 +24,9 @@ La aplicación consta de una aplicación frontend desarrollada en dart mediante 
 ### Firebase
 
 La base modela los datos mediante las siguientes colecciones:
-- users: contiene toda la información relevante del usuario (email, id, nombre, apellido, etc.)
-- novedades (Los campos de la novedad son: )
-- voluntariados (Los campos del voluntariado son: )
+- users
+- novedades
+- voluntariados
 
 ### State management
 Se utilizó la librería Provider para el manejo de estado de la aplicación. Esta librería nos permite obtener información tanto de los voluntariados como de las novedades y el manejo de la información del usuario de una manera eficiente y sencilla. 
@@ -35,11 +36,15 @@ Para el manejo de deep links se utilizó la librería GoRouter, siendo esta la m
 También, se configuraron los archivos correspondientes con el siguiente esquema:
 sermanos://pages/[page]
 
+Si fuese que también se estuviese trabajando en una aplicación web, se configuraría el deep link con el schema y el server de esa aplicación web, con el fin de que al abrir en el navegador la versión web de la aplicación, el mismo SO del dispositivo pueda redirigir al usuario a la versión móvil. Como solo contamos con una aplicación móvil, se optó por configurar. el esquema anteriormente mencionado. 
+
 ### Testing
 
 Se implementaron los siguientes tipos de test:
 #### Unit testing
-En este caso se testearon los distintos servicios que nos permiten interactuar con los voluntariados, las novedades y los usuarios. Para ello, se mockearon los sericios y la base de firebase utilizando la librería [fake_cloud_firestore](https://pub.dev/packages/fake_cloud_firestore/example)
+En este caso se testearon los distintos servicios que nos permiten interactuar con los voluntariados, las novedades y los usuarios. Para ello, se mockearon los sericios y la base de firebase utilizando la librería [fake_cloud_firestore](https://pub.dev/packages/fake_cloud_firestore/example)<br />
+Para correr los unit tests, se debe correr el comando:
+`flutter test`
 
 #### Golden tests
 Se realizan en distintos dispositivos de diferentes tamaños con el fin de testear los widgets de la UI con snapshots, siendo exitoso el test si lucieran de la misma manera. 
@@ -53,10 +58,45 @@ Para el monitoreo de la aplicación utilizamos Crashlytics de Firebase (para err
 Para el logueo o registración de la app se utilizo Firebase Auth, con únicamente disponible el ingreso usando un email y contraseña.
 
 ### Notificaciones
-Por un lado se integró con Firebase Messaging para agregar el manejo general de notificaciones y se la complementó con flutter-local-notifications para poder emitir cuando la app se encuentra en foreground, ya que por default firebase no muestra las notificaciones si la app se encuentra en foreground (solo recibe el mensaje).
 
-### Dificultades
+Las push notifications fueron implementadas utilizando las siguientes librerías:
+- [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications)
+- [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging?hl=es-419)
 
-- No se pudo agregar deep linking dentro de la notificación por un problema con el ruteo a la pantalla indicada. Se recibe la información para saber a donde redirigir pero no se tiene un context válido que visualice el router para navegar a dicha pantalla.
+Actualmente la aplicación soporta tanto background notifications como foreground notifications. 
+Por un lado se integró con Firebase Messaging para agregar el manejo general de notificaciones y se la complementó con flutter-local-notifications para poder emitir cuando la app se encuentra en foreground, ya que por default firebase no muestra las notificaciones si la app se encuentra en foreground (solo recibe el mensaje). Además de mostrar la notificación al usuario, la aplicación posee un handler para cuando el usuario interacciona con la notificación, parseando el payload del mismo (en caso de novedades, por ejemplo, el payload contiene el tipo de notificación y el identificaor de la novedad) para el correcto ruteo en la aplicación.
 
-- 
+#### Testing de notificaciones
+Para probar el correcto funcionamiento de las notificaciones, se utilizó la herramienta [Postman](https://www.postman.com/). Para el request, debe hacerse un POST a https://fcm.googleapis.com/fcm/send utilizando el siguiente formato en el body:  <br />
+```
+{
+    "to": "<DEVICE_TOKEN>",
+    "notification": {
+        "title": "Novedades",
+        "body": "Nueva noticia cargada!"
+    },
+    "data": {
+        "id": "1",
+        "type": "noticias"
+    }
+}
+```
+Como último requisito, debemos habilitar el servicio Firebase Cloud Messaging en Firebase para obtener un SERVER_KEY y utilizarlo en el header Authorization.
+
+De esta manera, las notificaciones se muestran en foreground: <br />
+<br />
+![Captura de pantalla 2023-06-26 a la(s) 19 42 37](https://github.com/gprinc/flutter-tp-1c-2023/assets/37815318/3adc8aad-76b2-486e-9092-4faa4ae14ba2)
+
+
+
+#### Dificultades
+Si bien las funcionalidades mencionadas anteriormente con respecto a las notificaciones estan funcionando y estan probadas, hubo una dificultad que no se pudo sortear. Cuando el usuario presiona. la notificación, la misma reacciona ante evento, extrae la información relevante del payload, pero no llega a rutear correctamente a la página deseada. Esto no se debe a ninguna falta de configuración o mal funcionamiento de la implementación de notifiaciones, sino a un inconveniente con el BuildContext y el la configuración de GoRouter. Probamos muchas opciones distintas para solucionar esto (una de ellas, utilizar el widget Builder para utilizar el contexto del parent widget al configurar el router) sin embargo, no pudimos terminar de solucionarlo. 
+
+
+## Autores
+
+- [@maanuluque](https://github.com/maanuluque)
+- [@gprinc](https://github.com/gprinc)
+- [@agbossi](https://github.com/agbossi)
+
+
