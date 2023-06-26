@@ -78,7 +78,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await FirebaseNotificationService.initializeFirebase();
-  // final RemoteMessage? _message = await FirebaseNotificationService.firebaseMessaging.getInitialMessage();
+  final RemoteMessage? _message = await FirebaseNotificationService.firebaseMessaging.getInitialMessage();
 
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
