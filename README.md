@@ -85,17 +85,18 @@ Como último requisito, debemos habilitar el servicio Firebase Cloud Messaging e
 
 De esta manera, las notificaciones se muestran en foreground: <br />
 <br />
-![Captura de pantalla 2023-06-26 a la(s) 19 42 37](https://github.com/gprinc/flutter-tp-1c-2023/assets/37815318/3adc8aad-76b2-486e-9092-4faa4ae14ba2)
+![notificacion](https://github.com/gprinc/flutter-tp-1c-2023/assets/37815318/b7981274-0e64-493f-b725-1350021c6692)
 
 
 
 #### Dificultades
 Si bien las funcionalidades mencionadas anteriormente con respecto a las notificaciones estan funcionando y estan probadas, hubo una dificultad que no se pudo sortear. Cuando el usuario presiona. la notificación, la misma reacciona ante evento, extrae la información relevante del payload, pero no llega a rutear correctamente a la página deseada. Esto no se debe a ninguna falta de configuración o mal funcionamiento de la implementación de notifiaciones, sino a un inconveniente con el BuildContext y el la configuración de GoRouter. Probamos muchas opciones distintas para solucionar esto (una de ellas, utilizar el widget Builder para utilizar el contexto del parent widget al configurar el router) sin embargo, no pudimos terminar de solucionarlo. 
 
-### Comentarios finales sobre el diseño
+### Comentarios finales y aclaraciones
 
 1) Para confirmar la participación de un usuario a un voluntariado, se debe modificar la base de datos de firebase. Simplemente se logra pasando un usuario de un voluntariado de "appliersEmail" a "participantsEmails". De esa manera, se mostrará el diseño correspondiente en la página de un voluntariado.
-2) En el perfil, no se podrá modificar el email del usuario. Esto se debió a una decisión de diseño ya que el email es la única manera de distinguir a un usuario de manera inequívoca. 
+2) En el perfil, no se podrá modificar el email del usuario. Esto se debió a una decisión de diseño ya que el email es la única manera de distinguir a un usuario de manera inequívoca.
+3) El APK debe correrse arrastrando el archivo a el emulador. 
 
 ## Aclaraciones
 
