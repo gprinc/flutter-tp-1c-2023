@@ -97,6 +97,16 @@ Si bien las funcionalidades mencionadas anteriormente con respecto a las notific
 1) Para confirmar la participación de un usuario a un voluntariado, se debe modificar la base de datos de firebase. Simplemente se logra pasando un usuario de un voluntariado de "appliersEmail" a "participantsEmails". De esa manera, se mostrará el diseño correspondiente en la página de un voluntariado.
 2) En el perfil, no se podrá modificar el email del usuario. Esto se debió a una decisión de diseño ya que el email es la única manera de distinguir a un usuario de manera inequívoca. 
 
+## Aclaraciones
+
+Para correr la app debe agregarse los archivos en los lugares indicados:
+
+
+- /android/key.properties
+- /android/app/google-services.json
+- /ios/firebase_app_id_file.json
+
+
 ## Autores
 
 - [@maanuluque](https://github.com/maanuluque)
