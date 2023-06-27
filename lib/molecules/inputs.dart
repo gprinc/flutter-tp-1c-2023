@@ -164,7 +164,7 @@ class _LabelTextInputState extends State<LabelTextInput> {
     if (widget.obscureInput) {
       return IconButton(
         icon: Icon(
-          _isObscured ? Icons.visibility : Icons.visibility_off,
+          _isObscured ? Icons.visibility_off : Icons.visibility,
           color: Colors.grey,
         ),
         onPressed: () {
