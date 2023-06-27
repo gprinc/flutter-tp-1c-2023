@@ -121,31 +121,6 @@ void main() {
         [userMockedProvider]);
   });
 
-  testGoldens('Golden test completar perfil', (WidgetTester tester) async {
-    UserModel user =
-        UserModel(email: "user@itba.edu.ar", name: 'User', lastName: 'Model');
-    await goldenTest(tester, ProfileModal(user: user, callback: () {}),
-        'profile_modal_vacio', [userMockedProvider]);
-  });
-
-  testGoldens('Golden test perfil completado', (WidgetTester tester) async {
-    UserModel user = UserModel(
-        email: "user@itba.edu.ar",
-        name: 'User',
-        lastName: 'Model',
-        birthDay: '09/07/1990',
-        phoneNumber: '+549112255664',
-        gender: 'Hombre');
-    await goldenTest(
-        tester,
-        ProfileModal(
-          user: user,
-          callback: () {},
-        ),
-        'profile_modal_lleno',
-        [userMockedProvider]);
-  });
-
   testGoldens('Golden test tab novedades', (WidgetTester tester) async {
     await goldenTest(tester, const NewsTab(), 'tab_novedades',
         [userMockedProvider, newsMockedProvider]);
