@@ -2,7 +2,6 @@ import 'package:dam_1c_2023/tokens/token_shadows.dart';
 import 'package:flutter/material.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:intl/intl.dart';
-
 import '../tokens/token_colors.dart';
 
 class Input extends StatefulWidget {
@@ -100,9 +99,9 @@ class _InputState extends State<Input> {
         controller: _controller,
         decoration: InputDecoration(
             labelText: _getLabelText(),
-            labelStyle: subtitle01,
+            labelStyle: subtitle01Modif(searchLbl),
             hintText: _hasFocus ? '' : widget.placeHolder,
-            hintStyle: subtitle01,
+            hintStyle: subtitle01Modif(searchLbl),
             focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.blue),
             ),
@@ -136,6 +135,7 @@ class LabelTextInput extends StatefulWidget {
   final bool obscureInput;
   final TextEditingController controller;
   final TextInputType keyboardType;
+  final bool enabled;
   final String? value;
 
   const LabelTextInput(
@@ -146,6 +146,7 @@ class LabelTextInput extends StatefulWidget {
       required this.label,
       this.obscureInput = false,
       this.value = '',
+      this.enabled = true,
       this.keyboardType = TextInputType.text});
 
   @override
@@ -155,7 +156,7 @@ class LabelTextInput extends StatefulWidget {
 class _LabelTextInputState extends State<LabelTextInput> {
   bool _hasError = false;
   bool _hasFocus = false;
-  bool _isObscured = true;
+  late bool _isObscured;
   final FocusNode _focus = FocusNode();
   late TextEditingController _controller;
 
@@ -165,7 +166,7 @@ class _LabelTextInputState extends State<LabelTextInput> {
     if (widget.obscureInput) {
       return IconButton(
         icon: Icon(
-          _isObscured ? Icons.visibility : Icons.visibility_off,
+          _isObscured ? Icons.visibility_off : Icons.visibility,
           color: Colors.grey,
         ),
         onPressed: () {
@@ -192,6 +193,7 @@ class _LabelTextInputState extends State<LabelTextInput> {
     _focus.addListener(_onFocusChange);
     _controller = widget.controller;
     _controller.text = widget.value ?? '';
+    _isObscured = widget.obscureInput;
   }
 
   @override
@@ -211,14 +213,15 @@ class _LabelTextInputState extends State<LabelTextInput> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+        enabled: widget.enabled,
         keyboardType: widget.keyboardType,
         controller: _controller,
         decoration: InputDecoration(
             floatingLabelBehavior: FloatingLabelBehavior.always,
             labelText: widget.label,
-            labelStyle: subtitle01,
+            labelStyle: subtitle01Modif(searchLbl),
             hintText: widget.placeHolder,
-            hintStyle: subtitle01,
+            hintStyle: subtitle01Modif(searchLbl),
             focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.blue),
             ),
@@ -233,7 +236,7 @@ class _LabelTextInputState extends State<LabelTextInput> {
             ),
             suffixIcon: _getStateIcon()),
         style: subtitle01,
-        obscureText: widget.obscureInput,
+        obscureText: _isObscured,
         validator: (value) {
           String? validation = widget.validator(value);
           setState(() {
@@ -246,10 +249,13 @@ class _LabelTextInputState extends State<LabelTextInput> {
 }
 
 class SearchInput extends StatefulWidget {
-  final void Function() search;
+  final void Function(String value) search;
   //final String placeHolder;
 
-  const SearchInput({super.key, required this.search});
+  const SearchInput({
+    Key? key,
+    required this.search,
+  }) : super(key: key);
 
   @override
   State<SearchInput> createState() => _SearchInputState();
@@ -260,21 +266,32 @@ class _SearchInputState extends State<SearchInput> {
   final FocusNode _focus = FocusNode();
   final TextEditingController _controller = TextEditingController();
 
-  Widget? _getStateIcon() {
-    return _controller.text.isNotEmpty && !_hasFocus
+  Widget? _getPrefixStateIcon() {
+    return _controller.text.isNotEmpty
+        ? null
+        : const Icon(
+            Icons.search,
+            color: btnSecondary,
+          );
+  }
+
+  Widget? _getSuffixStateIcon() {
+    // If no focus, and no text => Map Icon
+    return _hasFocus && _controller.text.isNotEmpty
+        // If focus and text => return Clear Icon
         ? IconButton(
             icon: const Icon(
               Icons.clear,
               color: btnSecondary,
             ),
             onPressed: () {
-              _controller.clear();
+              setState(() {
+                _controller.clear();
+              });
+              widget.search(''); // Call _runFilter with an empty string
             },
           )
-        : IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: widget.search,
-          );
+        : null;
   }
 
   @override
@@ -300,22 +317,28 @@ class _SearchInputState extends State<SearchInput> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: shadow01,
-      child: TextFormField(
+      decoration: const BoxDecoration(
+        color: cardBg,
+        boxShadow: [
+          searchBarShadow,
+        ],
+      ),
+      child: TextField(
           onChanged: (value) {
-            setState(() {});
+            widget.search(value);
           },
           controller: _controller,
           decoration: InputDecoration(
               hintText: 'Buscar',
-              hintStyle: subtitle01,
+              hintStyle: subtitle01Modif(searchLbl),
               enabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey),
               ),
               focusedBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey),
               ),
-              suffixIcon: _getStateIcon()),
+              prefixIcon: _getPrefixStateIcon(),
+              suffixIcon: _getSuffixStateIcon()),
           style: subtitle01,
           focusNode: _focus),
     );
@@ -426,13 +449,12 @@ class _LabelDateInputState extends State<LabelDateInput> {
         controller: _controller,
         keyboardType: TextInputType.datetime,
         decoration: InputDecoration(
-            helperText: 'Día / Mes / Año',
             helperStyle: body02,
             floatingLabelBehavior: FloatingLabelBehavior.always,
             labelText: widget.label,
-            labelStyle: subtitle01,
+            labelStyle: subtitle01Modif(searchLbl),
             hintText: widget.placeHolder,
-            hintStyle: subtitle01,
+            hintStyle: subtitle01Modif(searchLbl),
             focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.blue),
             ),

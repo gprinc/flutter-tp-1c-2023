@@ -3,7 +3,6 @@ import 'package:dam_1c_2023/molecules/buttons.dart';
 import 'package:dam_1c_2023/tokens/token_colors.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 
 class NewsPage extends StatelessWidget {
@@ -27,6 +26,7 @@ class NewsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+          elevation: 0,
           leading: const ArrowBackIcon(),
           title: Padding(
             padding: const EdgeInsets.only(right: 40, top: 20, bottom: 20),
@@ -72,31 +72,33 @@ class NewsPage extends StatelessWidget {
                 title,
                 style: headLine02,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  SizedBox(
-                    width: 328,
-                    height: 160,
-                    child: Image.asset(
-                      imageName,
-                      fit: BoxFit.fitWidth,
+                  Expanded(
+                    child: SizedBox(
+                      //width: 328,
+                      height: 160,
+                      child: Image.asset(
+                        imageName,
+                        fit: BoxFit.fitWidth,
+                      ),
                     ),
                   ),
                 ],
               ),
               // Imagen
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               Text(
                 description,
-                style: subtitle01Modif(secondaryBlue),
+                style: subtitle01Modif(selectedTab),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               Text(
@@ -104,23 +106,22 @@ class NewsPage extends StatelessWidget {
                 style: body01,
                 textAlign: TextAlign.start,
               ),
-              SizedBox(
-                height: 16,
+              const SizedBox(
+                height: 24,
               ),
-              Center(
+              const Center(
                   child: Text(
                 'Comparte esta nota',
                 style: headLine02,
               )),
-              SizedBox(
-                height: 16,
+              const SizedBox(
+                height: 32,
               ),
               CtaButton(
                   text: 'Compartir',
                   handlePress: () {
                     Share.share(
-                        'mira esta novedad: https://sermanos.com/selected-news/' +
-                            index.toString());
+                        'mira esta novedad: sermanos://pages/selected-news/$index');
                   },
                   enabledState: true)
             ],

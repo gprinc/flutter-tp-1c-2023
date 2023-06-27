@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../firebase/firebase_cloudstore.dart';
 import 'news.dart';
 
 class NewsList extends ChangeNotifier {
+  bool loading = false;
   final List<News> _news = [
     News(
       header: 'REPORTE 2820',
@@ -41,10 +43,50 @@ class NewsList extends ChangeNotifier {
     // Add more volunteerings here...
   ];
 
-  List<News> get news => _news;
+  NewsList.withFirebaseCloudstore(
+      FirebaseCloudstoreITBA firebaseCloudstoreITBA) {
+    _firebaseCloudstore = firebaseCloudstoreITBA;
+  }
 
-  void addVolunteering(News news) {
+  NewsList() {
+    _firebaseCloudstore = FirebaseCloudstoreITBA();
+  }
+
+  final List<News> _firebaseNews = [];
+  late FirebaseCloudstoreITBA _firebaseCloudstore;
+  void setFirebaseCloudstore(FirebaseCloudstoreITBA firebaseCloudstore) {
+    _firebaseCloudstore = firebaseCloudstore;
+  }
+
+  List<News> get news => _firebaseNews;
+
+  Future<void> getFromFirebase() async {
+    loading = true;
+    try {
+      var aux = await _firebaseCloudstore
+          .db
+          .collection('ser_manos_data')
+          .doc('novedades')
+          .get();
+      Map<String, dynamic>? data = aux.data();
+      if (data != null) {
+        var newsData = data['values'] as List<dynamic>;
+        newsData.forEach((element) {
+          _firebaseNews.add(News.fromJson(element));
+        });
+      }
+      notifyListeners();
+    } catch (error, stackTrace) {
+      print('Error occurred during Firebase news retrieval: $error');
+      print(stackTrace);
+    } finally {
+      loading = false;
+    }
+  }
+
+  void addNews(News news) {
     _news.add(news);
     notifyListeners();
   }
+
 }

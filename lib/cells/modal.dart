@@ -13,10 +13,11 @@ buildModal(BuildContext context, Widget body) {
         return FractionallySizedBox(
           heightFactor: 1.0,
           child: Container(
-              decoration: const BoxDecoration(
-                color: neutralBg,
-              ),
-              child: SingleChildScrollView(child: body)),
+            decoration: const BoxDecoration(
+              color: neutralBg,
+            ),
+            child: SingleChildScrollView(child: body),
+          ),
         );
       });
 }

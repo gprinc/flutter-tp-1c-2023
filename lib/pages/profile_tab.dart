@@ -1,98 +1,196 @@
 import 'package:dam_1c_2023/cells/cards.dart';
+import 'package:dam_1c_2023/models/userService.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../cells/modal.dart';
 import '../cells/profile_modal.dart';
+import '../models/user.dart';
 import '../molecules/buttons.dart';
 import '../tokens/token_fonts.dart';
 
-class ProfileTab extends StatelessWidget {
-  const ProfileTab({super.key, this.isEmpty = true});
+class ProfileTab extends StatefulWidget {
+  final UserModel user;
 
-  final bool isEmpty;
+  const ProfileTab({super.key, required this.user});
 
-  showProfileModal(BuildContext context) {
-    buildModal(context, const ProfileModal());
+  @override
+  State<ProfileTab> createState() => _ProfileTabState();
+}
+
+class _ProfileTabState extends State<ProfileTab> {
+  showProfileModal(
+      BuildContext context, Function(String, String, String) updateProfile) {
+    buildModal(
+        context, ProfileModal(user: widget.user, callback: updateProfile));
+  }
+
+  void updateProfile(String birthday, String phoneNumber, String gender) {
+    // Update the state in the ProfileTab using the received values
+    // You can use setState or any other state management approach here
+    // For example:
+    setState(() {
+      widget.user.birthDay = birthday;
+      widget.user.phoneNumber = phoneNumber;
+      widget.user.gender = gender;
+    });
   }
 
   Widget filledProfile(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: SingleChildScrollView(
           child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(
-                      width: 120,
-                      height: 120,
-                      child: Image.asset('assets/profile.png'),
-                    ),
-                    const SizedBox(height: 16),
-                    const Text('Voluntario', style: overline),
-                    const SizedBox(height: 2),
-                    const Text('Juan Cruz Gonzalez', style: subtitle01),
-                    const SizedBox(height: 2),
-                    Text(
-                      "mimail@gmail.com",
-                      style: body01Modif(const Color(0xff0D47A1)),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-                const InformationCard(
-                  title: 'Información personal',
-                  label1: 'FECHA DE NACIMIENTO',
-                  content1: '10/08/1990',
-                  label2: 'Género',
-                  content2: 'Hombre',
-                ),
-                const InformationCard(
-                  title: 'Datos de contacto',
-                  label1: 'Teléfono',
-                  content1: '+5491165863216',
-                  label2: 'E-MAIL',
-                  content2: 'mimail@gmail.com',
-                ),
-                SizedBox(
-                  child: Column(
+            children: [
+              const SizedBox(
+                height: 32,
+              ),
+              SizedBox(
+                width: 120,
+                height: 120,
+                child: Image.asset('assets/icon_picture.png'),
+              ),
+              const SizedBox(height: 16),
+              const Text('Voluntario', style: overline),
+              const SizedBox(height: 2),
+              Text('${widget.user.name} ${widget.user.lastName}',
+                  style: subtitle01),
+              const SizedBox(height: 2),
+              Text(
+                widget.user.email,
+                style: body01Modif(const Color(0xff0D47A1)),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 32,
+              ),
+              InformationCard(
+                title: 'Información personal',
+                label1: 'FECHA DE NACIMIENTO',
+                content1: widget.user.birthDay!,
+                label2: 'Género',
+                content2: widget.user.gender!,
+              ),
+              const SizedBox(
+                height: 32,
+              ),
+              InformationCard(
+                title: 'Datos de contacto',
+                label1: 'Teléfono',
+                content1: widget.user.phoneNumber!,
+                label2: 'E-MAIL',
+                content2: widget.user.email,
+              ),
+              const SizedBox(
+                height: 32,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: CtaButton(
+                    text: 'Editar perfil',
+                    handlePress: () => showProfileModal(context, updateProfile),
+                    enabledState: true),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextButton(
+                onPressed: () => context.goNamed('login'),
+                child: Text('Cerrar sesion',
+                    style: btnModif(const Color(0xffB3261E))),
+              ),
+              const SizedBox(
+                height: 32,
+              )
+            ],
+          ),
+        )
+        /*Column(
+        children: [
+          Expanded(
+            child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      CtaButton(
-                          text: 'Editar perfil',
-                          handlePress: () => showProfileModal(context),
-                          enabledState: true),
-                      const SizedBox(
-                        height: 20,
+                      SizedBox(
+                        width: 120,
+                        height: 120,
+                        child: Image.asset('assets/icon_picture.png'),
                       ),
-                      TextButton(
-                        onPressed: () => context.goNamed('login'),
-                        child: Text('Cerrar sesion',
-                            style: btnModif(const Color(0xffB3261E))),
-                      )
+                      const SizedBox(height: 16),
+                      const Text('Voluntario', style: overline),
+                      const SizedBox(height: 2),
+                      Text('${widget.user.name} ${widget.user.lastName}',
+                          style: subtitle01),
+                      const SizedBox(height: 2),
+                      Text(
+                        widget.user.email,
+                        style: body01Modif(const Color(0xff0D47A1)),
+                        textAlign: TextAlign.center,
+                      ),
                     ],
                   ),
-                )
-              ]),
-        ),
-        SizedBox(
-          height: 22,
-        )
-      ],
-    );
+                  InformationCard(
+                    title: 'Información personal',
+                    label1: 'FECHA DE NACIMIENTO',
+                    content1: widget.user.birthDay!,
+                    label2: 'Género',
+                    content2: widget.user.gender!,
+                  ),
+                  InformationCard(
+                    title: 'Datos de contacto',
+                    label1: 'Teléfono',
+                    content1: widget.user.phoneNumber!,
+                    label2: 'E-MAIL',
+                    content2: widget.user.email,
+                  ),
+                  SizedBox(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: CtaButton(
+                              text: 'Editar perfil',
+                              handlePress: () =>
+                                  showProfileModal(context, updateProfile),
+                              enabledState: true),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Provider.of<UserService>(context, listen: false).logoutUser();
+                            context.goNamed('login');
+                          },
+                          child: Text('Cerrar sesion',
+                              style: btnModif(const Color(0xffB3261E))),
+                        )
+                      ],
+                    ),
+                  )
+                ]),
+          ),
+          const SizedBox(
+            height: 32,
+          )
+        ],
+      ),*/
+        );
   }
 
   Widget emptyProfile(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Expanded(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Container(
-            decoration: BoxDecoration(),
+            decoration: const BoxDecoration(),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -101,12 +199,13 @@ class ProfileTab extends StatelessWidget {
                   SizedBox(
                     width: 120,
                     height: 120,
-                    child: Image.asset('assets/profile.png'),
+                    child: Image.asset('assets/icon_picture.png'),
                   ),
                   const SizedBox(height: 16),
                   const Text('Voluntario', style: overline),
                   const SizedBox(height: 8),
-                  const Text('Juan Cruz', style: subtitle01),
+                  Text('${widget.user.name} ${widget.user.lastName}',
+                      style: subtitle01),
                   const SizedBox(height: 8),
                   const Center(
                     child: Text(
@@ -123,12 +222,10 @@ class ProfileTab extends StatelessWidget {
       ),
       const SizedBox(height: 16),
       Center(
-        child: Container(
-          width: 123,
-          height: 48,
-          margin: const EdgeInsets.only(bottom: 80),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 80),
           child: ShortButton(
-            handlePress: () => showProfileModal(context),
+            handlePress: () => showProfileModal(context, updateProfile),
             text: 'Completar',
             enabledState: true,
           ),
@@ -140,6 +237,8 @@ class ProfileTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return isEmpty ? emptyProfile(context) : filledProfile(context);
+    return widget.user.phoneNumber == null || widget.user.phoneNumber == ''
+        ? emptyProfile(context)
+        : filledProfile(context);
   }
 }

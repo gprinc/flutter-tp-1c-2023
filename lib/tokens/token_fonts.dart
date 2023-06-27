@@ -41,9 +41,9 @@ TextStyle subtitle01Modif(Color givenColor) {
     fontFamily: 'Roboto',
     fontStyle: FontStyle.normal,
     fontWeight: FontWeight.w400,
-    fontSize: 14,
+    fontSize: 16,
     //height: 20,
-    letterSpacing: 0.25,
+    letterSpacing: 0.15,
     color: givenColor,
   );
 }
@@ -55,7 +55,7 @@ const TextStyle body01 = TextStyle(
   fontSize: 14,
   //height: 20,
   letterSpacing: 0.25,
-  color: btnSecondary,
+  color: lbl,
 );
 
 TextStyle body01Modif(Color givenColor) {
@@ -76,7 +76,7 @@ const TextStyle body02 = TextStyle(
   fontSize: 12,
   //height: 16,
   letterSpacing: 0.4,
-  color: btnSecondary,
+  color: lbl,
 );
 
 TextStyle btnModif(Color givenColor) {

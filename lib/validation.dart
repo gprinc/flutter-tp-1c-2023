@@ -39,7 +39,7 @@ class Validator {
   static String? dateValidator(String? value) {
     if (value == null || value == '') return 'Campo requerido';
     try {
-      var dateTime2 = DateFormat('dd/MM/yy').parse(value);
+      DateFormat('dd/MM/yy').parse(value);
       return null;
     } on Exception {
       return 'Fecha invalida';

@@ -153,10 +153,12 @@ class IconSplashButton extends StatefulWidget {
       {super.key,
       required this.icon,
       required this.onPress,
+      required this.color,
       this.enabledState = true});
 
   final IconData icon;
   final void Function() onPress;
+  final Color color;
   final bool enabledState;
 
   @override
@@ -167,15 +169,15 @@ class _IconSplashButtonState extends State<IconSplashButton> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 14,
-      width: 14,
+      height: 24,
+      width: 24,
       child: InkWell(
           borderRadius: BorderRadius.circular(100),
+          onTap: widget.enabledState ? () => widget.onPress() : null,
           child: Icon(
             widget.icon,
-            color: btnSecondary,
-          ),
-          onTap: widget.enabledState ? () => widget.onPress() : null),
+            color: widget.color,
+          )),
     );
   }
 }

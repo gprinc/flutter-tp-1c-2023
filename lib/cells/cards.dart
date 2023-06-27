@@ -1,12 +1,19 @@
+import 'package:dam_1c_2023/atoms/icons/heart.dart';
+import 'package:dam_1c_2023/models/user.dart';
+import 'package:dam_1c_2023/models/volunteering.dart';
+import 'package:dam_1c_2023/tokens/token_colors.dart';
 import 'dart:convert';
 import 'dart:typed_data';
-
-import 'package:dam_1c_2023/tokens/token_colors.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
+import 'package:dam_1c_2023/tokens/token_shadows.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:provider/provider.dart';
+import '../atoms/icons/vol_location.dart';
+import '../models/volunteering_list.dart';
+import '../molecules/components.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../molecules/buttons.dart';
 
 class ProfilePicture extends StatefulWidget {
@@ -25,12 +32,6 @@ class _ProfilePictureState extends State<ProfilePicture> {
 
   String get btnText => _isImageSelected ? 'Cambiar foto' : 'Subir foto';
 
-  void _selectImage() {
-    setState(() {
-      _isImageSelected = true;
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -41,12 +42,13 @@ class _ProfilePictureState extends State<ProfilePicture> {
     FilePickerResult? result;
 
     result = await FilePicker.platform.pickFiles(type: FileType.image);
-    setState(() {
-      _isImageSelected = true;
-    });
+
     if (result != null) {
       Uint8List? selectedBytes = result.files.single.bytes;
       if (selectedBytes != null) {
+        setState(() {
+          _isImageSelected = true;
+        });
         widget.handleImageSelect(base64Encode(selectedBytes));
       }
     } else {
@@ -130,22 +132,20 @@ class InformationCard extends StatelessWidget {
   Widget _tile(String label, String content) {
     return Row(
       children: [
-        Container(
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              //crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: body01,
-                ),
-                Text(
-                  content,
-                  style: overline,
-                )
-              ]),
-        ),
+        Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            //crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: overline,
+              ),
+              Text(
+                content,
+                style: body01,
+              )
+            ]),
       ],
     );
   }
@@ -215,12 +215,6 @@ class _InputCardState extends State<InputCard> {
         const SizedBox(
           width: 10,
         ),
-        /*TextButton(
-            onPressed: () {
-              widget.handlePick(text);
-              genero = text;
-            },
-            child: */
         GestureDetector(
           onTap: () {
             widget.handlePick(text);
@@ -284,50 +278,205 @@ class _InputCardState extends State<InputCard> {
   }
 }
 
-class VolunteeringCard extends StatelessWidget {
-  final String title;
-  final String imageName;
+class CurrentVolunteeringCard extends StatelessWidget {
+  final Volunteering volunteering;
 
-  const VolunteeringCard(
-      {Key? key, required this.title, required this.imageName})
-      : super(key: key);
+  const CurrentVolunteeringCard({
+    Key? key,
+    required this.volunteering,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      //height: 72,
+      decoration: cardShadow,
       child: Card(
-        child: Column(children: [
-          Image.asset(
-            imageName,
-            height: 138,
-            width: 328,
+        color: primaryLight,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(6),
+            side: const BorderSide(color: primary)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      "ACCIÓN SOCIAL",
+                      style: overline,
+                    ),
+                    Text(
+                      volunteering.title,
+                      style: subtitle01,
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: VolLocationNoPadding(() {
+                  openMap(volunteering.address);
+                }),
+              )
+            ],
           ),
-          Padding(
-            padding:
-                const EdgeInsets.only(top: 8, bottom: 16, left: 16, right: 18),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
+        ),
+      ),
+    );
+  }
+}
+
+class VolunteeringCard extends StatefulWidget {
+  final Volunteering volunteering;
+  final UserModel? currentUser;
+
+  const VolunteeringCard(
+      {Key? key, required this.volunteering, this.currentUser})
+      : super(key: key);
+
+  @override
+  State<VolunteeringCard> createState() => _VolunteeringCardState();
+}
+
+class _VolunteeringCardState extends State<VolunteeringCard> {
+  bool? showFav;
+
+  void onFavoritePressed(Volunteering vol) {
+    if (widget.currentUser != null) {
+      Provider.of<VolunteeringList>(context, listen: false)
+          .updateFavorites(vol, widget.currentUser!.email)
+          .then((value) => {
+                setState(() {
+                  showFav = true;
+                })
+              });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    showFav = widget.volunteering.favoritos.contains(widget.currentUser?.email);
+    return Container(
+      //height: 234,
+      decoration: cardShadow,
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(2),
+        ),
+        child: Column(
+          children: [
+            Row(
               children: [
                 Expanded(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [const Text('ACCIÓN SOCIAL'), Text(title)],
-                )),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: const [
-                    Icon(Icons.favorite_border),
-                    SizedBox(
-                      width: 23,
+                  child: SizedBox(
+                    height: 138,
+                    child: Image.asset(
+                      widget.volunteering.imageName,
+                      fit: BoxFit.cover,
                     ),
-                    Icon(Icons.location_on),
-                  ],
-                )
+                  ),
+                ),
               ],
             ),
-          )
-        ]),
+            Padding(
+              padding: const EdgeInsets.only(
+                  top: 8, left: 16, right: 16, bottom: 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'ACCIÓN SOCIAL',
+                    style: overline,
+                  ),
+                  Text(
+                    widget.volunteering.title,
+                    style: subtitle01,
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      VacanciesNoConstrains(
+                        counter:
+                            10 - widget.volunteering.participantsEmail.length,
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          FavoriteIcon(
+                            callback: () =>
+                                onFavoritePressed(widget.volunteering),
+                            icon: showFav == null || !showFav!
+                                ? Icons.favorite_border
+                                : Icons.favorite,
+                            color: primary,
+                          ),
+                          const SizedBox(
+                            width: 16,
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(right: 4.0, left: 4.0),
+                            child: VolLocationNoPadding(() {
+                              openMap(widget.volunteering.address);
+                            }),
+                          )
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+Future<void> openMap(String location) async {
+  String googleUrl =
+      'https://www.google.com/maps/search/?api=1&query=$location';
+  final Uri url = Uri.parse(googleUrl);
+  // ignore: unnecessary_null_comparison
+  if (await canLaunchUrl(url)) {
+    await launchUrl(url);
+  } else {
+    throw 'Could not open the map.';
+  }
+}
+
+class EmptyVolunteeringCard extends StatelessWidget {
+  final String msg;
+
+  const EmptyVolunteeringCard({super.key, required this.msg});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: neutralBg,
+      height: 108,
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Align(
+          alignment: Alignment.center,
+          child: Text(
+            msg,
+            style: subtitle01,
+            textAlign: TextAlign.center,
+          ),
+        ),
       ),
     );
   }
@@ -370,11 +519,14 @@ class NewsCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(header, style: overline),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 2),
                     Text(title, style: subtitle01),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 2),
                     Text(description, style: body02),
                     //Text('Leer Más', style: btnModif(primary)),
+                    const SizedBox(
+                      height: 8,
+                    ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisAlignment: MainAxisAlignment.end,

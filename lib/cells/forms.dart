@@ -1,8 +1,10 @@
 import 'package:dam_1c_2023/atoms/logos.dart';
+import 'package:dam_1c_2023/models/userService.dart';
 import 'package:dam_1c_2023/molecules/buttons.dart';
 import 'package:dam_1c_2023/tokens/token_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../molecules/inputs.dart';
 import '../tokens/token_colors.dart';
@@ -36,73 +38,89 @@ class _LoginFormState extends State<LoginForm> {
     return _emailController.text.isNotEmpty && _passController.text.isNotEmpty;
   }
 
-  _validate() {
-    // Validate returns true if the form is valid, or false otherwise.
+  _validate() async {
     if (_formKey.currentState!.validate()) {
-      // If the form is valid, display a snackbar. In the real world,
-      // you'd often call a server or save the information in a database.
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Validando')),
+        const SnackBar(content: Text('Validating')),
       );
-      context.goNamed('home');
+
+      bool isValid = await Provider.of<UserService>(context, listen: false)
+          .loginUser(_emailController.text, _passController.text);
+
+      if (isValid) {
+        // Navigate to home screen
+        context.goNamed('home', params: {'index': '0'});
+      } else {
+        // Display an error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Invalid credentials')),
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      autovalidateMode: AutovalidateMode.disabled,
-      key: _formKey,
-      onChanged: () {
-        setState(() {
-          _enabled = _isComplete();
-          _isFresh = false;
-        });
-      },
-      child: Column(
-        children: <Widget>[
-          const SizedBox(
-            height: 149,
-          ),
-          squareLogo,
-          const SizedBox(
-            height: 43.5,
-          ),
-          LabelTextInput(
-            placeHolder: 'Email',
-            controller: _emailController,
-            validator: Validator.emailValidator,
-            label: 'Email',
-            keyboardType: TextInputType.emailAddress,
-          ),
-          const SizedBox(
-            height: 64,
-          ),
-          LabelTextInput(
-            placeHolder: 'Contraseña',
-            controller: _passController,
-            validator: Validator.passwordValidator,
-            obscureInput: true,
-            label: 'Contraseña',
-          ),
-          const SizedBox(
-            height: 63,
-          ),
-          CtaButton(
-            text: 'Ingresar',
-            handlePress: _validate,
-            enabledState: _isFresh ? false : _enabled,
-            disableAfterPress: true,
-          ),
-          const SizedBox(
-            height: 28,
-          ),
-          TextButton(
-            onPressed: () => context.goNamed('signup'),
-            child: Text('No tengo cuenta', style: btnModif(textBtn)),
-          )
-        ],
-      ),
+    return Column(
+      children: [
+        Form(
+            autovalidateMode: AutovalidateMode.disabled,
+            key: _formKey,
+            onChanged: () {
+              setState(() {
+                _enabled = _isComplete();
+                _isFresh = false;
+              });
+            },
+            child: Expanded(
+              child: Center(
+                child: SingleChildScrollView(
+                  child:
+                      Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                    squareLogo,
+                    const SizedBox(
+                      height: 32,
+                    ),
+                    LabelTextInput(
+                      placeHolder: 'Email',
+                      controller: _emailController,
+                      validator: Validator.emailValidator,
+                      label: 'Email',
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    LabelTextInput(
+                      placeHolder: 'Contraseña',
+                      controller: _passController,
+                      validator: Validator.passwordValidator,
+                      obscureInput: true,
+                      label: 'Contraseña',
+                    ),
+                  ]),
+                ),
+              ),
+            )),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CtaButton(
+              text: 'Iniciar Sesión',
+              handlePress: _validate,
+              enabledState: _isFresh ? false : _enabled,
+              disableAfterPress: true,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            TextButton(
+              onPressed: () => context.goNamed('signup'),
+              child: Text('No tengo cuenta', style: btnModif(primary)),
+            )
+          ],
+        )
+      ],
     );
   }
 }
@@ -172,7 +190,11 @@ class _RegisterFormState extends State<RegisterForm> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Validando')),
       );
-      context.goNamed('welcome');
+      // context.goNamed('welcome');
+      Provider.of<UserService>(context, listen: false)
+          .registerUser(_emailController.text, _firstNameController.text,
+              _lastNameController.text, _passController.text)
+          .then((value) => context.goNamed('welcome'));
     }
   }
 
@@ -185,73 +207,86 @@ class _RegisterFormState extends State<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      autovalidateMode: AutovalidateMode.disabled,
-      onChanged: () {
-        setState(() {
-          _enabled = _isComplete();
-          _isFresh = false;
-        });
-      },
-      child: Column(
-        children: <Widget>[
-          const SizedBox(
-            height: 176,
+    return Column(
+      children: [
+        Form(
+          key: _formKey,
+          autovalidateMode: AutovalidateMode.disabled,
+          onChanged: () {
+            setState(() {
+              _enabled = _isComplete();
+              _isFresh = false;
+            });
+          },
+          child: Expanded(
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/logo.png',
+                      height: 150,
+                      width: 150,
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    LabelTextInput(
+                      placeHolder: 'Ej: Juan ',
+                      controller: _firstNameController,
+                      validator: nameValidator,
+                      label: 'Nombre',
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    LabelTextInput(
+                      placeHolder: 'Ej: Barcena',
+                      controller: _lastNameController,
+                      validator: nameValidator,
+                      label: 'Apellido',
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    LabelTextInput(
+                      placeHolder: 'Ej: juanbarcena@mail.com',
+                      controller: _emailController,
+                      validator: emailValidator,
+                      label: 'Email',
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    LabelTextInput(
+                      placeHolder: 'Ej: ABCD1234',
+                      controller: _passController,
+                      validator: passwordValidator,
+                      obscureInput: true,
+                      label: 'Contraseña',
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
-          LabelTextInput(
-            placeHolder: 'Ej: Juan ',
-            controller: _firstNameController,
-            validator: nameValidator,
-            label: 'Nombre',
-          ),
-          const SizedBox(
-            height: 63,
-          ),
-          LabelTextInput(
-            placeHolder: 'Ej: Barcena',
-            controller: _lastNameController,
-            validator: nameValidator,
-            label: 'Apellido',
-          ),
-          const SizedBox(
-            height: 63,
-          ),
-          LabelTextInput(
-            placeHolder: 'Ej: juanbarcena@mail.com',
-            controller: _emailController,
-            validator: emailValidator,
-            label: 'Email',
-            keyboardType: TextInputType.emailAddress,
-          ),
-          const SizedBox(
-            height: 63,
-          ),
-          LabelTextInput(
-            placeHolder: 'Ej: ABCD1234',
-            controller: _passController,
-            validator: passwordValidator,
-            obscureInput: true,
-            label: 'Contraseña',
-          ),
-          const SizedBox(
-            height: 49,
-          ),
-          CtaButton(
-            text: 'Registrarme',
-            handlePress: _validate,
-            enabledState: _isFresh ? false : _enabled,
-            disableAfterPress: true,
-          ),
-          const SizedBox(
-            height: 29,
-          ),
-          TextButton(
-            onPressed: () => context.goNamed('login'),
-            child: Text('Ya tengo cuenta', style: btnModif(textBtn)),
-          )
-        ],
-      ),
+        ),
+        //const SizedBox(height: 16),
+        CtaButton(
+          text: 'Registrarme',
+          handlePress: _validate,
+          enabledState: _isFresh ? false : _enabled,
+          disableAfterPress: true,
+        ),
+        const SizedBox(height: 16),
+        TextButton(
+          onPressed: () => context.goNamed('login'),
+          child: Text('Ya tengo cuenta', style: btnModif(primary)),
+        ),
+      ],
     );
   }
 }
