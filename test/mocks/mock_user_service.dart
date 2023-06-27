@@ -11,11 +11,6 @@ class MockUserService extends ChangeNotifier implements UserService {
   @override
   String? get geterror => error;
 
-  @override
-  Future<void> getUserFromFirebase(String email) async {
-    firebaseUser = UserModel(
-        email: "gprinc@itba.edu.ar", name: 'Guido', lastName: 'Princ');
-  }
 
   @override
   Future<bool> loginUser(String email, String password) async {

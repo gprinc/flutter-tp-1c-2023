@@ -1,6 +1,8 @@
 import 'package:dam_1c_2023/cells/cards.dart';
+import 'package:dam_1c_2023/models/userService.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../cells/modal.dart';
 import '../cells/profile_modal.dart';
@@ -96,7 +98,10 @@ class _ProfileTabState extends State<ProfileTab> {
                           height: 20,
                         ),
                         TextButton(
-                          onPressed: () => context.goNamed('login'),
+                          onPressed: () {
+                            Provider.of<UserService>(context, listen: false).logoutUser();
+                            context.goNamed('login');
+                          },
                           child: Text('Cerrar sesion',
                               style: btnModif(const Color(0xffB3261E))),
                         )

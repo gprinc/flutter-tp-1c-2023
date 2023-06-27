@@ -151,7 +151,6 @@ void main() async {
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
       ?.requestPermission();
-  await UserService().loginUser('fluter@itba.com', 'prueba123');
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   NotificationSettings settings = await messaging.requestPermission(
