@@ -30,8 +30,11 @@ class HomeState extends State<Home> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _allCards =
-        Provider.of<VolunteeringList>(context, listen: false).volunteering;
+    setState(() {
+      _allCards =
+          Provider.of<VolunteeringList>(context, listen: false).volunteering;
+    });
+
     setState(() {
       _foundCards = _allCards;
     });
@@ -51,9 +54,21 @@ class HomeState extends State<Home> {
     });
   }
 
+  void fetchData() async {
+    await Provider.of<VolunteeringList>(context, listen: false).getFromFirebase();
+    setState(() {
+      _allCards =
+          Provider.of<VolunteeringList>(context, listen: false).volunteering;
+    });
+
+    setState(() {
+      _foundCards = _allCards;
+    });
+  }
+
   @override
   void initState() {
-    Provider.of<VolunteeringList>(context, listen: false).getFromFirebase();
+    fetchData();
     Provider.of<NewsList>(context, listen: false).getFromFirebase();
     super.initState();
   }
