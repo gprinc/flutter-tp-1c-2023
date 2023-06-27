@@ -32,7 +32,9 @@ class HomeState extends State<Home> {
     super.didChangeDependencies();
     _allCards =
         Provider.of<VolunteeringList>(context, listen: false).volunteering;
-    _foundCards = _allCards;
+    setState(() {
+      _foundCards = _allCards;
+    });
   }
 
   void _runFilter(String enteredKeyword) {
