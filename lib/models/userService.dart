@@ -5,27 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:dam_1c_2023/firebase/firebase_cloudstore.dart';
 
 class UserService extends ChangeNotifier {
-  UserModel? _firebaseUser = null;
+  UserModel? _firebaseUser;
   String? error;
 
   UserModel? get user => _firebaseUser;
   String? get geterror => error;
-
-  Future<void> getUserFromFirebase(String email) async {
-    var aux = await FirebaseCloudstoreITBA()
-        .db
-        .collection('ser_manos_data')
-        .doc('users')
-        .get();
-    Map<String, dynamic>? data = aux.data();
-    var usersData = data?['values'] as List<dynamic>;
-    usersData.forEach((element) {
-      if (element['email'] == email) {
-        _firebaseUser = UserModel.fromJson(element);
-      }
-      return;
-    });
-  }
 
   void clearError() {
     error = null;
@@ -41,8 +25,9 @@ class UserService extends ChangeNotifier {
     }
     UserModel auxUser = UserModel(email: email, name: name, lastName: lastName);
     await FirebaseCloudstoreITBA().db.collection('users').add(UserModel.toJson(
-        UserModel(email: email, name: name, lastName: lastName)));
+        auxUser));
     _firebaseUser = auxUser;
+    notifyListeners();
   }
 
   Future<bool> loginUser(String email, String password) async {
@@ -59,6 +44,7 @@ class UserService extends ChangeNotifier {
         .get();
     final userData = snapshot.docs.map((e) => UserModel.fromSnapshot(e)).single;
     _firebaseUser = userData;
+    notifyListeners();
     return true;
   }
 
@@ -68,22 +54,24 @@ class UserService extends ChangeNotifier {
   }
 
   Future<void> updateUser(UserModel newUser) async {
-    final userQuery = FirebaseCloudstoreITBA()
+    final userSnapshot = await FirebaseCloudstoreITBA()
         .db
         .collection('users')
-        .where('email', isEqualTo: _firebaseUser);
-    final userSnapshot = await userQuery.get();
-    if (userSnapshot.docs.isNotEmpty) {
-      final userDoc = userSnapshot.docs.first.reference;
-      await FirebaseCloudstoreITBA().db.runTransaction((transaction) async {
-        final userData = userSnapshot.docs.first.data();
-        // Update or add the 'volunteeringId' field
-        userData['birthDay'] = newUser.birthDay;
-        userData['gender'] = newUser.gender;
-        userData['phoneNumber'] = newUser.phoneNumber;
-        transaction.set(userDoc, userData);
-      });
-    }
+        .where('email', isEqualTo: newUser.email).get();
+    await FirebaseCloudstoreITBA().db.collection('users').doc(userSnapshot.docs[0].id).update(UserModel.toJson(newUser));
+    // if (userSnapshot.docs.isNotEmpty) {
+    //   final userDoc = userSnapshot.docs.first.reference;
+    //   await FirebaseCloudstoreITBA().db.runTransaction((transaction) async {
+    //     final userData = userSnapshot.docs.first.data();
+    //     // Update or add the 'volunteeringId' field
+    //     userData['birthDay'] = newUser.birthDay;
+    //     userData['gender'] = newUser.gender;
+    //     userData['phoneNumber'] = newUser.phoneNumber;
+    //     transaction.set(userDoc, userData);
+    //   });
+    // }
+    _firebaseUser = newUser;
+    notifyListeners();
   }
 
   Future<void> updateVolunteeringId(int? volunteeringId) async {

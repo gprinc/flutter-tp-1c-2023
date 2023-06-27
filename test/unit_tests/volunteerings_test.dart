@@ -52,7 +52,6 @@ void main() {
   //   await documentReference.set(firebaseData);
   //
   //   // Create user model
-  //   fakeUserService.getUserFromFirebase("email");
   //   UserModel user = fakeUserService.firebaseUser!;
   //
   //   // Pass mocked firebase to api
