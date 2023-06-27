@@ -37,8 +37,74 @@ class _ProfileTabState extends State<ProfileTab> {
 
   Widget filledProfile(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 32,
+              ),
+              SizedBox(
+                width: 120,
+                height: 120,
+                child: Image.asset('assets/icon_picture.png'),
+              ),
+              const SizedBox(height: 16),
+              const Text('Voluntario', style: overline),
+              const SizedBox(height: 2),
+              Text('${widget.user.name} ${widget.user.lastName}',
+                  style: subtitle01),
+              const SizedBox(height: 2),
+              Text(
+                widget.user.email,
+                style: body01Modif(const Color(0xff0D47A1)),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 32,
+              ),
+              InformationCard(
+                title: 'Información personal',
+                label1: 'FECHA DE NACIMIENTO',
+                content1: widget.user.birthDay!,
+                label2: 'Género',
+                content2: widget.user.gender!,
+              ),
+              const SizedBox(
+                height: 32,
+              ),
+              InformationCard(
+                title: 'Datos de contacto',
+                label1: 'Teléfono',
+                content1: widget.user.phoneNumber!,
+                label2: 'E-MAIL',
+                content2: widget.user.email,
+              ),
+              const SizedBox(
+                height: 32,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: CtaButton(
+                    text: 'Editar perfil',
+                    handlePress: () => showProfileModal(context, updateProfile),
+                    enabledState: true),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextButton(
+                onPressed: () => context.goNamed('login'),
+                child: Text('Cerrar sesion',
+                    style: btnModif(const Color(0xffB3261E))),
+              ),
+              const SizedBox(
+                height: 32,
+              )
+            ],
+          ),
+        )
+        /*Column(
         children: [
           Expanded(
             child: Column(
@@ -109,8 +175,8 @@ class _ProfileTabState extends State<ProfileTab> {
             height: 32,
           )
         ],
-      ),
-    );
+      ),*/
+        );
   }
 
   Widget emptyProfile(BuildContext context) {
