@@ -177,6 +177,7 @@ class _ProfileModalState extends State<ProfileModal> {
                 value: _emailController.text,
                 validator: Validator.emailValidator,
                 label: 'Mail',
+                enabled: false,
                 keyboardType: TextInputType.emailAddress,
               ),
               const SizedBox(

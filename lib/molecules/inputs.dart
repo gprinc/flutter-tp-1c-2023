@@ -135,6 +135,7 @@ class LabelTextInput extends StatefulWidget {
   final bool obscureInput;
   final TextEditingController controller;
   final TextInputType keyboardType;
+  final bool enabled;
   final String? value;
 
   const LabelTextInput(
@@ -145,6 +146,7 @@ class LabelTextInput extends StatefulWidget {
       required this.label,
       this.obscureInput = false,
       this.value = '',
+      this.enabled = true,
       this.keyboardType = TextInputType.text});
 
   @override
@@ -211,6 +213,7 @@ class _LabelTextInputState extends State<LabelTextInput> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+        enabled: widget.enabled,
         keyboardType: widget.keyboardType,
         controller: _controller,
         decoration: InputDecoration(
