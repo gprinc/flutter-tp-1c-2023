@@ -5,18 +5,12 @@ class FirebaseCloudstoreITBA {
 
   FirebaseCloudstoreITBA() : db = FirebaseFirestore.instance;
 
-  FirebaseCloudstoreITBA.withFirestore(FirebaseFirestore firebaseFirestore){
+  FirebaseCloudstoreITBA.withFirestore(FirebaseFirestore firebaseFirestore) {
     db = firebaseFirestore;
   }
 
   Future<void> addData(String collection, Map<String, dynamic> data) async {
     await db.collection(collection).add(data);
-    void addData(String collection, String docId, String innerCollection,
-        Map<String, dynamic> data) async {
-      await db.collection(collection).doc(docId)
-          .collection(innerCollection)
-          .add(data);
-    }
   }
 
   Future<void> getData(String collection) async {
@@ -27,7 +21,8 @@ class FirebaseCloudstoreITBA {
     });
   }
 
-  Future<void> updateData(String collectionName, String id, Map<String, dynamic> data) async {
+  Future<void> updateData(
+      String collectionName, String id, Map<String, dynamic> data) async {
     var collection = db.collection(collectionName);
     await collection.doc(id).update(data);
   }

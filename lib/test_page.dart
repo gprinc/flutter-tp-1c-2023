@@ -1,8 +1,4 @@
-import 'package:dam_1c_2023/cells/forms.dart';
-import 'package:dam_1c_2023/molecules/inputs.dart';
 import 'package:flutter/material.dart';
-
-import 'cells/cards.dart';
 
 class TestPage extends StatelessWidget {
   const TestPage({super.key});
@@ -29,11 +25,11 @@ class TestPage extends StatelessWidget {
             padding: const EdgeInsets.only(left: 20, right: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const SizedBox(
+              children: const <Widget>[
+                SizedBox(
                   height: 25,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 25,
                 ),
               ],

@@ -1,13 +1,13 @@
 import 'dart:ui';
 import 'package:dam_1c_2023/firebase/firebase_notification_service.dart';
 import 'package:dam_1c_2023/models/userService.dart';
+import 'package:dam_1c_2023/pages/novedades.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'firebase/firebase_notification_provider.dart';
-import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:dam_1c_2023/pages/home.dart';
 import 'package:dam_1c_2023/pages/login.dart';
@@ -48,10 +48,16 @@ GoRouter _router(FirebaseAnalyticsObserver obs) {
       ),
       GoRoute(
         name: 'home',
-        path: "/home",
-        builder: (context, state) => const Home(
-          key: Key("Home"),
-        ),
+        path: "/home/:index",
+        builder: (context, state) {
+          final int initialTabIndex = state.params['index'] != null
+              ? int.tryParse(state.params['index']!) ?? 0
+              : 0;
+          return Home(
+            key: const Key("Home"),
+            initialTabIndex: initialTabIndex,
+          );
+        },
       ),
       GoRoute(
           name: 'selected-card',
@@ -68,15 +74,33 @@ GoRouter _router(FirebaseAnalyticsObserver obs) {
               info: volunteering,
             );
           }),
+      GoRoute(
+        name: 'selected-news',
+        path: "/selected-news/:id",
+        builder: (context, state) {
+          final newsProvider = Provider.of<NewsList>(context);
+          final int? index = int.tryParse(state.params['id'] ?? '');
+          if (index == null) {
+            // handle the case where index is null (e.g. invalid input)
+            return Container();
+          }
+          final news = newsProvider.news[index];
+          return NewsPage(
+            imageName: news.imageName,
+            title: news.title,
+            description: news.description,
+            body: news.body,
+            header: news.header,
+            index: index,
+          );
+        },
+      ),
     ],
   );
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
   await FirebaseNotificationService.initializeFirebase();
   final RemoteMessage? _message = await FirebaseNotificationService.firebaseMessaging.getInitialMessage();
 
@@ -136,10 +160,11 @@ class _MyAppState extends State<MyApp> {
       ],
       child: MaterialApp.router(
         routerConfig: _router(observer),
-        title: 'Flutter App',
-        theme: ThemeData(
+        title: 'Ser Manos',
+        /*theme: ThemeData(
           primarySwatch: Colors.blue,
-        ),
+        ),*/
+        debugShowCheckedModeBanner: false,
       ),
     );
   }

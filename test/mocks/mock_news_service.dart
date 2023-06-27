@@ -1,10 +1,16 @@
+import 'package:dam_1c_2023/firebase/firebase_cloudstore.dart';
+import 'package:dam_1c_2023/models/news.dart';
+import 'package:dam_1c_2023/models/newsList.dart';
 import 'package:flutter/material.dart';
 
-import '../firebase/firebase_cloudstore.dart';
-import 'news.dart';
-
-class NewsList extends ChangeNotifier {
+class MockNewsProvider extends ChangeNotifier implements NewsList {
+  
+  @override
   bool loading = false;
+
+  @override
+  List<News> get news => _news;
+
   final List<News> _news = [
     News(
       header: 'REPORTE 2820',
@@ -42,51 +48,20 @@ class NewsList extends ChangeNotifier {
 
     // Add more volunteerings here...
   ];
-
-  NewsList.withFirebaseCloudstore(
-      FirebaseCloudstoreITBA firebaseCloudstoreITBA) {
-    _firebaseCloudstore = firebaseCloudstoreITBA;
-  }
-
-  NewsList() {
-    _firebaseCloudstore = FirebaseCloudstoreITBA();
-  }
-
-  final List<News> _firebaseNews = [];
-  late FirebaseCloudstoreITBA _firebaseCloudstore;
-  void setFirebaseCloudstore(FirebaseCloudstoreITBA firebaseCloudstore) {
-    _firebaseCloudstore = firebaseCloudstore;
-  }
-
-  List<News> get news => _firebaseNews;
-
-  Future<void> getFromFirebase() async {
-    loading = true;
-    try {
-      var aux = await _firebaseCloudstore
-          .db
-          .collection('ser_manos_data')
-          .doc('novedades')
-          .get();
-      Map<String, dynamic>? data = aux.data();
-      if (data != null) {
-        var newsData = data['values'] as List<dynamic>;
-        newsData.forEach((element) {
-          _firebaseNews.add(News.fromJson(element));
-        });
-      }
-      notifyListeners();
-    } catch (error, stackTrace) {
-      print('Error occurred during Firebase news retrieval: $error');
-      print(stackTrace);
-    } finally {
-      loading = false;
-    }
-  }
-
+  
+  @override
   void addNews(News news) {
     _news.add(news);
-    notifyListeners();
+     Future.value();
+  }
+  
+  @override
+  Future<void> getFromFirebase() {
+     return Future.value();
   }
 
+  @override
+  void setFirebaseCloudstore(FirebaseCloudstoreITBA firebaseCloudstore) {
+    return;
+  }
 }
